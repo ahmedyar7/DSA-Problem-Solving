@@ -1,32 +1,30 @@
-// BRUTE FORCE APPROACH
 #include <iostream>
-#include <vector>
 using namespace std;
 
-int main()
+void printArray(int array[], int n)
 {
-    int arr[] = {16, 17, 4, 3, 5, 2};
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-    vector<int> ans;
-    bool is_greater = true;
     for (int i = 0; i < n; i++)
     {
-        for (int j = i + 1; j < n; j++)
+        int j;
+        for (j = i + 1; j < n; j++)
         {
-            if (arr[j] > arr[i])
+            if (array[i] <= array[j])
             {
-                is_greater = false;
                 break;
             }
         }
-        if (is_greater == true)
+        if (j == n)
         {
-            ans.push_back(arr[i]);
+            cout << array[i] << endl;
         }
     }
-    for (int i = 0; i < ans.size(); i++)
-    {
-        cout << ans[i] << " ";
-    }
+}
+
+int main()
+{
+    int array[] = {16, 17, 4, 3, 5, 2};
+    int n = sizeof(array) / sizeof(array[0]);
+
+    printArray(array, n);
+    return 0;
 }
