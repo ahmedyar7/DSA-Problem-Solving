@@ -4,25 +4,22 @@ using namespace std;
 bool isPowerofTwo(int n)
 {
 
-    if (n == 0)
-        return true;
-    for (int i = 0; i < n; i++)
+    if (n <= 0)
     {
-        if ((n * (n * n)) % 2 == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
+    while (n % 2 == 0)
+    {
+        n = n / 2;
+    }
+    return n == 1;
 }
 
 int main()
 {
 
-    int z = 3;
+    int z = 2;
+
     bool x = isPowerofTwo(x);
     cout << x << endl;
 }
