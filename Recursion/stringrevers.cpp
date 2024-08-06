@@ -65,11 +65,25 @@ string move_all_x(string s)
     return ch + ans;
 }
 
+void subseq(string s, string a)
+{
+    if (s.length() == 0)
+    {
+        cout << s << endl;
+        return;
+    }
+    char ch = s[0];
+    string ans = s.substr(1);
+
+    subseq(ans, a);
+    subseq(ans, ch);
+}
+
 int main()
 {
     // reverse_str("Ahmed");
     // replace_pi("pippppiiiipi");
 
     // cout << remove_duplicate("gfg");
-    cout << move_all_x("ahxmexd");
+    // cout << move_all_x("ahxmexd");
 }
