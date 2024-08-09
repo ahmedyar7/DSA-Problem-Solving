@@ -35,8 +35,39 @@
 //     return 0;
 // }
 
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 
+// using namespace std;
+
+// void insertion_sort(int arr[], int n)
+// {
+//     for (int i = 0; i <= n - 1; i++)
+//     {
+//         int j = i;
+//         while (j > 0 && arr[j - 1] > arr[j])
+//         {
+//             swap(arr[j - 1], arr[j]);
+//             j--;
+//         }
+//     }
+// }
+
+// int main()
+// {
+//     int arr[] = {43, 12, 54, 66, 12, 1};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+
+//     insertion_sort(arr, n);
+
+//     for (int i = 0; i < n; i++)
+//     {
+//         cout << arr[i] << " ";
+//     }
+
+//     return 0;
+// }
+
+#include <bits/stdc++.h>
 using namespace std;
 
 void insertion_sort(int arr[], int n)
@@ -44,9 +75,12 @@ void insertion_sort(int arr[], int n)
     for (int i = 0; i <= n - 1; i++)
     {
         int j = i;
+
         while (j > 0 && arr[j - 1] > arr[j])
         {
-            swap(arr[j - 1], arr[j]);
+            int temp = arr[j - 1];
+            arr[j - 1] = arr[j];
+            arr[j] = temp;
             j--;
         }
     }
@@ -54,7 +88,7 @@ void insertion_sort(int arr[], int n)
 
 int main()
 {
-    int arr[] = {43, 12, 54, 66, 12, 1};
+    int arr[] = {12, 43, 54, 1, 54, 5, 322};
     int n = sizeof(arr) / sizeof(arr[0]);
 
     insertion_sort(arr, n);
@@ -63,6 +97,4 @@ int main()
     {
         cout << arr[i] << " ";
     }
-
-    return 0;
 }

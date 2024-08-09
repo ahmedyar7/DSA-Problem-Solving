@@ -72,39 +72,63 @@
 //     return 0;
 // }
 
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 
+// using namespace std;
+
+// void bubble_sort(int arr[], int n)
+// {
+//     for (int i = 0; i <= n - 1; i++)
+//     {
+//         int did_swap = 0;
+
+//         for (int j = 0; j < n - i - 1; j++)
+//         {printNosprintNos
+//             if (arr[j + 1] < arr[j])
+//             {
+//                 swap(arr[j + 1], arr[j]);
+//                 j = 1;
+//             }
+//         }
+//         if (did_swap == 0)
+//         {
+//             break;
+//         }
+//     }
+// }
+
+// int main()
+// {
+//     int arr[] = {43, 11, 33, 54, 124};
+//     int n = sizeof(arr) / sizeof(arr[0]);
+//     bubble_sort(arr, n);
+//     for (int i = 0; i < n; i++)
+//     {
+//         cout << arr[i] << " ";
+//     }
+//     return 0;
+// }
+
+#include <bits/stdc++.h>
 using namespace std;
 
-void bubble_sort(int arr[], int n)
+void print(int n)
 {
-    for (int i = 0; i <= n - 1; i++)
+    if (n == 0)
     {
-        int did_swap = 0;
-
-        for (int j = 0; j < n - i - 1; j++)
-        {
-            if (arr[j + 1] < arr[j])
-            {
-                swap(arr[j + 1], arr[j]);
-                j = 1;
-            }
-        }
-        if (did_swap == 0)
-        {
-            break;
-        }
+        return;
     }
+    cout << n << " ";
+    print(n - 1);
 }
 
 int main()
 {
-    int arr[] = {43, 11, 33, 54, 124};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    bubble_sort(arr, n);
-    for (int i = 0; i < n; i++)
-    {
-        cout << arr[i] << " ";
-    }
-    return 0;
+    // int arr[] = {12, 43, 54, 1, 54, 5, 322};
+    // int n = sizeof(arr) / sizeof(arr[0]);
+
+    int n;
+    cin >> n;
+
+    print(n);
 }
