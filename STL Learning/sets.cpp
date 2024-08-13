@@ -10,6 +10,5 @@ void explain_sets() {
   st.insert(4);  // {1, 2, 3, 4}
 
   auto it = st.find(2);
-  cout << it << endl;
 }
 int main() { explain_sets(); }
