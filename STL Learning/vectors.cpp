@@ -9,16 +9,13 @@ void declearation_of_vector() {
   for (int i = 0; i < v.size(); i++) {
     cout << v[i] << " ";
   }
-
   vector<pair<int, int>> vec;
   vec.push_back({1, 2});
   vec.emplace_back(2, 3);  // Assumes to be pairs
 
   // Predefining the size and values of vector:
   vector<int> v2(5, 100);  // size and values
-
-  vector<int> v3(5);  // Size only
-
+  vector<int> v3(5);       // Size only
   vector<int> v1(5, 20);
 }
 
@@ -55,6 +52,17 @@ void vector_operation() {  //
   for (auto it : vec) {
     cout << it << " ";
   }
+
+  // Size of vector
+  vec.size();
+  // Removes last element
+  vec.pop_back();
+
+  // This will perfrom the swap function
+  vec.swap(vec);
+
+  // This will clear the vector
+  vec.clear();
 }
 
 int main() {
