@@ -35,3 +35,20 @@
   - Armstrong Numbers
   - Print all Divisors
   - Check for Prime
+
+## 11th August | Sunday
+
+##
+
+## 12th August | Monday
+
+- Hashing Theory
+- Complete STL
+
+##
+
+## 13th August | Tuesday
+
+- Maps (ordered, unordered)
+- [Counting frequencies of array elements](https://www.geeksforgeeks.org/problems/frequency-of-array-elements-1587115620/0)
+- [Find the highest/lowest frequency element](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
