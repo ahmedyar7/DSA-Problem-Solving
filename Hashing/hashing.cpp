@@ -1,24 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main()
-{
-    // int arr[] = {12, 12, 34, 45, 53, 22, 22};
-    // int n = sizeof(arr) / sizeof(arr[0]);
+void hashing_of_array() {
+  int arr[] = {12, 12, 43, 34, 54, 23, 23};
+  int n = sizeof(arr) / sizeof(arr[0]);
+  int hash[55] = {0};
+  for (int i = 0; i < n; i++) {
+    hash[arr[i]]++;
+  }
+  for (int i = 0; i < 55; i++) {
+    cout << i << " -> " << hash[i] << endl;
+  }
+}
 
-    // int hash[54] = {0};
-    // for (int i = 0; i < n; i++)
-    // {
-    //     hash[arr[i]] += 1;
-    // }
-    // for (int i = 0; i < n; i++)
-    //     cout << hash[22] << endl;
+void hashing_of_string() {
+  string str = "abcdefabcfg";
+  int hash[256] = {0};
+  for (int i = 0; i < str.length(); i++) {
+    hash[str[i]]++;
+  }
+  for (int i = 0; i < 256; i++) {
+    cout << i << " -> " << hash[i] << endl;
+  }
+}
 
-    string s = "abcdabehf";
-    int hash[256] = {0};
-    for (int i = 0; i < s.size(); i++)
-    {
-        hash[s[i]]++;
-    }
-    cout << hash['a'];
+int main() {
+  //  hashing_of_array();
+  hashing_of_string();
 }
