@@ -52,3 +52,13 @@
 - Maps (ordered, unordered)
 - [Counting frequencies of array elements](https://www.geeksforgeeks.org/problems/frequency-of-array-elements-1587115620/0)
 - [Find the highest/lowest frequency element](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
+
+##
+
+## 14th August | Wednesday
+
+- Learning Merge Sort
+- [Solving Merge Sort question](https://www.geeksforgeeks.org/problems/merge-sort/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=merge-sort)
+- Learning the Quick Sort algorithm
+
+##
