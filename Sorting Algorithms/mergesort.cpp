@@ -164,10 +164,62 @@
 //   }
 // }
 
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// void merge(vector<int>& arr, int low, int mid, int high) {
+//   vector<int> temp;
+//   int left = low;
+//   int right = mid + 1;
+
+//   while (left <= mid && right <= high) {
+//     if (arr[left] <= arr[right]) {
+//       temp.push_back(arr[left]);
+//       left++;
+//     } else {
+//       temp.push_back(arr[right]);
+//       right++;
+//     }
+//   }
+
+//   while (left <= mid) {
+//     temp.push_back(arr[left]);
+//     left++;
+//   }
+
+//   while (right <= high) {
+//     temp.push_back(arr[right]);
+//     right++;
+//   }
+
+//   for (int i = low; i < high; i++) {
+//     arr[i] = temp[i - low];
+//   }
+// }
+
+// void mergeSort(vector<int>& arr, int low, int high) {
+//   if (low < high) {
+//     int mid = (low + high) / 2;
+//     mergeSort(arr, low, mid);
+//     mergeSort(arr, mid + 1, high);
+//     merge(arr, low, mid, high);
+//   }
+// }
+
+// int main() {
+//   vector<int> arr = {12, 34, 54, 13, 4, 5, 32, 54, 55, 22};
+//   int n = arr.size();
+
+//   mergeSort(arr, 0, n - 1);
+//   for (int i = 0; i < n; i++) {
+//     cout << arr[i] << " ";
+//   }
+// }
+
 #include <bits/stdc++.h>
 using namespace std;
 
-void merge(vector<int>& arr, int low, int mid, int high) {
+void merge(int arr[], int low, int mid, int high) {
   vector<int> temp;
   int left = low;
   int right = mid + 1;
@@ -186,20 +238,19 @@ void merge(vector<int>& arr, int low, int mid, int high) {
     temp.push_back(arr[left]);
     left++;
   }
-
   while (right <= high) {
     temp.push_back(arr[right]);
     right++;
   }
 
-  for (int i = low; i < high; i++) {
+  for (int i = low; i <= high; i++) {
     arr[i] = temp[i - low];
   }
 }
 
-void mergeSort(vector<int>& arr, int low, int high) {
+void mergeSort(int arr[], int low, int high) {
   if (low < high) {
-    int mid = (low + high) / 2;
+    int mid = (high + low) / 2;
     mergeSort(arr, low, mid);
     mergeSort(arr, mid + 1, high);
     merge(arr, low, mid, high);
@@ -207,11 +258,10 @@ void mergeSort(vector<int>& arr, int low, int high) {
 }
 
 int main() {
-  vector<int> arr = {12, 34, 54, 13, 4, 5, 32, 54, 55, 22};
-  int n = arr.size();
+  int arr[] = {23, 12, 54, 6, 3, 22, 4, 234};
+  int n = sizeof(arr) / sizeof(arr[0]);
 
   mergeSort(arr, 0, n - 1);
-  for (int i = 0; i < n; i++) {
-    cout << arr[i] << " ";
-  }
+
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
 }
