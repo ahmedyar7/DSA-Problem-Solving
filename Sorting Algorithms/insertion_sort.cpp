@@ -99,16 +99,40 @@
 //     }
 // }
 
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// void insertionSort(int arr[], int n) {
+//   for (int i = 0; i <= n - 1; i++) {
+//     int j = i;
+//     while (j > 0 && arr[j - 1] > arr[j]) {
+//       int temp = arr[j - 1];
+//       arr[j - 1] = arr[j];
+//       arr[j] = temp;
+//       j--;
+//     }
+//   }
+// }
+
+// int main() {
+//   int arr[] = {234, 12, 3, 4, 54, 5, 23};
+//   int n = sizeof(arr) / sizeof(arr[0]);
+
+//   insertionSort(arr, n);
+
+//   for (int i = 0; i < n; i++) {
+//     cout << arr[i] << " ";
+//   }
+// }
+
 #include <bits/stdc++.h>
 using namespace std;
 
-void insertionSort(int arr[], int n) {
+void insertionsort(int arr[], int n) {
   for (int i = 0; i <= n - 1; i++) {
     int j = i;
-    while (j > 0 && arr[j - 1] > arr[j]) {
-      int temp = arr[j - 1];
-      arr[j - 1] = arr[j];
-      arr[j] = temp;
+    while (j > 0 && arr[j] < arr[j - 1]) {
+      swap(arr[j - 1], arr[j]);
       j--;
     }
   }
@@ -118,7 +142,7 @@ int main() {
   int arr[] = {234, 12, 3, 4, 54, 5, 23};
   int n = sizeof(arr) / sizeof(arr[0]);
 
-  insertionSort(arr, n);
+  insertionsort(arr, n);
 
   for (int i = 0; i < n; i++) {
     cout << arr[i] << " ";
