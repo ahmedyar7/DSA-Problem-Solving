@@ -72,3 +72,17 @@
 - 2nd largest element
 
 ##
+
+## 16th August | Friday
+
+- Rotate Array by k places
+- Move zeros to the end
+
+##
+
+## 17th August | Saturday
+
+- Union of array
+- Intersection of array
+
+##

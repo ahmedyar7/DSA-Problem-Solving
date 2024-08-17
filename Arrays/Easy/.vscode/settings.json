@@ -5,6 +5,7 @@
     "format": "cpp",
     "set": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "unordered_set": "cpp"
   }
 }
