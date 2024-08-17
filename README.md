@@ -62,3 +62,13 @@
 - Learning the Quick Sort algorithm
 
 ##
+
+## 15th August | Thursday
+
+- Quick Sort
+- Remove Duplicates
+- Left Rotate by one element
+- Check Sorted
+- 2nd largest element
+
+##

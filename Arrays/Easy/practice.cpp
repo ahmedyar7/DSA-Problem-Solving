@@ -64,4 +64,38 @@ void second_largest_element() {
   cout << second_largest;
 }
 
-int main() { second_largest_element(); }
+// . Rotate The array by k places
+void rotate_array_by_k_places() {
+  int arr[] = {1, 2, 3, 4, 5};
+  int n = sizeof(arr) / sizeof(arr[0]);
+  int k = 3;
+  reverse(arr, arr + k);
+  reverse(arr + k, arr + n);
+  reverse(arr, arr + n);
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+}
+
+// . Move all zeros to the end
+void move_all_zeros() {
+  int arr[] = {1, 0, 1, 2, 0, 3, 0, 2};
+  int n = sizeof(arr) / sizeof(arr[0]);
+  int j = INT_MIN;
+  for (int i = 0; i < n; i++) {
+    if (arr[i] == 0) {
+      j = i;
+      break;
+    }
+  }
+  if (j == INT_MIN) cout << "No zero element found";
+
+  for (int i = j + 1; i < n; i++) {
+    if (arr[i] != 0) {
+      swap(arr[i], arr[j]);
+      j++;
+    }
+  }
+
+  for (int i = 0; i < n; i++) cout << arr[i] << " ";
+}
+
+int main() { move_all_zeros(); }
