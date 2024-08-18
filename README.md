@@ -91,3 +91,8 @@
 
 - Missing Number
 - Consecutive ones
+- One's Two
+- Find the Duplicate Number I
+- Find the Duplicate Number II
+
+##

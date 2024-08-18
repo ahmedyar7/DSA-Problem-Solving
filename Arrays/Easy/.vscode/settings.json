@@ -7,6 +7,8 @@
     "xtree": "cpp",
     "xutility": "cpp",
     "unordered_set": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "unordered_map": "cpp",
+    "utility": "cpp"
   }
 }
