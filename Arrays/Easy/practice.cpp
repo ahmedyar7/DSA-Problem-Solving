@@ -98,4 +98,68 @@ void move_all_zeros() {
   for (int i = 0; i < n; i++) cout << arr[i] << " ";
 }
 
-int main() { move_all_zeros(); }
+// . UNION OF ARRAYS
+
+void union_of_arrays() {
+  int A[] = {1, 2, 3, 4, 5};
+  int B[] = {2, 3, 4, 5, 6, 7};
+  int n1 = sizeof(A) / sizeof(A[0]);
+  int n2 = sizeof(B) / sizeof(B[0]);
+  int i = 0;
+  int j = 0;
+  vector<int> ans;
+
+  while (i < n1 && j < n2) {
+    if (A[i] <= B[j]) {
+      if (ans.empty() || ans.back() != A[i]) {
+        ans.push_back(A[i]);
+      }
+      i++;
+    } else {
+      if (ans.empty() || ans.back() != B[j]) {
+        ans.push_back(B[j]);
+      }
+      j++;
+    }
+  }
+  while (i < n1) {
+    if (ans.empty() || ans.back() != A[i]) {
+      ans.push_back(A[i]);
+    }
+    i++;
+  }
+  while (j < n2) {
+    if (ans.empty() || ans.back() != B[j]) {
+      ans.push_back(B[j]);
+    }
+    j++;
+  }
+
+  for (auto it : ans) cout << it << " ";
+}
+
+// . INTERSECTION OF ARRAYS
+
+void intersection_of_array() {
+  int A[] = {1, 2, 3, 4, 5};
+  int B[] = {2, 3, 4, 5, 6, 7};
+  int n1 = sizeof(A) / sizeof(A[0]);
+  int n2 = sizeof(B) / sizeof(B[0]);
+  int i = 0;
+  int j = 0;
+  vector<int> ans;
+  while (i <= n1 && j <= n2) {
+    if (A[i] == B[j]) {
+      ans.push_back(A[i]);
+      i++;
+      j++;
+    } else if (A[i] < B[j]) {
+      i++;
+    } else {
+      j++;
+    }
+  }
+  for (auto it : ans) cout << it << " ";
+}
+
+int main() { intersection_of_array(); }
