@@ -86,3 +86,8 @@
 - Intersection of array
 
 ##
+
+## 18th August | Sunday
+
+- Missing Number
+- Consecutive ones
