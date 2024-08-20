@@ -186,6 +186,27 @@ class Solution {
 
     return -1;
   }
+
+  int len_longest_sum_arr_of_sum(vector<int>& A, int n, int k) {
+    unordered_map<int, int> pre_sum_map;
+    int sum = 0;
+    int max_len = 0;
+
+    for (int i = 0; i < n; i++) {
+      sum += A[i];
+      if (sum == k) {
+        max_len = max(max_len, i + 1);
+      }
+      int rem = sum - k;
+      if (pre_sum_map.find(rem) != pre_sum_map.end()) {
+        int length = i - pre_sum_map[rem];
+        max_len = max(max_len, rem);
+      }
+      pre_sum_map[rem] = i;
+    }
+
+    return max_len;
+  }
 };
 
 int main() {
@@ -199,7 +220,8 @@ int main() {
   Solution solution;
   while (t--) {
     int n;
-    cin >> n;
+    int k;
+    cin >> n >> k;
 
     vector<int> A(n);
 
@@ -207,7 +229,7 @@ int main() {
       cin >> A[i];
     }
 
-    cout << solution.singleNumber(A) << endl;
+    cout << solution.len_longest_sum_arr_of_sum(A, n, k) << endl;
     // solution.removeElement(arr, val);
     // for (int i = 0; i < n; i++) {
     //   cout << arr[i] << " ";
