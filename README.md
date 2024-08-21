@@ -96,3 +96,28 @@
 - Find the Duplicate Number II
 
 ##
+
+## 19the August | Monday
+
+- Longest Sub array with sum K
+- Practice all the easy problem in the Strives DSA Sheet
+
+##
+
+## 20th August | Tuesday
+
+- Sort 0s, 1s and 2s
+- 2Sum
+- Majority Element
+
+##
+
+## 21st August | Wednesday
+
+- Kadane's Algorithm `LC`
+- Pairs with maxium sum `GFG`
+- Next Permutation
+- Alternate Positives and negatives
+- Buy and Sell Stocks
+
+##
