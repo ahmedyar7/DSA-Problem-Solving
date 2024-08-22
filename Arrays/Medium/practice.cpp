@@ -44,6 +44,60 @@ class Solution {
     }
     return -1;
   }
+
+  int maxSubArray(vector<int>& arr) {
+    int maximum = INT_MIN;
+    int sum = 0;
+
+    for (int i = 0; i < arr.size(); i++) {
+      sum += arr[i];
+
+      if (sum < 0) sum = 0;
+
+      maximum = max(maximum, sum);
+    }
+    return maximum;
+  }
+
+  int pairWithMaxSum(vector<int>& arr) {
+    int sum = 0;
+    int maxi = INT_MIN;
+    for (int i = 0; i < arr.size() - 1; i++) {
+      sum = arr[i] + arr[i + 1];
+      if (sum < 0) {
+        sum = 0;
+      }
+      maxi = max(sum, maxi);
+    }
+    return maxi;
+  }
+
+  int maxProfit(vector<int>& arr) {
+    int profit = 0;
+    int min_cost = arr[0];
+    for (int i = 0; i < arr.size(); i++) {
+      int cost = arr[i] - min_cost;
+      profit = max(cost, profit);
+      min_cost = min(min_cost, arr[i]);
+    }
+    return profit;
+  }
+
+  vector<int> rearrangeArray(vector<int>& arr) {
+    vector<int> pos, neg;
+    for (int i = 0; i < arr.size(); i++) {
+      if (arr[i] < 0) {
+        neg.push_back(arr[i]);
+      } else {
+        pos.push_back(arr[i]);
+      }
+    }
+    for (int i = 0; i < arr.size() / 2; i++) {
+      arr[2 * i] = pos[i];
+      arr[2 * i + 1] = neg[i];
+    }
+    return arr;
+  }
 };
 
 int main() {
@@ -62,13 +116,13 @@ int main() {
     for (int i = 0; i < n; i++) {
       cin >> arr[i];
     }
-    // solution.majorityElement(arr);
-    cout << solution.majorityElement(arr) << endl;
+    vector<int> ans = solution.rearrangeArray(arr);
+    // cout << solution.maxProfit(arr) << endl;
     // vector<int> answer = solution.twoSum(arr, target);
-    // for (int i = 0; i < n; i++) {
-    //   cout << arr[i] << " ";
-    // }
-    // cout << endl;
+    for (int i = 0; i < ans.size(); i++) {
+      cout << ans[i] << " ";
+    }
+    cout << endl;
   }
 
   return 0;
