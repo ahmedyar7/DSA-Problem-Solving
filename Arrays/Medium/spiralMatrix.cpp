@@ -3,27 +3,8 @@ using namespace std;
 
 class Solution {
  public:
-  void rotate(vector<vector<int>>& arr) {
-    int n = arr.size();
-    int m = arr[0].size();
-
-    for (int i = 0; i < n - 1; i++) {
-      for (int j = i + 1; j < n; j++) {
-        swap(arr[i][j], arr[j][i]);
-      }
-    }
-
-    for (int i = 0; i < n; i++) {
-      reverse(arr[i].begin(), arr[i].end());
-    }
-
-    for (int i = 0; i < n; i++) {
-      for (int j = 0; j < m; j++) {
-        cout << arr[i][j] << " ";
-      }
-      cout << " " << endl;
-    }
-    cout << endl;
+  vector<int> spiralOrder(vector<vector<int>>& matrix) {
+    // code here
   }
 };
 
@@ -49,7 +30,7 @@ int main() {
     }
 
     // cout << solution.setZeroes(matrix) << endl;
-    solution.rotate(arr);
+    solution.spiralOrder(arr);
   }
 
   return 0;

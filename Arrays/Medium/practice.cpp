@@ -45,20 +45,6 @@ class Solution {
     return -1;
   }
 
-  int maxSubArray(vector<int>& arr) {
-    int maximum = INT_MIN;
-    int sum = 0;
-
-    for (int i = 0; i < arr.size(); i++) {
-      sum += arr[i];
-
-      if (sum < 0) sum = 0;
-
-      maximum = max(maximum, sum);
-    }
-    return maximum;
-  }
-
   int pairWithMaxSum(vector<int>& arr) {
     int sum = 0;
     int maxi = INT_MIN;
@@ -98,6 +84,54 @@ class Solution {
     }
     return arr;
   }
+
+  int maxSubArray(vector<int>& arr) {
+    int maximum = INT_MIN;
+    int sum = 0;
+
+    for (int i = 0; i < arr.size(); i++) {
+      sum += arr[i];
+
+      if (sum < 0) sum = 0;
+
+      maximum = max(maximum, sum);
+    }
+    return maximum;
+  }
+
+  vector<int> majorityElement_2(vector<int>& arr) {
+    map<int, int> hashed;
+    vector<int> ans;
+
+    for (auto it : arr) {
+      hashed[it]++;
+    }
+    for (auto it : hashed) {
+      if (it.second > (arr.size() / 3 % arr.size())) {
+        ans.push_back(it.first);
+      }
+    }
+    return ans;
+  }
+
+  int mostFrequentEven(vector<int>& arr) {
+    map<int, int> hashmap;
+    int max_element = INT_MAX;
+    int min_element = INT_MIN;
+
+    for (auto it : arr) {
+      hashmap[it]++;
+    }
+
+    for (auto it : hashmap) {
+      if (it.first % 2 == 0) {
+        min_element = max(min_element, it.first);
+        return min_element;
+      }
+    }
+
+    return -1;
+  }
 };
 
 int main() {
@@ -116,13 +150,12 @@ int main() {
     for (int i = 0; i < n; i++) {
       cin >> arr[i];
     }
-    vector<int> ans = solution.rearrangeArray(arr);
-    // cout << solution.maxProfit(arr) << endl;
-    // vector<int> answer = solution.twoSum(arr, target);
-    for (int i = 0; i < ans.size(); i++) {
-      cout << ans[i] << " ";
-    }
-    cout << endl;
+    cout << solution.mostFrequentEven(arr) << endl;
+    // vector<int> answer = solution.majorityElement_2(arr);
+    // for (int i = 0; i < answer.size(); i++) {
+    //   cout << answer[i] << " ";
+    // }
+    // cout << endl;
   }
 
   return 0;
