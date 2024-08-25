@@ -138,3 +138,10 @@
 ##
 
 ## 24th August | Saturday
+
+##
+
+## 25th August | Sunday
+
+- Spiral Printing
+- Majority element
