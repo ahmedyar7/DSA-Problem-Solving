@@ -118,6 +118,23 @@
 - Pairs with maxium sum `GFG`
 - Next Permutation
 - Alternate Positives and negatives
-- Buy and Sell Stocks
+- Buy and Sell Stocks\
+- Next Permutation
 
 ##
+
+## 22nd August | Thursday
+
+- Leaders in array
+
+##
+
+## 23rd August | Friday
+
+- Longest Consecutive Sub Sequence of array
+- Set matrix zero
+- Rotate Matrix by 90 Degrees
+
+##
+
+## 24th August | Saturday

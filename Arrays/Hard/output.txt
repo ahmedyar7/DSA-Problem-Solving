@@ -1,0 +1,4 @@
+-1 -1 2 
+-1 0 1 
+No triplets found
+0 0 0 
