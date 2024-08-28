@@ -3,45 +3,31 @@ using namespace std;
 
 class Solution {
  public:
-  vector<vector<int>> fourSum(vector<int>& arr, int target) {
+  vector<vector<int>> threeSum(vector<int>& arr) {
     int n = arr.size();
-
-    sort(arr.begin(), arr.end());  // This is because to avoid the duplicates in
-                                   // the sorted array
-    vector<vector<int>> ans;       // This will store the quads of element
+    int target = 0;
+    sort(arr.begin(), arr.end());
+    vector<vector<int>> ans;
 
     for (int i = 0; i < n; i++) {
-      if (i > 0 && arr[i] == arr[i - 1])
-        continue;  // This will make sure no duplicate ith element
-      for (int j = i + 1; j < n; j++) {
-        if (j > (i + 1) && arr[j] == arr[j - 1])
-          continue;  // This will make sure no duplicate jth element
+      if (i > 0 && arr[i] == arr[i - 1]) continue;
 
-        int k = j + 1;  // 3rd element of array
-        int l = n - 1;  // Last element of array
+      int j = i + 1;
+      int k = n - 1;
 
-        while (k < l) {  // untill the k donot crosses the l element
-          long long sum = arr[i] + arr[j] + arr[k] + arr[l];
+      while (j < k) {
+        int sum = arr[i] + arr[j] + arr[k];
+        if (sum == target) {
+          vector<int> temp = {arr[i], arr[j], arr[k]};
+          j++;
+          k--;
 
-          if (sum == target) {
-            vector<int> temp = {
-                arr[i], arr[j], arr[k],
-                arr[l]};  // This would add all the elements to the temp vector
-
-            ans.push_back(temp);
-            k++;
-            l--;
-
-            // After adding changing the k and l position
-            while (k < l && arr[k] == arr[k - 1]) k++;
-            while (k < l && arr[l] == arr[l + 1]) l--;
-          }
-          // if sum is short of target then
-          else if (sum < target)
-            k++;
-          else
-            l--;
-        }
+          while (j < k && arr[j] == arr[j - 1]) j++;
+          while (j < k && arr[k] == arr[k + 1]) k--;
+        } else if (sum < target)
+          j++;
+        else
+          k--;
       }
     }
 
@@ -65,7 +51,7 @@ int main() {
     vector<int> arr(n);
     for (int i = 0; i < n; i++) cin >> arr[i];
     // cout << solution.solve() << endl;
-    vector<vector<int>> ans = solution.fourSum(arr, target);
+    vector<vector<int>> ans = solution.threeSum(arr, target);
 
     for (int i = 0; i < ans.size(); i++) {
       for (int j = 0; j < ans[0].size(); j++) {
