@@ -59,7 +59,7 @@ int main() {
       cin >> arr[i];
     }
 
-    solution.sortColors(arr);
+    solution.Dutch_National_Flag(arr);
     for (int i = 0; i < n; i++) {
       cout << arr[i] << " ";
     }

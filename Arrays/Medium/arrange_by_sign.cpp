@@ -4,20 +4,19 @@ using namespace std;
 class Solution {
  public:
   vector<int> rearrangeArray(vector<int>& arr) {
-    vector<int> positives;
-    vector<int> negatives;
+    vector<int> pos;
+    vector<int> neg;
 
     for (int i = 0; i < arr.size(); i++) {
       if (arr[i] >= 0) {
-        positives.push_back(arr[i]);
+        pos.push_back(arr[i]);
       } else {
-        negatives.push_back(arr[i]);
+        neg.push_back(arr[i]);
       }
     }
-
     for (int i = 0; i < arr.size() / 2; i++) {
-      arr[2 * i] = positives[i];
-      arr[2 * i + 1] = negatives[i];
+      arr[i * 2] = pos[i];
+      arr[i * 2 - 1] = neg[i];
     }
 
     return arr;
