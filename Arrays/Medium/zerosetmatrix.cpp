@@ -21,7 +21,7 @@ class Solution {
 
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < m; j++) {
-        if (row[i] || cols[j]) {
+        if (row[i] == 1 || cols[j] == 1) {
           arr[i][j] = 0;
         }
       }
@@ -31,9 +31,8 @@ class Solution {
       for (int j = 0; j < m; j++) {
         cout << arr[i][j] << " ";
       }
-      cout << " " << endl;
+      cout << endl;
     }
-
     cout << endl;
   }
 };

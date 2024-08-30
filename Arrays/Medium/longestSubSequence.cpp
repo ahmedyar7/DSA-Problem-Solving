@@ -4,21 +4,23 @@ using namespace std;
 class Solution {
  public:
   int longestConsecutive(vector<int>& arr) {
-    sort(arr.begin(), arr.end());
-    int longest = 1;
-    int counter = 0;
-    int last_smaller = INT_MIN;
+    if (arr.size() == 0) return 0;
+    set<int> st(arr.begin(), arr.end());
+    int longest = 0;
 
-    for (int i = 0; i < arr.size(); i++) {
-      if (arr[i] - 1 == last_smaller) {
-        counter++;
-        last_smaller = arr[i];
-      } else if (last_smaller != arr[i]) {
-        counter = 1;
-        last_smaller = arr[i];
+    for (auto it : st) {
+      if (st.find(it - 1) == st.end()) {
+        int count = 1;
+        int x = it;
+
+        while (st.find(x + 1) != st.end()) {
+          x = x + 1;
+          count = count + 1;
+        }
+        longest = max(longest, count);
       }
-      longest = max(longest, counter);
     }
+
     return longest;
   }
 };
