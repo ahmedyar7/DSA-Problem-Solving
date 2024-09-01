@@ -4,45 +4,26 @@ using namespace std;
 class Solution {
  public:
   int maxLen(vector<int>& arr, int n) {
-    int sum = 0;       // This will store the sum of array
-    int maxi_arr = 0;  // This will store the maxium subarray
-    map<int, int> mpp;
-
+    unordered_map<int, int> hashmap;
+    int maxi = 0;
+    int sum = 0;
     for (int i = 0; i < n; i++) {
-      sum += arr[i];  // This will add the element while traversing once
+      sum += arr[i];
 
-      if (sum == 0) {  // This will check wether the sum = 0 or not
-        maxi_arr =
-            i +
-            1;  // If yes then adding the till that very index to the maxi_arr
+      if (sum == 0) {
+        maxi = i + 1;
       }
 
       else {
-        if (mpp.find(sum) != mpp.end()) {
-          maxi_arr = max(maxi_arr, i - mpp[sum]);
+        if (hashmap.find(sum) != hashmap.end()) {
+          maxi = max(maxi, i - hashmap[sum]);
         } else {
-          mpp[sum] = i;
+          hashmap[sum] = i;
         }
       }
     }
 
-    return maxi_arr;
-  }
-
-  vector<int> twoSum(vector<int>& arr, int target) {
-    map<int, int> hashmap;
-
-    for (int i = 0; i < arr.size(); i++) {
-      int req = target - arr[i];
-
-      if (hashmap.find(req) != hashmap.end()) {
-        return {hashmap[req] + 1, i + 1};
-      } else {
-        hashmap[arr[i]] = i;
-      }
-    }
-
-    return {-1, -1};
+    return maxi;
   }
 };
 
@@ -57,19 +38,12 @@ int main() {
   Solution solution;
   while (t--) {
     int n;
-    int target;
-    cin >> n >> target;
+    cin >> n;
     vector<int> arr(n);
     for (int i = 0; i < n; i++) {
       cin >> arr[i];
     }
-    // cout << solution.maxLen(arr, n) << endl << endl;
-
-    vector<int> ans = solution.twoSum(arr, target);
-    for (int i = 0; i < ans.size(); i++) {
-      cout << ans[i] << " ";
-    }
-    cout << endl;
+    cout << solution.maxLen(arr, n) << endl << endl;
   }
 
   return 0;
