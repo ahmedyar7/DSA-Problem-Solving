@@ -8,10 +8,10 @@ class Solution {
     sort(arr.begin(), arr.end());
 
     for (int i = 0; i < arr.size(); i++) {
-      if (ans.empty() || arr.back()[1] > arr[i][1]) {
+      if (ans.empty() || arr.back()[1] > ans[i][1]) {
         ans.push_back(arr[i]);
       } else {
-        ans.back()[1] = max(arr.back()[1], arr[i][1]);
+        ans.back()[1] = max(arr.back()[1], ans[i][1]);
       }
     }
 
