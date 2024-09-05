@@ -7,7 +7,7 @@ class Solution {
   void merge(vector<long long>& arr, int low, int mid, int high) {
     int left = low;
     int right = mid + 1;
-    vector<int> temp;
+    vector<long long> temp;
 
     while (left <= mid && right <= high) {
       if (arr[left] <= arr[right]) {
@@ -24,7 +24,6 @@ class Solution {
       temp.push_back(arr[left]);
       left++;
     }
-
     while (right <= high) {
       temp.push_back(arr[right]);
       right++;
@@ -37,7 +36,7 @@ class Solution {
 
   void merge_sort(vector<long long>& arr, int low, int high) {
     if (low < high) {
-      int mid = low + (high - low) / 2.;
+      int mid = (high + low) / 2;
       merge_sort(arr, low, mid);
       merge_sort(arr, mid + 1, high);
       merge(arr, low, mid, high);
