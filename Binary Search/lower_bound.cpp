@@ -6,19 +6,19 @@ class Solution {
   int findFloor(vector<long long> &arr, long long n, long long target) {
     int low = 0;
     int high = n - 1;
-    int ans = -1;
+    int ans = n;
 
     while (low <= high) {
-      int mid = low + high / 2;
-      if (arr[mid] == target) {
-        return mid;
-      } else if (arr[mid] < target) {
+      int mid = low + (high - low) / 2;
+
+      if (arr[mid] >= target) {
         ans = mid;
-        low = mid + 1;
-      } else {
         high = mid - 1;
+      } else {
+        low = mid + 1;
       }
     }
+
     return ans;
   }
 };
