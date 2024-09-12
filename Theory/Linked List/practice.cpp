@@ -1,19 +1,18 @@
-#include <climits>
 #include <iostream>
 using namespace std;
 
+// . Making the Node
 class Node {
  public:
   int data;
   Node* next;
-
   Node(int value) {
     data = value;
     next = NULL;
   }
 };
 
-//. Inserting Element At Tail
+//. Inserting at tail
 void insert_at_tail(Node*& head, int value) {
   Node* new_node = new Node(value);
   if (head == NULL) {
@@ -27,84 +26,129 @@ void insert_at_tail(Node*& head, int value) {
   temp->next = new_node;
 }
 
-//. Display Linked List
-void display(Node* head) {
-  while (head->next != NULL) {
-    cout << head->data << " -> ";
+//. Total No.of Nodes
+void count_nodes(Node* head) {
+  int counter = 0;
+  while (head != NULL) {
+    counter++;
     head = head->next;
   }
-  cout << "NULL" << endl;
+  cout << "No. of Nodes: " << counter << endl;
 }
 
-// . Insert at Head
+//. Insert at head
 void insert_at_head(Node*& head, int value) {
   Node* new_node = new Node(value);
-  new_node->next = head;
+  Node* p = head;
+  new_node->next = p;
   head = new_node;
 }
 
-// . Count Number of Nodes
-int count_node(Node* head) {
-  int count = 0;
-  while (head->next != NULL) {
-    count++;
-    head = head->next;
-  }
-  cout << "Number of Nodes " << count << endl;
-}
-
-// . Maximum Element
+//. Maximum element In LL
 void maximum_element(Node* head) {
-  int max = INT_MIN;
-  while (head->next != NULL) {
+  int max = -1000000;
+  while (head != NULL) {
     if (head->data > max) {
       max = head->data;
     }
     head = head->next;
   }
-  cout << "Maximum Element " << max << endl;
+  cout << "Maximum Element: " << max << endl;
 }
 
-// . Minimum Element
 void minimum_element(Node* head) {
-  int min = INT_MAX;
-  while (head->next != NULL) {
+  int min = 1000000;
+  while (head != NULL) {
     if (head->data < min) {
       min = head->data;
     }
     head = head->next;
   }
-  cout << "Minimum Element " << min << endl;
+  cout << "Minimum Element: " << min << endl;
 }
 
-// . Searching in array
 Node* search(Node* head, int key) {
   Node* p = head;
   Node* q = NULL;
-
-  while (p != NULL) {
+  while (head != NULL) {
     if (p->data == key) {
+      if (q != NULL) {
+        q->next = p->next;
+        p->next = head;
+        head = p;
+      }
       return p;
-      q->next = p->next;
-      p->next = head;
-      head = p;
     }
+    return NULL;
+  }
+}
+
+void insert_at_sorted(Node* head, int value) {
+  Node* p = head;
+  Node* q = NULL;
+  Node* new_node = new Node(value);
+  if (head == NULL || head->data >= value) {
+    new_node->next = head;  // New node points to the current head
+    head = new_node;        // Head now points to the new node
+    return;
+  }
+  while (p != NULL && p->data < value) {
     q = p;
     p = p->next;
   }
+  new_node->next = p;
+  q->next = new_node;
+}
+
+void deallocate_memory(Node* head) {
+  Node* current = head;
+  Node* next_node;
+  while (current != NULL) {
+    next_node = current->next;
+    delete current;
+    current = next_node;
+  }
+  head = NULL;
+}
+
+void delete_node(Node*& head, int pos) {
+  if (pos < 1 || head == NULL) return;
+  Node* current = head;
+  Node* previous = NULL;
+  for (int i = 1; i < pos; i++) {
+    if (current == NULL) return;
+    previous = current;
+    current = current->next;
+  }
+  if (previous == NULL) {
+    head = current->next;
+  }
+  previous->next = current->next;
+  delete previous;
+}
+
+void display(Node* head) {
+  while (head != NULL) {
+    cout << head->data << " -> ";
+    head = head->next;
+  }
+  cout << "NULL\n";
 }
 
 int main() {
   Node* node = NULL;
-  int count = 1;
 
-  insert_at_head(node, 250);
   for (int i = 0; i <= 10; i++) {
-    insert_at_tail(node, count);
-    count = count * 2;
+    insert_at_tail(node, i);
   }
+  insert_at_sorted(node, 11);
+  insert_at_head(node, 1010);
+  insert_at_sorted(node, 10010);
+  delete_node(node, 0);
   display(node);
-  count_node(node);
+  count_nodes(node);
   maximum_element(node);
   minimum_element(node);
+  cout << "Element found: " << search(node, 10010) << endl;
+  deallocate_memory(node);
 }
