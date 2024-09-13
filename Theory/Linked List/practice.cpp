@@ -113,13 +113,16 @@ void deallocate_memory(Node* head) {
 
 void delete_node(Node*& head, int pos) {
   if (pos < 1 || head == NULL) return;
+
   Node* current = head;
   Node* previous = NULL;
+
   for (int i = 1; i < pos; i++) {
     if (current == NULL) return;
     previous = current;
     current = current->next;
   }
+
   if (previous == NULL) {
     head = current->next;
   }
