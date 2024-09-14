@@ -95,6 +95,70 @@ void insert_at_sorted(Node*& head, int value) {
   new_node->next = current;
 }
 
+// . Concatenate 2 Linked Lists
+Node* concatenate_linked_list(Node*& head_1, Node*& head_2) {
+  Node* current = head_1;
+  while (current->next != NULL) current = current->next;
+  current->next = head_2;
+  head_2 = NULL;
+  return head_1;
+}
+
+//. Merging two linked lists
+Node* merge_nodes(Node*& list_1, Node*& list_2) {
+  Node* first = list_1;
+  Node* second = list_2;
+  Node* third = NULL;
+  Node* last = NULL;
+
+  // Edge Case
+  if (first == NULL) return second;
+  if (second == NULL) return first;
+
+  // Initial Condition
+  if (first->data < first->data) {
+    third = last = first;
+    first = first->next;
+  } else {
+    third = last = second;
+    second = second->next;
+  }
+
+  while (first != NULL && second != NULL) {
+    if (first->data < second->data) {
+      last->next = first;
+      last = first;
+      first = first->next;
+    } else {
+      last->next = second;
+      last = second;
+      second = second->next;
+    }
+  }
+
+  // If either of list finish first
+  if (first != NULL) {
+    last->next = first;
+  } else {
+    last->next = second;
+  }
+
+  return third;
+}
+
+// . Check for loops in Linked list
+bool isLoop(Node* head) {
+  Node* slow = head;
+  Node* fast = head;
+
+  while (fast != NULL && fast->next != NULL) {
+    slow = slow->next;        // move one step
+    fast = fast->next->next;  // move 2 step
+    if (slow == fast) return true;
+  }
+  return false;
+}
+
 void display(Node* head) {
   if (head == NULL) return;
   while (head != NULL) {
@@ -105,13 +169,19 @@ void display(Node* head) {
 }
 
 int main() {
-  Node* node = NULL;
-  for (int i = 0; i <= 10; i++) insert_at_tail(node, i * 2);
-  insert_at_tail(node, 20);
-  remove_duplicates(node);
-  insert_at_sorted(node, 21);
-  display(node);
-  cout << search_node(node, 4);
+  Node* node_1 = NULL;
+  Node* node_2 = NULL;
 
-  // cout << check_sorted(node) << endl;
+  insert_at_tail(node_1, 1);
+  insert_at_tail(node_1, 2);
+  insert_at_tail(node_1, 4);
+
+  insert_at_tail(node_2, 1);
+  insert_at_tail(node_2, 3);
+  insert_at_tail(node_2, 4);
+
+  // Node* concat = concatenate_linked_list(node_1, node_2);
+  // display(concat);
+  Node* merged_linked_list = merge_nodes(node_1, node_2);
+  display(merged_linked_list);
 }
