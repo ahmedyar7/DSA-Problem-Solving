@@ -55,14 +55,13 @@ class CharacterGrid {
         }
       }
     }
-  }
 
-  void print_grid() {
-    for (int i = 0; i < row; i++) {
-      for (int j = 0; j < col; j++) {
-        cout << charactergrid[i][j] << " ";
+    void print_grid() {
+      for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+          cout << charactergrid[i][j] << " ";
+        }
+        cout << "\n";
       }
-      cout << "\n";
     }
-  }
-};
+  };

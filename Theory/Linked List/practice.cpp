@@ -138,6 +138,33 @@ void display(Node* head) {
   cout << "NULL\n";
 }
 
+bool check_sorted(Node* head) {
+  int x = -1000000;
+  while (head != NULL) {
+    if (head->data < x) {
+      return false;
+    }
+    x = head->data;
+    head = head->next;
+  }
+  return true;
+}
+
+void remove_duplicate(Node* head) {
+  if (head == NULL) return;
+  Node* prev = head;
+  Node* current = prev->next;
+  while (current != NULL) {
+    if (prev->data != current->data) {
+      prev = current;
+    } else {
+      prev->next = current->next;
+      delete current;
+    }
+    current = prev->next;
+  }
+}
+
 int main() {
   Node* node = NULL;
 

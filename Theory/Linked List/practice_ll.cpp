@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 using namespace std;
 
@@ -12,26 +13,67 @@ class Node {
   }
 };
 
-// Insert at head
-void insert_at_head(Node*& head, int value) {
-  Node* new_node = new Node(value);
-  new_node->next = head;
-  head = new_node;
-}
-
-// Insert at tail
 void insert_at_tail(Node*& head, int value) {
   Node* new_node = new Node(value);
   if (head == NULL) {
     head = new_node;
+    return;
   }
 
-  Node* temp = head;
-  while (temp->next != NULL) {
-    temp = temp->next;
+  Node* current = head;
+  while (current->next != NULL) {
+    current = current->next;
   }
 
-  temp->next = new_node;
+  current->next = new_node;
+}
+
+bool check_sorted(Node* head) {
+  int x = INT_MIN;
+  while (head != NULL) {
+    if (head->data < x) {
+      return false;
+    }
+    x = head->data;
+    head = head->next;
+  }
+  return true;
+}
+
+void remove_duplicates(Node* head) {
+  if (head == NULL) return;
+
+  Node* prev = head;
+  Node* current = prev->next;
+
+  while (current != NULL) {
+    if (prev->data != current->data) {
+      prev = current;
+    } else {
+      prev->next = current->next;
+      delete current;
+    }
+    current = prev->next;
+  }
+}
+
+Node* search_node(Node* head, int key) {
+  Node* current = head;
+  Node* prev = NULL;
+
+  while (current != NULL) {
+    if (current->data == key) {
+      if (prev != NULL) {
+        prev->next = current->next;
+        current->next = head;
+        head = current;
+      }
+      return current;
+    }
+    prev = current;
+    current = current->next;
+  }
+  return NULL;
 }
 
 void insert_at_sorted(Node*& head, int value) {
@@ -39,7 +81,8 @@ void insert_at_sorted(Node*& head, int value) {
   Node* prev = NULL;
   Node* new_node = new Node(value);
 
-  if (head == NULL || head->data >= value) {
+  if (head == NULL || head->data > value) {
+    head->next = new_node;
     head = new_node;
     return;
   }
@@ -48,55 +91,27 @@ void insert_at_sorted(Node*& head, int value) {
     prev = current;
     current = current->next;
   }
-
-  new_node->next = current;
   prev->next = new_node;
+  new_node->next = current;
 }
 
-// Delete Node
-void delete_node(Node*& head, int position) {
-  Node* current = head;
-  Node* prev = NULL;
-
-  if (position < 1 || head == NULL) return;
-
-  for (int i = 1; i < position; i++) {
-    if (current == NULL) return;
-    prev = current;
-    current = current->next;
-  }
-
-  if (prev == NULL) head = current->next;
-  prev->next = current->next;
-  delete current;
-}
-
-// Display Linked List
 void display(Node* head) {
+  if (head == NULL) return;
   while (head != NULL) {
     cout << head->data << " -> ";
     head = head->next;
   }
-  cout << "NULL" << endl;
+  cout << "NULL\n";
 }
 
 int main() {
-  Node* node = NULL;  // Initialize the linked list head to NULL
-
-  // Build the list
-  for (int i = 0; i <= 5; i++) {
-    insert_at_head(node, i);  // Insert at head
-    insert_at_tail(node, i);  // Insert at tail
-  }
-
-  // Insert an element in a sorted position
-  insert_at_sorted(node, 99);
-
-  // Delete a node at the second position
-  delete_node(node, 2);
-
-  // Display the list
+  Node* node = NULL;
+  for (int i = 0; i <= 10; i++) insert_at_tail(node, i * 2);
+  insert_at_tail(node, 20);
+  remove_duplicates(node);
+  insert_at_sorted(node, 21);
   display(node);
+  cout << search_node(node, 4);
 
-  return 0;
+  // cout << check_sorted(node) << endl;
 }
