@@ -95,23 +95,41 @@ Node* merge_ll(Node*& node1, Node*& node2) {
   return third;
 }
 
+void print_circular(Node* head) {
+  if (head == nullptr) {
+    cout << "The list is empty." << endl;
+    return;
+  }
+
+  Node* temp = head;
+
+  // Use a do-while loop to ensure we print the head node
+  do {
+    cout << temp->data << " ";
+    temp = temp->next;
+  } while (temp != head);
+
+  cout << endl;
+}
+
 int main() {
-  Node* node1 = NULL;
-  Node* node2 = NULL;
+  Node* node1 = nullptr;
+  Node* node2 = nullptr;
 
   insert_at_tail(node1, 2);
   insert_at_tail(node1, 4);
   insert_at_tail(node1, 6);
   insert_at_tail(node1, 8);
+  print_circular(node1);
 
-  insert_at_tail(node2, 1);
-  insert_at_tail(node2, 3);
-  insert_at_tail(node2, 5);
-  insert_at_tail(node2, 7);
+  // insert_at_tail(node2, 1);
+  // insert_at_tail(node2, 3);
+  // insert_at_tail(node2, 5);
+  // insert_at_tail(node2, 7);
 
   //   Node* concate = concatenate_LL(node1, node2);
   //   display(concate);
 
-  Node* merged = merge_ll(node1, node2);
-  display(merged);
+  // Node* merged = merge_ll(node1, node2);
+  display(node1);
 }
