@@ -1,4 +1,3 @@
-#include <climits>
 #include <iostream>
 using namespace std;
 
@@ -6,182 +5,125 @@ class Node {
  public:
   int data;
   Node* next;
-
   Node(int value) {
     data = value;
-    next = NULL;
+    next = nullptr;
   }
 };
 
 void insert_at_tail(Node*& head, int value) {
   Node* new_node = new Node(value);
-  if (head == NULL) {
+  if (head == nullptr) {
     head = new_node;
-    return;
+    new_node->next = head;
   }
-
-  Node* current = head;
-  while (current->next != NULL) {
-    current = current->next;
+  Node* temp = head;
+  while (temp->next != head) {
+    temp = temp->next;
   }
-
-  current->next = new_node;
-}
-
-bool check_sorted(Node* head) {
-  int x = INT_MIN;
-  while (head != NULL) {
-    if (head->data < x) {
-      return false;
-    }
-    x = head->data;
-    head = head->next;
-  }
-  return true;
-}
-
-void remove_duplicates(Node* head) {
-  if (head == NULL) return;
-
-  Node* prev = head;
-  Node* current = prev->next;
-
-  while (current != NULL) {
-    if (prev->data != current->data) {
-      prev = current;
-    } else {
-      prev->next = current->next;
-      delete current;
-    }
-    current = prev->next;
-  }
-}
-
-Node* search_node(Node* head, int key) {
-  Node* current = head;
-  Node* prev = NULL;
-
-  while (current != NULL) {
-    if (current->data == key) {
-      if (prev != NULL) {
-        prev->next = current->next;
-        current->next = head;
-        head = current;
-      }
-      return current;
-    }
-    prev = current;
-    current = current->next;
-  }
-  return NULL;
-}
-
-void insert_at_sorted(Node*& head, int value) {
-  Node* current = head;
-  Node* prev = NULL;
-  Node* new_node = new Node(value);
-
-  if (head == NULL || head->data > value) {
-    head->next = new_node;
-    head = new_node;
-    return;
-  }
-
-  while (current != NULL && current->data < value) {
-    prev = current;
-    current = current->next;
-  }
-  prev->next = new_node;
-  new_node->next = current;
-}
-
-// . Concatenate 2 Linked Lists
-Node* concatenate_linked_list(Node*& head_1, Node*& head_2) {
-  Node* current = head_1;
-  while (current->next != NULL) current = current->next;
-  current->next = head_2;
-  head_2 = NULL;
-  return head_1;
-}
-
-//. Merging two linked lists
-Node* merge_nodes(Node*& list_1, Node*& list_2) {
-  Node* first = list_1;
-  Node* second = list_2;
-  Node* third = NULL;
-  Node* last = NULL;
-
-  // Edge Case
-  if (first == NULL) return second;
-  if (second == NULL) return first;
-
-  // Initial Condition
-  if (first->data < first->data) {
-    third = last = first;
-    first = first->next;
-  } else {
-    third = last = second;
-    second = second->next;
-  }
-
-  while (first != NULL && second != NULL) {
-    if (first->data < second->data) {
-      last->next = first;
-      last = first;
-      first = first->next;
-    } else {
-      last->next = second;
-      last = second;
-      second = second->next;
-    }
-  }
-
-  // If either of list finish first
-  if (first != NULL) {
-    last->next = first;
-  } else {
-    last->next = second;
-  }
-
-  return third;
-}
-
-// . Check for loops in Linked list
-bool isLoop(Node* head) {
-  Node* slow = head;
-  Node* fast = head;
-
-  while (fast != NULL && fast->next != NULL) {
-    slow = slow->next;        // move one step
-    fast = fast->next->next;  // move 2 step
-    if (slow == fast) return true;
-  }
-  return false;
+  temp->next = new_node;
+  new_node->next = head;
 }
 
 void display(Node* head) {
-  if (head == NULL) return;
-  while (head != NULL) {
-    cout << head->data << " -> ";
-    head = head->next;
+  if (head == nullptr) return;
+  Node* temp = head;
+
+  do {
+    cout << temp->data << " -> ";
+    temp = temp->next;
+  } while (temp != head);
+  cout << "HEAD\n";
+}
+
+void insert_at_head(Node*& head, int value) {
+  Node* new_node = new Node(value);
+  if (head == nullptr) {
+    new_node->next = head;
+    head = new_node;
+    return;
   }
-  cout << "NULL\n";
+
+  Node* temp = head;
+  while (temp->next != head) temp = temp->next;
+  temp->next = new_node;
+  new_node->next = head;
+  head = new_node;
+}
+
+void insert_at_position(Node*& head, int value, int position) {
+  Node* new_node = new Node(value);
+  if (head == nullptr || position == 1) insert_at_head(head, value);
+
+  Node* temp = head;
+  for (int i = 0; i < position - 1 && temp->next != head; i++) {
+    temp = temp->next;
+  }
+  new_node->next = temp->next;
+  temp->next = new_node;
+  return;
+}
+
+void delete_head_node(Node*& head) {
+  if (head == nullptr) {
+    delete head;
+    head->next = nullptr;
+    return;
+  }
+
+  Node* temp = head;
+  Node* last = head;
+
+  while (last->next != head) {
+    last = last->next;
+  }
+
+  head = head->next;
+  last->next = head;
+  delete temp;
+}
+
+void delete_any_node(Node*& head, int position) {
+  if (head == nullptr) {
+    delete head;
+    head->next = nullptr;
+    return;
+  }
+
+  Node* temp = head;
+  Node* last = head;
+  while (last->next != head) {
+    last = last->next;
+  }
+  head = head->next;
+  last->next = head;
+  delete temp;
+  return;
+
+  Node* current = head;
+  Node* previous = nullptr;
+
+  for (int i = 1; i < position && current->next != head; i++) {
+    previous = current;
+    current = current->next;
+  }
+
+  previous->next = current->next;
+  delete current;
+  return;
 }
 
 int main() {
-  Node* node_1 = NULL;
-  Node* node_2 = NULL;
+  Node* node = nullptr;
 
-  insert_at_tail(node_1, 1);
-  insert_at_tail(node_1, 2);
-  insert_at_tail(node_1, 4);
+  insert_at_tail(node, 1);
+  insert_at_head(node, 0);
+  insert_at_tail(node, 2);
+  insert_at_position(node, 22, 2);
+  insert_at_tail(node, 3);
+  display(node);
 
-  insert_at_tail(node_2, 1);
-  insert_at_tail(node_2, 3);
-  insert_at_tail(node_2, 4);
-
-  // Node* concat = concatenate_linked_list(node_1, node_2);
-  // display(concat);
-  Node* merged_linked_list = merge_nodes(node_1, node_2);
-  display(merged_linked_list);
+  // delete_head_node(node);
+  delete_any_node(node, 3);
+  display(node);
 }

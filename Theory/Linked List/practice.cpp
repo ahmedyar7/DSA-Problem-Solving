@@ -162,31 +162,45 @@ Node* merge_doubly_LL(Node*& node1, Node*& node2) {
     last->next = second;
   else
     last->next = first;
-
   return third;
 }
 
+void remove_element(Node* head, int value) {
+  Node* current = head;
+  Node* prev = nullptr;
+
+  if (head == nullptr || head->next == nullptr) return;
+
+  if (head->data == value) {
+    Node* temp = head;
+    head = head->next;
+    delete temp;
+  }
+
+  while (current != nullptr) {
+    if (current->data == value) {
+      Node* temp = current;
+      prev->next = current->next;
+      current = current->next;
+      delete temp;
+    } else {
+      prev = current;
+      current = current->next;
+    }
+  }
+}
+
 int main() {
-  Node* node1 = nullptr;
-  Node* node2 = nullptr;
+  Node* node = nullptr;
 
-  insert_at_tail(node1, 1);
-  insert_at_tail(node1, 3);
-  insert_at_tail(node1, 5);
-  insert_at_tail(node1, 7);
-  insert_at_tail(node1, 9);
+  insert_at_tail(node, 1);
+  insert_at_tail(node, 2);
+  insert_at_tail(node, 6);
+  insert_at_tail(node, 3);
+  insert_at_tail(node, 4);
+  insert_at_tail(node, 5);
 
-  insert_at_tail(node2, 2);
-  insert_at_tail(node2, 4);
-  insert_at_tail(node2, 6);
-  insert_at_tail(node2, 8);
-  insert_at_tail(node2, 10);
-
-  display(node2);
-  display(node1);
-
-  Node* merged = merge_doubly_LL(node1, node2);
-  display(merged);
-
+  remove_element(node, 6);
+  display(node);
   return 0;
 }

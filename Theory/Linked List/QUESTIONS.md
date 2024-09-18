@@ -13,6 +13,7 @@
 - Merging of two linked list
 - Check sorted
 - Removing duplicates
+- Removing specific element occurences
 
 ## Circular Linked List
 
