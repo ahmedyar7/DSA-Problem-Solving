@@ -81,17 +81,91 @@ void reverse_dll(Node*& head) {
   if (temp != nullptr) head = temp->prev;
 }
 
-int main() {
-  Node* node = nullptr;
-  insert_at_tail(node, 1);
-  // insert_at_head(node, 2222);
-  insert_at_tail(node, 2);
-  // insert_at_position(node, 2212, 1);
-  insert_at_tail(node, 3);
-  insert_at_tail(node, 3);
-  insert_at_tail(node, 3);
+Node* concate(Node*& node1, Node*& node2) {
+  Node* first = node1;
+  Node* second = node2;
 
-  display(node);
-  reverse_dll(node);
-  display(node);
+  if (first == nullptr) return second;
+  if (second == nullptr) return first;
+
+  while (first->next != nullptr) {
+    first = first->next;
+  }
+  first->next = second;
+  second = nullptr;
+  return node1;
+}
+
+Node* merge_dll(Node* node1, Node* node2) {
+  Node* first = node1;
+  Node* second = node2;
+  Node* third = nullptr;  // This will be the head of the merged list
+  Node* last = nullptr;   // This will track the last node of the merged list
+
+  // If either list is empty, return the other one
+  if (first == nullptr) return second;
+  if (second == nullptr) return first;
+
+  // Initialize the merged list with the smaller head
+  if (first->data < second->data) {
+    third = last = first;
+    first = first->next;
+  } else {
+    third = last = second;
+    second = second->next;
+  }
+  last->prev = nullptr;  // The first node has no previous node
+
+  // Merge the two lists
+  while (first != nullptr && second != nullptr) {
+    if (first->data < second->data) {
+      last->next = first;
+      first->prev = last;  // Update the previous pointer
+      last = first;        // Move last to the node that was just added
+      first = first->next;
+    } else {
+      last->next = second;
+      second->prev = last;  // Update the previous pointer
+      last = second;        // Move last to the node that was just added
+      second = second->next;
+    }
+  }
+
+  // Append the remaining elements of either list
+  if (first != nullptr) {
+    last->next = first;
+    first->prev = last;
+  } else {
+    last->next = second;
+    if (second != nullptr) second->prev = last;
+  }
+
+  // Return the head of the merged list
+  return third;
+}
+
+int main() {
+  Node* node1 = nullptr;
+  Node* node2 = nullptr;
+
+  insert_at_tail(node1, 1);
+  insert_at_tail(node1, 3);
+  insert_at_tail(node1, 5);
+  insert_at_tail(node1, 7);
+  insert_at_tail(node1, 9);
+
+  insert_at_tail(node2, 2);
+  insert_at_tail(node2, 4);
+  insert_at_tail(node2, 6);
+  insert_at_tail(node2, 8);
+  insert_at_tail(node2, 10);
+
+  display(node1);
+  display(node2);
+
+  Node* concatenation = concate(node1, node2);
+  display(concatenation);
+  Node* merge = merge_dll(node1, node2);
+
+  display(merge);
 }
