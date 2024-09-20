@@ -64,4 +64,5 @@ class CharacterGrid {
         cout << "\n";
       }
     }
-  };
+  }
+};
