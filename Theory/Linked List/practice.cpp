@@ -96,17 +96,16 @@ Node* concate(Node*& node1, Node*& node2) {
   return node1;
 }
 
-Node* merge_dll(Node* node1, Node* node2) {
+Node* merge_dll(Node*& node1, Node*& node2) {
   Node* first = node1;
   Node* second = node2;
-  Node* third = nullptr;  // This will be the head of the merged list
-  Node* last = nullptr;   // This will track the last node of the merged list
+  Node* last = nullptr;
+  Node* third = nullptr;
 
-  // If either list is empty, return the other one
   if (first == nullptr) return second;
   if (second == nullptr) return first;
 
-  // Initialize the merged list with the smaller head
+  // Initialize third and last pointers to the smaller head node
   if (first->data < second->data) {
     third = last = first;
     first = first->next;
@@ -114,31 +113,28 @@ Node* merge_dll(Node* node1, Node* node2) {
     third = last = second;
     second = second->next;
   }
-  last->prev = nullptr;  // The first node has no previous node
 
   // Merge the two lists
   while (first != nullptr && second != nullptr) {
     if (first->data < second->data) {
-      last->next = first;
-      first->prev = last;  // Update the previous pointer
-      last = first;        // Move last to the node that was just added
-      first = first->next;
+      last->next = first;   // Link the smaller node to the merged list
+      last = first;         // Move the last pointer forward
+      first = first->next;  // Advance the first list
     } else {
       last->next = second;
-      second->prev = last;
       last = second;
       second = second->next;
     }
   }
 
-  if (first != nullptr) {
-    last->next = first;
-    first->prev = last;
-  } else {
+  // Attach the remaining part of whichever list is not yet finished
+  if (first == nullptr) {
     last->next = second;
-    if (second != nullptr) second->prev = last;
+  } else {
+    last->next = first;
   }
-  return third;
+
+  return third;  // Return the merged list's head
 }
 
 void remove_duplicates(Node*& head) {
@@ -165,13 +161,14 @@ int main() {
   insert_at_tail(node1, 3);
   insert_at_tail(node1, 5);
   insert_at_tail(node1, 7);
-  insert_at_tail(node1, 9);
-  insert_at_tail(node1, 2);
-  insert_at_tail(node1, 3);
-  insert_at_tail(node1, 2);
-  insert_at_tail(node1, 9);
 
-  remove_duplicates(node1);
+  insert_at_tail(node2, 9);
+  insert_at_tail(node2, 2);
+  insert_at_tail(node2, 3);
+  insert_at_tail(node2, 2);
+  insert_at_tail(node2, 9);
 
-  display(node1);
+  Node* merged = merge_dll(node1, node2);
+
+  display(merged);
 }
