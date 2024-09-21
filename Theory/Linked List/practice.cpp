@@ -125,13 +125,12 @@ Node* merge_dll(Node* node1, Node* node2) {
       first = first->next;
     } else {
       last->next = second;
-      second->prev = last;  // Update the previous pointer
-      last = second;        // Move last to the node that was just added
+      second->prev = last;
+      last = second;
       second = second->next;
     }
   }
 
-  // Append the remaining elements of either list
   if (first != nullptr) {
     last->next = first;
     first->prev = last;
@@ -139,9 +138,23 @@ Node* merge_dll(Node* node1, Node* node2) {
     last->next = second;
     if (second != nullptr) second->prev = last;
   }
-
-  // Return the head of the merged list
   return third;
+}
+
+void remove_duplicates(Node*& head) {
+  Node* prev = head;
+  Node* current = prev->next;
+
+  while (current != nullptr) {
+    if (prev->data != current->data) {
+      prev = current;
+      current = current->next;
+    } else {
+      prev->next = current->next;
+      delete current;
+      current = prev->next;
+    }
+  }
 }
 
 int main() {
@@ -153,19 +166,12 @@ int main() {
   insert_at_tail(node1, 5);
   insert_at_tail(node1, 7);
   insert_at_tail(node1, 9);
+  insert_at_tail(node1, 2);
+  insert_at_tail(node1, 3);
+  insert_at_tail(node1, 2);
+  insert_at_tail(node1, 9);
 
-  insert_at_tail(node2, 2);
-  insert_at_tail(node2, 4);
-  insert_at_tail(node2, 6);
-  insert_at_tail(node2, 8);
-  insert_at_tail(node2, 10);
+  remove_duplicates(node1);
 
   display(node1);
-  display(node2);
-
-  Node* concatenation = concate(node1, node2);
-  display(concatenation);
-  Node* merge = merge_dll(node1, node2);
-
-  display(merge);
 }
