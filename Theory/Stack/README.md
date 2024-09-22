@@ -1,4 +1,4 @@
-## Stack Using Array
+# Stack Using Array
 
 - Creating the stack(with class)
 - Push
@@ -8,8 +8,10 @@
 - Top element
 - Is empty
 - Is full
+- Valid Paranthesis Part 1
+- Valid Paranthesis Part 2
 
-## Stack using linked List
+# Stack using linked List
 
 - Creating the Stack (using class Node)
 - Push

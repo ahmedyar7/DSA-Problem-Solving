@@ -14,6 +14,7 @@
 - Check sorted
 - Removing duplicates
 - Removing specific element occurences
+- Find the intersection point b/w two linked list
 
 ## Circular Linked List
 

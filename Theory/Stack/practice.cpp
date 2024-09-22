@@ -1,88 +1,57 @@
 #include <iostream>
 using namespace std;
 
-/*
-    ? IMPLEMENTATION OF STACK USING ARRAY
-*/
-
-class Stack {
+class Node {
  public:
-  int size;
-  int top;
-  int *s;
+  char data;
+  Node* next;
+  Node(char value) {
+    data = value;
+    next = nullptr;
+  }
 };
 
-void create(Stack &st) {
-  cout << "Enter the size of the Stack: ";
-  cin >> st.size;
-  st.s = new int[st.size];
-  st.top = -1;
+void push(Node*& head, char value) {
+  Node* new_node = new Node(value);
+  new_node->next = head;
+  head = new_node;
 }
 
-void push(Stack *st, int value) {
-  if (st->top == st->size - 1) {
-    cout << "Stack Overflow!\n";
-    return;
+char pop(Node*& head) {
+  if (head == nullptr) {
+    return '_';
   }
-  st->top++;
-  st->s[st->top] = value;
+  Node* current = head;
+  head = head->next;
+  char value = current->data;
+  delete current;
+  return value;
 }
 
-int pop(Stack *st) {
-  int x = -1;
-  if (st->top == -1) {
-    cout << "Stack Underflow!\n";
-    return -1;
+bool valid_parenthesis(char exp[]) {
+  Node* stack = nullptr;
+  for (int i = 0; exp[i] != '\0'; i++) {
+    if (exp[i] == '(') {
+      push(stack, '(');
+    }
+
+    else if (exp[i] == ')') {
+      if (stack == nullptr || pop(stack) != '(') {
+        return false;
+      }
+    }
   }
-  x = st->s[st->top];
-  st->top--;
-  return x;
-}
-
-void display(Stack st) {
-  for (int i = st.top; i >= 0; i--) cout << st.s[i] << " ";
-  cout << "\n";
-}
-
-int is_empty(Stack st) {
-  if (st.top == -1) return 1;
-  return 0;
-}
-
-int is_full(Stack st) {
-  if (st.top == st.size - 1) return 1;
-  return 0;
-}
-
-int peek(Stack st, int position) {
-  if (st.top - position + 1 < 0) return -1;  // invalid position
-  return st.s[st.top - position + 1];
-}
-
-int top_element(Stack st) {
-  if (st.top == -1) {
-    cout << "Stack Underflow\n";
-    return 0;
-  }
-  return st.s[st.top];
+  return stack == nullptr;
 }
 
 int main() {
-  Stack st;
-  create(st);
-  push(&st, 10);
-  push(&st, 20);
-  push(&st, 30);
-  push(&st, 40);
-  push(&st, 50);
+  char exp[] = "((a+b)*(c-d))";
 
-  display(st);
+  if (valid_parenthesis(exp)) {
+    cout << "Parentheses are valid." << endl;
+  } else {
+    cout << "Parentheses are invalid." << endl;
+  }
 
-  cout << top_element(st) << "\n";
-  cout << peek(st, 1) << "\n";
-
-  cout << "After Pop Function call\n";
-  pop(&st);
-  pop(&st);
-  display(st);
+  return 0;
 }
