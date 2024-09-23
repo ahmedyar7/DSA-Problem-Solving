@@ -3,55 +3,79 @@ using namespace std;
 
 class Node {
  public:
-  char data;
+  int data;
   Node* next;
-  Node(char value) {
+  Node(int value) {
     data = value;
     next = nullptr;
   }
 };
 
-void push(Node*& head, char value) {
+void push(Node*& head, int value) {
   Node* new_node = new Node(value);
   new_node->next = head;
   head = new_node;
 }
 
-char pop(Node*& head) {
+int pop(Node*& head) {
   if (head == nullptr) {
-    return '_';
+    cout << "Stack is Empty\n";
+    return 0;
   }
   Node* current = head;
   head = head->next;
-  char value = current->data;
+  int value = current->data;
   delete current;
   return value;
 }
 
-bool valid_parenthesis(char exp[]) {
-  Node* stack = nullptr;
-  for (int i = 0; exp[i] != '\0'; i++) {
-    if (exp[i] == '(') {
-      push(stack, '(');
-    }
-
-    else if (exp[i] == ')') {
-      if (stack == nullptr || pop(stack) != '(') {
-        return false;
-      }
-    }
+void display(Node* head) {
+  if (head == nullptr) {
+    cout << "Stack is Empty!\n";
+    return;
   }
-  return stack == nullptr;
+  while (head->next != nullptr) {
+    cout << head->data << " ";
+    head = head->next;
+  }
+  cout << "\n";
+}
+
+int peek(Node* head, int position) {
+  if (head == nullptr) {
+    cout << "Stack is Empty\n";
+    return 0;
+  }
+  Node* current = head;
+  for (int i = 0; i < position - 1 && current->next != nullptr; i++) {
+    current = current->next;
+  }
+  return current->data;
+}
+
+int top_element(Node* head) {
+  if (head == nullptr) {
+    cout << "The stack is empty\n";
+    return 0;
+  }
+  return head->data;
 }
 
 int main() {
-  char exp[] = "((a+b)*(c-d))";
+  Node* stack = nullptr;
+  push(stack, 10);
+  push(stack, 20);
+  push(stack, 30);
+  push(stack, 40);
+  push(stack, 50);
 
-  if (valid_parenthesis(exp)) {
-    cout << "Parentheses are valid." << endl;
-  } else {
-    cout << "Parentheses are invalid." << endl;
-  }
+  cout << "Displaying the Stack: \n";
+  display(stack);
 
-  return 0;
+  cout << "Display the Popping Function\n";
+  cout << pop(stack) << "\n";
+
+  cout << "Checking The Peek Function\n";
+  cout << peek(stack, 2) << endl;
+  cout << top_element(stack) << endl;
 }

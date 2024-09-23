@@ -78,3 +78,31 @@ int main() {
   display(top);
   cout << "Peek Element: " << peek(top, 0);
 }
+
+bool valid_parenthesis(char exp[]) {
+  Node* stack = nullptr;
+  for (int i = 0; exp[i] != '\0'; i++) {
+    if (exp[i] == '(') {
+      push(stack, '(');
+    }
+
+    else if (exp[i] == ')') {
+      if (stack == nullptr || pop(stack) != '(') {
+        return false;
+      }
+    }
+  }
+  return stack == nullptr;
+}
+
+int main() {
+  char exp[] = "((a+b)*(c-d))";
+
+  if (valid_parenthesis(exp)) {
+    cout << "Parentheses are valid." << endl;
+  } else {
+    cout << "Parentheses are invalid." << endl;
+  }
+
+  return 0;
+}
