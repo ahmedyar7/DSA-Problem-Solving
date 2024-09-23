@@ -1,81 +1,70 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class Stack {
  public:
-  int data;
-  Node* next;
-  Node(int value) {
-    data = value;
-    next = nullptr;
-  }
+  int size;
+  int top;
+  int* s;
 };
 
-void push(Node*& head, int value) {
-  Node* new_node = new Node(value);
-  new_node->next = head;
-  head = new_node;
+void push(Stack* st, int value) {
+  if (st->top == st->size - 1) {
+    cout << "Stack Overflow\n";
+    return;
+  }
+  st->top++;
+  st->s[st->top] = value;
 }
 
-int pop(Node*& head) {
-  if (head == nullptr) {
-    cout << "Stack is Empty\n";
+int pop(Stack* st) {
+  if (st->top == -1) {
+    cout << "Stack Underflow\n";
     return 0;
   }
-  Node* current = head;
-  head = head->next;
-  int value = current->data;
-  delete current;
+  int value = st->s[st->top];
+  st->top--;
   return value;
 }
 
-void display(Node* head) {
-  if (head == nullptr) {
-    cout << "Stack is Empty!\n";
-    return;
-  }
-  while (head->next != nullptr) {
-    cout << head->data << " ";
-    head = head->next;
-  }
-  cout << "\n";
+void create_stack(Stack& st) {
+  cout << "Enter the size of Stack ";
+  cin >> st.size;
+  st.s = new int[st.size];
+  st.top = -1;
 }
 
-int peek(Node* head, int position) {
-  if (head == nullptr) {
-    cout << "Stack is Empty\n";
-    return 0;
+void display(Stack st) {
+  for (int i = st.top; i >= 0; i--) {
+    cout << st.s[i] << " ";
   }
-  Node* current = head;
-  for (int i = 0; i < position - 1 && current->next != nullptr; i++) {
-    current = current->next;
-  }
-  return current->data;
+  cout << endl;
 }
 
-int top_element(Node* head) {
-  if (head == nullptr) {
-    cout << "The stack is empty\n";
-    return 0;
+int peek(Stack* st, int position) {
+  if (st->top - position + 1 < 0) {
+    cout << "Invalid Position\n";
+    return -1;
   }
-  return head->data;
+  int value = st->s[st->top - position + 1];
+  return value;
 }
 
 int main() {
-  Node* stack = nullptr;
-  push(stack, 10);
-  push(stack, 20);
-  push(stack, 30);
-  push(stack, 40);
-  push(stack, 50);
+  Stack st;
+  create_stack(st);
+  cout << "Pushing the element\n";
+  push(&st, 10);
+  push(&st, 20);
+  push(&st, 30);
+  push(&st, 40);
 
-  cout << "Displaying the Stack: \n";
-  display(stack);
+  display(st);
 
-  cout << "Display the Popping Function\n";
-  cout << pop(stack) << "\n";
+  cout << "After Popping\n";
+  pop(&st);
+  pop(&st);
+  display(st);
 
-  cout << "Checking The Peek Function\n";
-  cout << peek(stack, 2) << endl;
-  cout << top_element(stack) << endl;
+  cout << peek(&st, 2);
 }
