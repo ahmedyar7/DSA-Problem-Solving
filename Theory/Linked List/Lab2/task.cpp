@@ -190,3 +190,8 @@ int main() {
     }
   }
 }
+
+// export TERM=xterm-256color
+// export PATH=$PATH:/root/.local/bin
+// eval "$(oh-my-posh init bash)"
+// eval "$(oh-my-posh init bash --config '/root/themes/quick-term.omp.json')"
