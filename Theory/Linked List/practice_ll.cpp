@@ -42,29 +42,29 @@ void insert_at_head(Node*& head, int value) {
   new_node->next = head;
   current->next = new_node;
   head = new_node;
-
-  return;
 }
 
 void insert_at_position(Node*& head, int value, int position) {
   Node* new_node = new Node(value);
 
   // Edge cases
-  if (position < 0) {
-    cout << "invalid Position\n";
+  if (position < 1) {
+    cout << "Invalid Position\n";
     return;
   }
 
   if (position == 1) {
-    insert_at_head(new_node, value);
+    insert_at_head(head, value);
+    return;
   }
+
   Node* current = head;
-  for (int i = 0; i < position - 1 && current->next != head; i++) {
+  for (int i = 1; i < position - 1 && current->next != head; i++) {
     current = current->next;
   }
+
   new_node->next = current->next;
   current->next = new_node;
-  return;
 }
 
 void display(Node* head) {
@@ -81,39 +81,79 @@ void display(Node* head) {
 }
 
 void delete_node(Node*& head) {
-  Node* temp = head;
-  while (temp->next != head) {
-    temp = temp->next;
+  if (head == nullptr) {
+    cout << "List is empty.\n";
+    return;
   }
-  temp->next = head->next;
-  delete head;
-  head = temp->next;
+
+  if (head->next == head) {  // Only one node in the list
+    delete head;
+    head = nullptr;
+    return;
+  }
+
+  Node* temp = head;
+  Node* last = head;
+
+  // Find the last node in the circular list
+  while (last->next != head) {
+    last = last->next;
+  }
+
+  // Point the last node to the second node
+  last->next = head->next;
+  head = head->next;
+
+  delete temp;
 }
 
 void delete_at_position(Node*& head, int position) {
-  if (position < 0) {
-    cout << "Invalid Postion\n";
+  if (head == nullptr || position < 1) {
+    cout << "Invalid Position\n";
     return;
   }
+
+  // Case when deleting the first node (position == 1)
   if (position == 1) {
     delete_node(head);
+    return;
   }
+
+  // Traverse to the node just before the position
   Node* temp = head;
   for (int i = 1; i < position - 1 && temp->next != head; i++) {
     temp = temp->next;
   }
-  temp->next = temp->next->next;
-  delete temp;
-  return;
+
+  // If temp->next is head, the position is out of range
+  if (temp->next == head || temp->next == nullptr) {
+    cout << "Position out of range\n";
+    return;
+  }
+
+  // Delete the node at the desired position
+  Node* node_to_delete = temp->next;
+  temp->next = node_to_delete->next;
+  delete node_to_delete;
 }
 
 int main() {
   Node* node = nullptr;
-  for (int i = 0; i < 10; i++) insert_at_tail(node, i);
-  // for (int i = 0; i < 10; i++) insert_at_head(node, i);
 
+  // Insert at tail
+  for (int i = 0; i < 10; i++) {
+    insert_at_tail(node, i);
+  }
+
+  // Insert at a specific position
   insert_at_position(node, 22, 2);
+
+  // Display list
   display(node);
+
+  // Delete first node
   delete_node(node);
+
+  // Display list after deletion
   display(node);
 }
