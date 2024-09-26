@@ -221,20 +221,22 @@ bool is_sorted(Node* head) {
 }
 
 void remove_duplicate(Node*& head) {
-  Node* previous = head;
-  Node* current = previous->next;
-
+  Node* prev = head;
+  Node* current = prev->next;
+  if (head == nullptr) {
+    cout << "List Is Empty\n";
+    return;
+  }
   while (current != nullptr) {
-    if (previous->data != current->data) {
-      previous = current;
+    if (current->data != prev->data) {
+      prev = current;
       current = current->next;
     } else {
-      previous->next = current->next;
+      prev->next = current->next;
       delete current;
-      current = previous->next;
+      current = prev->next;
     }
   }
-  return;
 }
 
 int main() {

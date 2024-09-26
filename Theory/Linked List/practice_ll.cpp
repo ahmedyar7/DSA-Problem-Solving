@@ -5,10 +5,11 @@ class Node {
  public:
   int data;
   Node* next;
-
+  Node* previous;
   Node(int value) {
     data = value;
     next = nullptr;
+    previous = nullptr;
   }
 };
 
@@ -16,144 +17,196 @@ void insert_at_tail(Node*& head, int value) {
   Node* new_node = new Node(value);
   if (head == nullptr) {
     head = new_node;
-    new_node->next = head;
     return;
   }
-  Node* current = head;
-
-  while (current->next != head) {
-    current = current->next;
+  Node* temp = head;
+  while (temp->next != nullptr) {
+    temp = temp->next;
   }
-  current->next = new_node;
-  new_node->next = head;
+  temp->next = new_node;
+  new_node->previous = temp;
+}
+
+void display(Node* head) {
+  if (head == nullptr) {
+    cout << "Empty List\n";
+    return;
+  }
+  while (head != nullptr) {
+    cout << head->data << " <-> ";
+    head = head->next;
+  }
+  cout << "NULL\n";
 }
 
 void insert_at_head(Node*& head, int value) {
   Node* new_node = new Node(value);
   if (head == nullptr) {
     head = new_node;
-    new_node->next = head;
     return;
   }
-  Node* current = head;
-  while (current->next != head) {
-    current = current->next;
-  }
   new_node->next = head;
-  current->next = new_node;
+  head->previous = new_node;
   head = new_node;
 }
 
 void insert_at_position(Node*& head, int value, int position) {
   Node* new_node = new Node(value);
-
-  // Edge cases
-  if (position < 1) {
+  if (head == nullptr || position < 0) {
     cout << "Invalid Position\n";
     return;
   }
-
   if (position == 1) {
     insert_at_head(head, value);
     return;
   }
-
-  Node* current = head;
-  for (int i = 1; i < position - 1 && current->next != head; i++) {
-    current = current->next;
+  Node* temp = head;
+  for (int i = 1; i < position - 1 && temp->next != nullptr; i++) {
+    temp = temp->next;
   }
+  new_node->next = temp->next;
+  temp->next = new_node;
+  temp->next->previous = new_node;
+  new_node->previous = temp;
 
-  new_node->next = current->next;
-  current->next = new_node;
+  return;
 }
 
-void display(Node* head) {
+void delete_head(Node*& head) {
   if (head == nullptr) {
     cout << "Empty Linked List\n";
     return;
   }
-  Node* current = head;
-  do {
-    cout << current->data << " -> ";
-    current = current->next;
-  } while (current != head);
-  cout << "HEAD\n";
-}
-
-void delete_node(Node*& head) {
-  if (head == nullptr) {
-    cout << "List is empty.\n";
-    return;
-  }
-
-  if (head->next == head) {  // Only one node in the list
-    delete head;
-    head = nullptr;
-    return;
-  }
-
   Node* temp = head;
-  Node* last = head;
-
-  // Find the last node in the circular list
-  while (last->next != head) {
-    last = last->next;
-  }
-
-  // Point the last node to the second node
-  last->next = head->next;
   head = head->next;
-
   delete temp;
 }
 
 void delete_at_position(Node*& head, int position) {
-  if (head == nullptr || position < 1) {
+  if (head == nullptr || position < 0) {
     cout << "Invalid Position\n";
     return;
   }
-
-  // Case when deleting the first node (position == 1)
   if (position == 1) {
-    delete_node(head);
+    delete_head(head);
     return;
   }
-
-  // Traverse to the node just before the position
   Node* temp = head;
-  for (int i = 1; i < position - 1 && temp->next != head; i++) {
+  for (int i = 1; i < position && temp->next != nullptr; i++) {
     temp = temp->next;
   }
+  temp->previous->next = temp->next;
+  temp->next->previous = temp->previous;
+  delete temp;
+}
 
-  // If temp->next is head, the position is out of range
-  if (temp->next == head || temp->next == nullptr) {
-    cout << "Position out of range\n";
-    return;
+Node* concatenate(Node*& node1, Node*& node2) {
+  Node* first = node1;
+  Node* second = node2;
+
+  if (first == nullptr) return second;
+  if (second == nullptr) return first;
+
+  while (first->next != nullptr) {
+    first = first->next;
+  }
+  first->next = second;
+  return node1;
+}
+
+Node* merge_dll(Node*& node1, Node*& node2) {
+  Node* first = node1;
+  Node* second = node2;
+  Node* third = nullptr;
+  Node* last = nullptr;
+
+  if (first == nullptr) return second;
+  if (second == nullptr) return first;
+
+  if (first->data < second->data) {
+    third = last = first;
+    first = first->next;
+  } else {
+    third = last = second;
+    second = second->next;
   }
 
-  // Delete the node at the desired position
-  Node* node_to_delete = temp->next;
-  temp->next = node_to_delete->next;
-  delete node_to_delete;
+  while (first != nullptr && second != nullptr) {
+    if (first->data < second->data) {
+      last->next = first;
+      last = first;
+      first = first->next;
+    } else {
+      last->next = second;
+      last = second;
+      second = second->next;
+    }
+  }
+
+  if (first == nullptr) {
+    last->next = second;
+  }
+  if (second == nullptr) {
+    last->next = first;
+  }
+  return third;
+}
+
+void remove_duplicate(Node*& head) {
+  Node* prev = head;
+  Node* current = prev->next;
+  if (head == nullptr) {
+    cout << "List Is Empty\n";
+    return;
+  }
+  while (current != nullptr) {
+    if (current->data != prev->data) {
+      prev = current;
+      current = current->next;
+    } else {
+      prev->next = current->next;
+      delete current;
+      current = prev->next;
+      current->previous = current;
+    }
+  }
+}
+
+void insert_at_sorted_position(Node*& head, int value) {
+  Node* new_node = new Node(value);
+  if (head == nullptr) {
+    head = new_node;
+    return;
+  }
+  Node* temp = head;
+  while (temp->next != nullptr) {
+    if (temp->data > value) {
+      insert_at_head(head, value);
+    } else {
+      new_node->next = temp->next;
+      temp->next = new_node;
+      temp->next->previous = new_node;
+      new_node->previous = temp;
+    }
+  }
+  return;
 }
 
 int main() {
-  Node* node = nullptr;
-
-  // Insert at tail
+  Node* node1 = nullptr;
+  Node* node2 = nullptr;
   for (int i = 0; i < 10; i++) {
-    insert_at_tail(node, i);
+    insert_at_tail(node1, i);
+    insert_at_tail(node2, i - 2);
   }
+  display(node1);
+  display(node2);
 
-  // Insert at a specific position
-  insert_at_position(node, 22, 2);
+  // Node* concat = concatenate(node1, node2);
+  Node* merged = merge_dll(node1, node2);
 
-  // Display list
-  display(node);
-
-  // Delete first node
-  delete_node(node);
-
-  // Display list after deletion
-  display(node);
+  display(merged);
+  remove_duplicate(merged);
+  insert_at_sorted_position(merged, 5);
+  display(merged);
 }
