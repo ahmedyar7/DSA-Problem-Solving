@@ -1,35 +1,35 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class DoublyLinkedList {
  public:
   int data;
-  Node* next;
-  Node* previous;
+  DoublyLinkedList* next;
+  DoublyLinkedList* previous;
 
-  Node(int value) {
+  DoublyLinkedList(int value) {
     data = value;
     next = nullptr;
     previous = nullptr;
   }
 
-  ~Node() {}
+  ~DoublyLinkedList() {}
 
-  void insert_at_tail(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_tail(DoublyLinkedList*& head, int value) {
+    DoublyLinkedList* new_DoublyLinkedList = new DoublyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_DoublyLinkedList;
       return;
     }
-    Node* temp = head;
+    DoublyLinkedList* temp = head;
     while (temp->next != nullptr) {
       temp = temp->next;
     }
-    temp->next = new_node;
-    new_node->previous = temp;
+    temp->next = new_DoublyLinkedList;
+    new_DoublyLinkedList->previous = temp;
   }
 
-  void display(Node* head) {
+  void display(DoublyLinkedList* head) {
     if (head == nullptr) {
       cout << "Empty List\n";
       return;
@@ -41,19 +41,19 @@ class Node {
     cout << "NULL\n";
   }
 
-  void insert_at_head(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_head(DoublyLinkedList*& head, int value) {
+    DoublyLinkedList* new_DoublyLinkedList = new DoublyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_DoublyLinkedList;
       return;
     }
-    new_node->next = head;
-    head->previous = new_node;
-    head = new_node;
+    new_DoublyLinkedList->next = head;
+    head->previous = new_DoublyLinkedList;
+    head = new_DoublyLinkedList;
   }
 
-  void insert_at_position(Node*& head, int value, int position) {
-    Node* new_node = new Node(value);
+  void insert_at_position(DoublyLinkedList*& head, int value, int position) {
+    DoublyLinkedList* new_DoublyLinkedList = new DoublyLinkedList(value);
     if (head == nullptr || position < 0) {
       cout << "Invalid Position\n";
       return;
@@ -62,29 +62,29 @@ class Node {
       insert_at_head(head, value);
       return;
     }
-    Node* temp = head;
+    DoublyLinkedList* temp = head;
     for (int i = 1; i < position - 1 && temp->next != nullptr; i++) {
       temp = temp->next;
     }
-    new_node->next = temp->next;
-    temp->next = new_node;
-    temp->next->previous = new_node;
-    new_node->previous = temp;
+    new_DoublyLinkedList->next = temp->next;
+    temp->next = new_DoublyLinkedList;
+    temp->next->previous = new_DoublyLinkedList;
+    new_DoublyLinkedList->previous = temp;
 
     return;
   }
 
-  void delete_head(Node*& head) {
+  void delete_head(DoublyLinkedList*& head) {
     if (head == nullptr) {
       cout << "Empty Linked List\n";
       return;
     }
-    Node* temp = head;
+    DoublyLinkedList* temp = head;
     head = head->next;
     delete temp;
   }
 
-  void delete_at_position(Node*& head, int position) {
+  void delete_at_position(DoublyLinkedList*& head, int position) {
     if (head == nullptr || position < 0) {
       cout << "Invalid Position\n";
       return;
@@ -93,7 +93,7 @@ class Node {
       delete_head(head);
       return;
     }
-    Node* temp = head;
+    DoublyLinkedList* temp = head;
     for (int i = 1; i < position && temp->next != nullptr; i++) {
       temp = temp->next;
     }
@@ -102,9 +102,10 @@ class Node {
     delete temp;
   }
 
-  Node* concatenate(Node*& node1, Node*& node2) {
-    Node* first = node1;
-    Node* second = node2;
+  DoublyLinkedList* concatenate(DoublyLinkedList*& DoublyLinkedList1,
+                                DoublyLinkedList*& DoublyLinkedList2) {
+    DoublyLinkedList* first = DoublyLinkedList1;
+    DoublyLinkedList* second = DoublyLinkedList2;
 
     if (first == nullptr) return second;
     if (second == nullptr) return first;
@@ -113,14 +114,15 @@ class Node {
       first = first->next;
     }
     first->next = second;
-    return node1;
+    return DoublyLinkedList1;
   }
 
-  Node* merge_dll(Node*& node1, Node*& node2) {
-    Node* first = node1;
-    Node* second = node2;
-    Node* third = nullptr;
-    Node* last = nullptr;
+  DoublyLinkedList* merge_dll(DoublyLinkedList*& DoublyLinkedList1,
+                              DoublyLinkedList*& DoublyLinkedList2) {
+    DoublyLinkedList* first = DoublyLinkedList1;
+    DoublyLinkedList* second = DoublyLinkedList2;
+    DoublyLinkedList* third = nullptr;
+    DoublyLinkedList* last = nullptr;
 
     if (first == nullptr) return second;
     if (second == nullptr) return first;
@@ -154,9 +156,9 @@ class Node {
     return third;
   }
 
-  void remove_duplicate(Node*& head) {
-    Node* prev = head;
-    Node* current = prev->next;
+  void remove_duplicate(DoublyLinkedList*& head) {
+    DoublyLinkedList* prev = head;
+    DoublyLinkedList* current = prev->next;
     if (head == nullptr) {
       cout << "List Is Empty\n";
       return;
@@ -174,42 +176,44 @@ class Node {
     }
   }
 
-  void insert_at_sorted_position(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_sorted_position(DoublyLinkedList*& head, int value) {
+    DoublyLinkedList* new_DoublyLinkedList = new DoublyLinkedList(value);
     if (head == nullptr || head->data >= value) {
-      new_node->next = head;
+      new_DoublyLinkedList->next = head;
       if (head != nullptr) {
-        head->previous = new_node;
+        head->previous = new_DoublyLinkedList;
       }
-      head = new_node;
+      head = new_DoublyLinkedList;
       return;
     }
-    Node* temp = head;
+    DoublyLinkedList* temp = head;
     while (temp->next != nullptr || temp->data < value) {
       temp = temp->next;
     }
-    new_node->next = temp->next;
+    new_DoublyLinkedList->next = temp->next;
     if (temp->next != nullptr) {
-      temp->next->previous = new_node;
+      temp->next->previous = new_DoublyLinkedList;
     }
-    temp->next = new_node;
-    new_node->previous = temp;
+    temp->next = new_DoublyLinkedList;
+    new_DoublyLinkedList->previous = temp;
   }
 };
 
 int main() {
-  Node* node1 = nullptr;
-  Node* node2 = nullptr;
-  Node dll(0);
+  DoublyLinkedList* DoublyLinkedList1 = nullptr;
+  DoublyLinkedList* DoublyLinkedList2 = nullptr;
+  DoublyLinkedList dll(0);
   for (int i = 0; i < 10; i++) {
-    dll.insert_at_tail(node1, i);
-    dll.insert_at_tail(node2, i - 2);
+    dll.insert_at_tail(DoublyLinkedList1, i);
+    dll.insert_at_tail(DoublyLinkedList2, i - 2);
   }
-  dll.display(node1);
-  dll.display(node2);
+  dll.display(DoublyLinkedList1);
+  dll.display(DoublyLinkedList2);
 
-  // Node* concat = concatenate(node1, node2);
-  Node* merged = dll.merge_dll(node1, node2);
+  // DoublyLinkedList* concat = concatenate(DoublyLinkedList1,
+  // DoublyLinkedList2);
+  DoublyLinkedList* merged =
+      dll.merge_dll(DoublyLinkedList1, DoublyLinkedList2);
 
   dll.display(merged);
   dll.remove_duplicate(merged);

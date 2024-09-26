@@ -2,42 +2,44 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class SinglyLinkedList {
  public:
   int data;
-  Node* next;
+  SinglyLinkedList* next;
 
-  Node(int value) {
+  SinglyLinkedList(int value) {
     data = value;
     next = nullptr;
   }
 
-  void insert_at_tail(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  ~SinglyLinkedList() {}
+
+  void insert_at_tail(SinglyLinkedList*& head, int value) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_SinglyLinkedList;
       return;
     }
-    Node* temp = head;
+    SinglyLinkedList* temp = head;
     while (temp->next != nullptr) {
       temp = temp->next;
     }
-    temp->next = new_node;
+    temp->next = new_SinglyLinkedList;
     return;
   }
 
-  void insert_at_head(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_head(SinglyLinkedList*& head, int value) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_SinglyLinkedList;
       return;
     }
-    new_node->next = head;
-    head = new_node;
+    new_SinglyLinkedList->next = head;
+    head = new_SinglyLinkedList;
   }
 
-  void insert_at_location(Node*& head, int value, int position) {
-    Node* new_node = new Node(value);
+  void insert_at_location(SinglyLinkedList*& head, int value, int position) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
     if (position < 0) {
       cout << "Invalid Position\n";
       return;
@@ -45,17 +47,17 @@ class Node {
     if (position == 1) {
       insert_at_head(head, value);
     }
-    Node* current = head;
+    SinglyLinkedList* current = head;
     for (int i = 0; i < position - 1 && current != nullptr; i++) {
       current = current->next;
     }
-    new_node->next = current->next;
-    current->next = new_node;
+    new_SinglyLinkedList->next = current->next;
+    current->next = new_SinglyLinkedList;
   }
 
-  int max_element(Node* head) {
+  int max_element(SinglyLinkedList* head) {
     int max = INT_MIN;
-    Node* temp = head;
+    SinglyLinkedList* temp = head;
     while (temp->next != nullptr) {
       if (temp->data > max) {
         max = temp->data;
@@ -66,7 +68,7 @@ class Node {
     return max;
   }
 
-  int min_element(Node* head) {
+  int min_element(SinglyLinkedList* head) {
     int min = INT_MAX;
     while (head != nullptr) {
       if (head->data < min) {
@@ -77,7 +79,7 @@ class Node {
     return min;
   }
 
-  int count_nodes(Node* head) {
+  int count_SinglyLinkedLists(SinglyLinkedList* head) {
     int counter = 0;
     if (head == nullptr) {
       return counter;
@@ -90,10 +92,10 @@ class Node {
     return counter;
   }
 
-  void reversing_ll(Node*& head) {
-    Node* p = head;
-    Node* q = nullptr;
-    Node* r = nullptr;
+  void reversing_ll(SinglyLinkedList*& head) {
+    SinglyLinkedList* p = head;
+    SinglyLinkedList* q = nullptr;
+    SinglyLinkedList* r = nullptr;
 
     while (p != nullptr) {
       r = q;
@@ -104,7 +106,7 @@ class Node {
     head = q;
   }
 
-  bool search_node(Node* head, int search_value) {
+  bool search_SinglyLinkedList(SinglyLinkedList* head, int search_value) {
     while (head != nullptr) {
       if (head->data == search_value) {
         return true;
@@ -114,7 +116,7 @@ class Node {
     return false;
   }
 
-  void display(Node* head) {
+  void display(SinglyLinkedList* head) {
     if (head == nullptr) {
       cout << "Empty List\n";
       return;
@@ -126,9 +128,9 @@ class Node {
     cout << "NULL\n";
   }
 
-  bool is_looped(Node* head) {
-    Node* fast = head;
-    Node* slow = head;
+  bool is_looped(SinglyLinkedList* head) {
+    SinglyLinkedList* fast = head;
+    SinglyLinkedList* slow = head;
 
     while (fast != nullptr && fast->next != nullptr) {
       slow = slow->next;
@@ -141,26 +143,27 @@ class Node {
     return false;
   }
 
-  void insert_at_sorted(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_sorted(SinglyLinkedList*& head, int value) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
 
     if (head == nullptr || head->data > value) {
-      head = new_node;
+      head = new_SinglyLinkedList;
       return;
     }
 
-    Node* current = head;
+    SinglyLinkedList* current = head;
     while (current->next != nullptr && current->next->data < value) {
       current = current->next;
     }
-    new_node->next = current->next;
-    current->next = new_node;
+    new_SinglyLinkedList->next = current->next;
+    current->next = new_SinglyLinkedList;
     return;
   }
 
-  Node* conatenate(Node*& node1, Node*& node2) {
-    Node* first = node1;
-    Node* second = node2;
+  SinglyLinkedList* conatenate(SinglyLinkedList*& SinglyLinkedList1,
+                               SinglyLinkedList*& SinglyLinkedList2) {
+    SinglyLinkedList* first = SinglyLinkedList1;
+    SinglyLinkedList* second = SinglyLinkedList2;
 
     if (first == nullptr) return second;
     if (second == nullptr) return first;
@@ -169,14 +172,15 @@ class Node {
       first = first->next;
     }
     first->next = second;
-    return node1;
+    return SinglyLinkedList1;
   }
 
-  Node* merge_ll(Node*& node1, Node*& node2) {
-    Node* first = node1;
-    Node* second = node2;
-    Node* last = nullptr;
-    Node* third = nullptr;
+  SinglyLinkedList* merge_ll(SinglyLinkedList*& SinglyLinkedList1,
+                             SinglyLinkedList*& SinglyLinkedList2) {
+    SinglyLinkedList* first = SinglyLinkedList1;
+    SinglyLinkedList* second = SinglyLinkedList2;
+    SinglyLinkedList* last = nullptr;
+    SinglyLinkedList* third = nullptr;
 
     if (first == nullptr) return second;
     if (second == nullptr) return first;
@@ -207,9 +211,9 @@ class Node {
     return third;
   }
 
-  bool is_sorted(Node* head) {
-    Node* current = head;
-    Node* previous = nullptr;
+  bool is_sorted(SinglyLinkedList* head) {
+    SinglyLinkedList* current = head;
+    SinglyLinkedList* previous = nullptr;
 
     while (current->next != nullptr) {
       previous = current;
@@ -219,9 +223,9 @@ class Node {
     return false;
   }
 
-  void remove_duplicate(Node*& head) {
-    Node* prev = head;
-    Node* current = prev->next;
+  void remove_duplicate(SinglyLinkedList*& head) {
+    SinglyLinkedList* prev = head;
+    SinglyLinkedList* current = prev->next;
     if (head == nullptr) {
       cout << "List Is Empty\n";
       return;
@@ -240,26 +244,26 @@ class Node {
 };
 
 int main() {
-  Node* node1 = nullptr;
-  Node* node2 = nullptr;
-  Node sll(0);
+  SinglyLinkedList* SinglyLinkedList1 = nullptr;
+  SinglyLinkedList* SinglyLinkedList2 = nullptr;
+  SinglyLinkedList sll(0);
 
   for (int i = 0; i <= 10; i++) {
     if (i % 2 == 0) {
-      sll.insert_at_tail(node1, i * 2);
+      sll.insert_at_tail(SinglyLinkedList1, i * 2);
     }
   }
-  sll.display(node1);
+  sll.display(SinglyLinkedList1);
 
   for (int i = 0; i <= 10; i++) {
     if (i % 2 != 0) {
-      sll.insert_at_tail(node2, i * 9);
-      sll.insert_at_tail(node2, i * 9);
+      sll.insert_at_tail(SinglyLinkedList2, i * 9);
+      sll.insert_at_tail(SinglyLinkedList2, i * 9);
     }
   }
-  sll.display(node2);
+  sll.display(SinglyLinkedList2);
 
-  Node* merged = sll.merge_ll(node1, node2);
+  SinglyLinkedList* merged = sll.merge_ll(SinglyLinkedList1, SinglyLinkedList2);
   sll.display(merged);
 
   sll.remove_duplicate(merged);

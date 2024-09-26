@@ -1,50 +1,52 @@
 #include <iostream>
 using namespace std;
 
-class Node {
+class SinglyLinkedList {
  public:
   int data;
-  Node* next;
+  SinglyLinkedList* next;
 
   // Constructor
-  Node(int value) {
+  SinglyLinkedList(int value) {
     data = value;
     next = nullptr;
   }
 
+  ~SinglyLinkedList() {}
+
   // METHODS
 
   // Insert at tail
-  void insert_at_tail(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_tail(SinglyLinkedList*& head, int value) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_SinglyLinkedList;
       return;
     }
 
-    Node* temp = head;
+    SinglyLinkedList* temp = head;
     while (temp->next != nullptr) {
       temp = temp->next;
     }
-    temp->next = new_node;
+    temp->next = new_SinglyLinkedList;
     return;
   }
 
   // Insert at head
-  void insert_at_head(Node*& head, int value) {
-    Node* new_node = new Node(value);
+  void insert_at_head(SinglyLinkedList*& head, int value) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
     if (head == nullptr) {
-      head = new_node;
+      head = new_SinglyLinkedList;
       return;
     }
-    new_node->next = head;
-    head = new_node;
+    new_SinglyLinkedList->next = head;
+    head = new_SinglyLinkedList;
     return;
   }
 
   // Insert at location
-  void insert_at_location(Node*& head, int value, int postion) {
-    Node* new_node = new Node(value);
+  void insert_at_location(SinglyLinkedList*& head, int value, int postion) {
+    SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
 
     if (postion < 0) {
       cout << "Invalid Position\n";
@@ -52,21 +54,21 @@ class Node {
     }
 
     if (postion == 1) {
-      insert_at_head(new_node, value);
+      insert_at_head(new_SinglyLinkedList, value);
       return;
     }
 
-    Node* current = head;
+    SinglyLinkedList* current = head;
     for (int i = 1; i < postion - 1 && current->next != nullptr; i++) {
       current = current->next;
     }
-    new_node->next = current->next;
-    current->next = new_node;
+    new_SinglyLinkedList->next = current->next;
+    current->next = new_SinglyLinkedList;
     return;
   }
 
   // Delete at location
-  int delete_at_location(Node*& head, int position) {
+  int delete_at_location(SinglyLinkedList*& head, int position) {
     if (position < 0) {
       cout << "Invalid Position\n";
       return -1;
@@ -78,8 +80,8 @@ class Node {
       delete head;
     }
 
-    Node* current = head;
-    Node* previous = nullptr;
+    SinglyLinkedList* current = head;
+    SinglyLinkedList* previous = nullptr;
 
     for (int i = 0; i < position && current->next != nullptr; i++) {
       previous = current;
@@ -93,7 +95,7 @@ class Node {
   }
 
   // Disply Linked List
-  void display(Node* head) {
+  void display(SinglyLinkedList* head) {
     if (head == nullptr) {
       return;
     }
@@ -105,8 +107,8 @@ class Node {
     return;
   }
 
-  // Count Nodes
-  int count_nodes(Node* head) {
+  // Count SinglyLinkedLists
+  int count_SinglyLinkedLists(SinglyLinkedList* head) {
     int counter = 0;
     if (head == nullptr) {
       return counter;
@@ -122,17 +124,17 @@ class Node {
 
 void main_menu() {
   cout << "\n\nWelcome to the Linked List \n\n";
-  cout << "1. Insert Node at tail\n";
-  cout << "2. Insert Node at head\n";
-  cout << "3. Insert Node at any Position\n";
+  cout << "1. Insert SinglyLinkedList at tail\n";
+  cout << "2. Insert SinglyLinkedList at head\n";
+  cout << "3. Insert SinglyLinkedList at any Position\n";
   cout << "4. Delete From any Postion\n";
   cout << "5. Display Linked List\n";
-  cout << "6. Count Number of total nodes\n\n";
+  cout << "6. Count Number of total SinglyLinkedLists\n\n";
 }
 
 int main() {
-  Node* head = nullptr;
-  Node node(0);  // object of Node class
+  SinglyLinkedList* head = nullptr;
+  SinglyLinkedList SinglyLinkedList(0);  // object of SinglyLinkedList class
 
   bool run = true;
   while (run) {
@@ -146,14 +148,14 @@ int main() {
       cout << "Enter the value to enter: ";
       int value;
       cin >> value;
-      node.insert_at_tail(head, value);
+      SinglyLinkedList.insert_at_tail(head, value);
     }
 
     else if (user_input == 2) {
       cout << "Enter the value to enter: ";
       int value;
       cin >> value;
-      node.insert_at_head(head, value);
+      SinglyLinkedList.insert_at_head(head, value);
     }
 
     else if (user_input == 3) {
@@ -165,24 +167,25 @@ int main() {
       int location;
       cin >> location;
 
-      node.insert_at_location(head, value, location);
+      SinglyLinkedList.insert_at_location(head, value, location);
     }
 
     else if (user_input == 4) {
       cout << "Enter the Position you want to delete: ";
       int location;
       cin >> location;
-      int deleted_value = node.delete_at_location(head, location);
+      int deleted_value = SinglyLinkedList.delete_at_location(head, location);
       cout << deleted_value << "\n";
     }
 
     else if (user_input == 5) {
       cout << "Displaying the Linked List\n\n";
-      node.display(head);
+      SinglyLinkedList.display(head);
     }
 
     else if (user_input == 6) {
-      cout << "Total Count of Nodes: " << node.count_nodes(head) << "\n";
+      cout << "Total Count of SinglyLinkedLists: "
+           << SinglyLinkedList.count_SinglyLinkedLists(head) << "\n";
     }
 
     else {
