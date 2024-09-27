@@ -200,9 +200,9 @@ class DoublyLinkedList {
 };
 
 int main() {
-  DoublyLinkedList* DoublyLinkedList1 = nullptr;
-  DoublyLinkedList* DoublyLinkedList2 = nullptr;
-  DoublyLinkedList dll(0);
+  DoublyLinkedList* DoublyLinkedList1 = nullptr;  // node 1
+  DoublyLinkedList* DoublyLinkedList2 = nullptr;  // node 2
+  DoublyLinkedList dll(0);                        // object
   for (int i = 0; i < 10; i++) {
     dll.insert_at_tail(DoublyLinkedList1, i);
     dll.insert_at_tail(DoublyLinkedList2, i - 2);

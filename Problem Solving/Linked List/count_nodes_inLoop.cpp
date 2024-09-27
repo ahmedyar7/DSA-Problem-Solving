@@ -31,3 +31,15 @@ class Solution {
     return 0;
   }
 };
+
+/*
+  Approach:
+  1. Take the hashmap and then add the nodes to that hashmaps
+     and before adding the nodes check wether that node already exits
+     or not
+
+  2. if yes then return the timer initialized as 1 and the absolute
+  difference(value of that node and the timer) otherwise add that node and
+  incrementing the timer and moving the node to the next node of the linked list
+
+*/
