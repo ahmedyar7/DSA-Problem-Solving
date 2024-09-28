@@ -64,6 +64,26 @@ class Node {
     }
     cout << "NULL\n";
   }
+
+  bool valid_parenthesis(char exp[]) {
+    Node* stack = nullptr;
+
+    for (int i = 0; exp[i] != '\0'; i++) {
+      if (exp[i] == '(' || exp[i] == '{' || exp[i] == '[')
+        push(stack, exp[i]);
+      else if (exp[i] == ')' || exp[i] == '}' || exp[i] == ']') {
+        if (stack == nullptr) return false;
+        char popped = pop(stack);
+        if ((exp[i] == '}' && popped != '{') ||
+            (exp[i] == ')' && popped != '(') ||
+            (exp[i] == ']' && popped != '[')) {
+          return false;
+        }
+      }
+    }
+
+    return stack == nullptr;
+  }
 };
 
 int main() {

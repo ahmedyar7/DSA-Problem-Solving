@@ -8,8 +8,6 @@
 - Top element
 - Is empty
 - Is full
-- Valid Paranthesis Part 1
-- Valid Paranthesis Part 2
 
 # Stack using linked List
 
@@ -17,3 +15,4 @@
 - Push
 - Pop
 - Peek
+- Valid parenthesis all
