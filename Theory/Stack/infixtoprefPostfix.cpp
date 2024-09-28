@@ -60,5 +60,5 @@ int pre(char x) {
 
 char *convert(char infix[]) {
   Stack st;
-  char postfix[] = new char(size(infix) + 1)
+  char postfix[] = new char((infix) + 1)
 }
