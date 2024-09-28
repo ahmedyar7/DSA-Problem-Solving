@@ -41,5 +41,10 @@
 
 ## Circular Doubly Linked List
 
-- Inserting element
+- Inserting element at tail
+- Inserting element at head
+- Inserting element at any position
+- Deleting element at tail
+- Deleting element at head
+- Deleting element at any position
 - Displaying element
