@@ -1,85 +1,85 @@
 #include <iostream>
 using namespace std;
 
-class Stack {
+class Node {
  private:
  public:
-  int size;
-  int top;
-  int *s;
+  int data;
+  Node* next;
 
-  void create_stack(Stack &st) {
-    cout << "Enter the size of stack: ";
-    cin >> st.size;
-    st.s = new int[st.size];
-    st.top = -1;
+  Node(int value) {
+    data = value;
+    next = nullptr;
   }
 
-  void push(Stack *st, int value) {
-    if (st->top == st->size - 1) {
-      cout << "Stack Overflow\n";
+  ~Node() {}
+
+  void push(Node*& head, int value) {
+    Node* new_node = new Node(value);
+    if (head == nullptr) {
+      head = new_node;
       return;
     }
-    st->top++;
-    st->s[st->top] = value;
+    Node* temp = head;
+    while (temp->next != next) {
+      temp = temp->next;
+    }
+    temp->next = new_node;
     return;
   }
 
-  void display(Stack st) {
-    for (int i = st.top; i >= 0; i--) {
-      cout << st.s[i] << " ";
+  int pop(Node*& head) {
+    if (head == nullptr) {
+      cout << "empty list\n";
+      return 0;
     }
-    cout << endl;
+    Node* temp = head;
+    int value = temp->data;
+    head = head->next;
+    delete temp;
+
+    cout << value << " \n";
   }
 
-  int pop(Stack *st) {
-    if (st->top == -1) {
-      cout << "Stack is empty\n";
-      return -1;
+  int peek(Node* head, int position) {
+    if (head == nullptr) {
+      cout << "Empty List\n";
+      return 0;
     }
-    int value = st->s[st->top];
-    st->top--;
-    cout << value << endl;
+    Node* temp = head;
+    for (int i = 1; i < position - 1; i++) {
+      temp = temp->next;
+    }
+    cout << temp->data << " \n";
   }
 
-  int peek(Stack st, int position) {
-    if (st.top == -1) {
-      cout << "Stack Is Empty\n";
-      return -1;
+  void display(Node* head) {
+    if (head == nullptr) {
+      cout << "Empty Stack\n";
+      return;
     }
-    cout << st.s[st.top - position + 1] << " ";
-  }
-
-  bool is_empty(Stack st) {
-    if (st.top == -1) {
-      return 1;
+    while (head != nullptr) {
+      cout << head->data << " ";
+      head = head->next;
     }
-    return 0;
-  }
-
-  bool is_full(Stack st) {
-    if (st.top == st.size - 1) {
-      return 1;
-    }
-    return 0;
+    cout << "NULL\n";
   }
 };
 
 int main() {
-  Stack st;
-  st.create_stack(st);
+  Node* head = nullptr;
+  Node stack(0);
 
-  st.push(&st, 10);
-  st.push(&st, 20);
-  st.push(&st, 30);
-  st.push(&st, 40);
-  st.push(&st, 50);
+  stack.push(head, 10);
+  stack.push(head, 20);
+  stack.push(head, 30);
+  stack.push(head, 40);
+  stack.push(head, 50);
 
-  st.display(st);
+  stack.display(head);
 
-  st.pop(&st);
-  st.pop(&st);
+  stack.pop(head);
+  stack.pop(head);
 
-  st.peek(st, 1);
-  st.peek(st, 2);
+  stack.display(head);
 }
