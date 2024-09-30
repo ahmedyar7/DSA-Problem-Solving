@@ -6,6 +6,7 @@ class StackNode {
  public:
   char data;
   StackNode* next;
+
   StackNode(char value) {
     data = value;
     next = nullptr;
@@ -18,13 +19,20 @@ class Stack {
  private:
  public:
   StackNode* top;
-  Stack() { top == nullptr; }
+
+  Stack() { top = nullptr; }
   ~Stack() { delete top; }
 
-  // Methods
+  bool is_empty() {
+    if (top == nullptr) {
+      return true;
+    }
+    return false;
+  }
+
   void push(char value) {
     StackNode* new_node = new StackNode(value);
-    if (top == nullptr) {
+    if (is_empty()) {
       top = new_node;
       return;
     }
@@ -34,71 +42,59 @@ class Stack {
   }
 
   char pop() {
-    if (top == nullptr) {
-      cout << "Stack is Empty\n";
+    if (is_empty()) {
+      cout << "Empty List\n";
       return '\0';
     }
     StackNode* temp = top;
     top = top->next;
-    char popped_value = temp->data;
+    char value = temp->data;
     delete temp;
-    return popped_value;
+    return value;
   }
 
   char peek() {
-    if (top == nullptr) {
-      cout << "Stack Is empty\n";
+    if (is_empty()) {
       return '\0';
     }
     return top->data;
   }
-
-  bool is_empty() {
-    if (top == nullptr) {
-      return true;
-    }
-    return false;
-  }
 };
 
-bool is_operator(char ch) {
-  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-      (ch >= '0' && ch <= '9')) {
+bool is_operand(char ch) {
+  if ((ch >= '0' && ch <= '9') || (ch > 'a' && ch <= 'z') ||
+      (ch >= 'A' && ch <= 'Z')) {
     return true;
   }
   return false;
 }
 
-bool is_operand(char ch) {
-  if (ch == '+' || ch == '-' || ch == '/' || ch == '*' || ch == '^') {
+bool is_operator(char ch) {
+  if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^') {
     return true;
   }
   return false;
+}
+
+int precedence(char ch) {
+  if (ch == '+' || ch == '-') {
+    return 1;
+  } else if (ch == '/' || ch == '*') {
+    return 2;
+  } else if (ch == '^') {
+    return 3;
+  }
+  return 0;
 }
 
 void reverse(char str[], int length) {
-  int start = 0;
-  int end = length - 1;
-
+  int start = 0, end = length - 1;
   while (start < end) {
     char temp = str[start];
     str[start] = str[end];
     str[end] = temp;
     start++, end--;
   }
-
-  return;
-}
-
-int precedence(char ch) {
-  if (ch == '+' || ch == '-')
-    return 1;
-  else if (ch == '*' || ch == '/')
-    return 2;
-  else if (ch == '^')
-    return 3;
-  else
-    return 0;
 }
 
 void infix_to_prefix(char infix[], char prefix[]) {
@@ -106,59 +102,70 @@ void infix_to_prefix(char infix[], char prefix[]) {
   while (infix[length] != '\0') length++;
   reverse(infix, length);
 
-  Stack operator_stack, operand_stack;
+  Stack operators_stack, operands_stack;
 
   for (int i = 0; i < length; i++) {
     char ch = infix[i];
 
     if (is_operand(ch)) {
-      operand_stack.push(ch);
-    } else if (is_operator(ch)) {
-      operator_stack.push(ch);
+      operands_stack.push(ch);
     } else if (ch == ')') {
-      operator_stack.push(ch);
+      operators_stack.push(ch);
     }
 
     else if (ch == '(') {
-      while (operator_stack.peek() != ')' && !operator_stack.is_empty()) {
-        char op = operator_stack.pop();
-        char operand2 = operand_stack.pop();
-        char operand1 = operand_stack.pop();
+      while (operators_stack.peek() != ')' && !operators_stack.is_empty()) {
+        char op = operators_stack.pop();
+        char operand2 = operands_stack.pop();
+        char operand1 = operands_stack.pop();
 
-        operand_stack.push(operand2);
-        operand_stack.push(operand1);
-        operator_stack.push(op);
+        operands_stack.push(operand2);
+        operands_stack.push(operand1);
+        operands_stack.push(op);
       }
+      operators_stack.pop();
+    } else if (is_operator(ch)) {
+      if (!operators_stack.is_empty() &&
+          precedence(operators_stack.peek()) > precedence(ch)) {
+        char op = operators_stack.pop();
+        char operand2 = operands_stack.pop();
+        char operand1 = operands_stack.pop();
 
-      operator_stack.pop();
-    }
-
-    else if (is_operator(ch)) {
-      while (!operator_stack.is_empty() &&
-             precedence(operator_stack.peek()) > precedence(ch)) {
-        char op = operator_stack.pop();
-        char operand2 = operand_stack.pop();
-        char operand1 = operand_stack.pop();
-
-        operand_stack.push(operand2);
-        operand_stack.push(operand1);
-        operand_stack.push(op);
+        operands_stack.push(operand2);
+        operands_stack.push(operand1);
+        operands_stack.push(op);
       }
-
-      operator_stack.push(ch);
+      operators_stack.pop();
     }
   }
 
-  while (!operator_stack.is_empty()) {
-    char op = operator_stack.pop();
-    char operand2 = operand_stack.pop();
-    char operand1 = operand_stack.pop();
+  while (!operators_stack.is_empty()) {
+    char op = operators_stack.pop();
+    char operand2 = operands_stack.pop();
+    char operand1 = operands_stack.pop();
+
+    operands_stack.push(operand2);
+    operands_stack.push(operand1);
+    operands_stack.push(op);
   }
 
   int i = 0;
-  while (!operand_stack.is_empty()) {
-    prefix[i++] = operand_stack.pop();
+  while (!operands_stack.is_empty()) {
+    prefix[i++] = operands_stack.pop();
   }
   prefix[i] = '\0';
   reverse(prefix, i);
+}
+
+int main() {
+  char infix[] = "(A-B/C)*(A/K-L)";
+  char prefix[100];
+
+  cout << "Infix Expression: " << infix << endl;
+
+  infix_to_prefix(infix, prefix);
+
+  cout << "Prefix Expression: " << prefix << endl;
+
+  return 0;
 }
