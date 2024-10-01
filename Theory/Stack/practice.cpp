@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 using namespace std;
 
@@ -7,29 +6,30 @@ class Stack {
  public:
   int capacity;
   int top;
-  char* arr;
+  char *arr;
 
   Stack(int size) {
     capacity = size;
     top = -1;
-    arr = new char[capacity];
+    arr = new char[size];
   }
+
   ~Stack() { delete[] arr; }
 
-  // Methods
+  bool is_full() {
+    if (top == capacity - 1) {
+      return true;
+    }
+    return false;
+  }
   bool is_empty() {
     if (top == -1) return true;
     return false;
   }
 
-  bool is_full() {
-    if (top == capacity - 1) return true;
-    return false;
-  }
-
   void push(char value) {
     if (is_full()) {
-      cout << "Stackover flow\n";
+      cout << "Stack Overflow\n";
       return;
     }
     top++;
@@ -38,10 +38,11 @@ class Stack {
 
   char pop() {
     if (is_empty()) {
-      cout << "Stackunderflow\n";
       return '\0';
     }
-    return arr[top--];
+    char value = arr[top];
+    top--;
+    return value;
   }
 
   char peek() {
@@ -51,6 +52,23 @@ class Stack {
     return arr[top];
   }
 };
+
+void reverse_str(string str) {
+  int n = str.length();
+
+  for (int i = 0; i < n / 2; i++) {
+    char temp = str[i];
+    str[i] = str[n - i - 1];
+    str[n - i - 1] = temp;
+  }
+}
+
+bool is_operand(char ch) {
+  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+      (ch >= '0' && ch <= '9'))
+    return true;
+  return false;
+}
 
 int precedence(char ch) {
   if (ch == '+' || ch == '-')
@@ -62,25 +80,11 @@ int precedence(char ch) {
   return -1;
 }
 
-bool is_operand(char ch) {
-  if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') ||
-      (ch >= '0' && ch <= '9')) {
-    return true;
-  }
-  return false;
-}
-
-void infix_to_postfix(char* s) {
-  int len = 0;
-  int i = 0;
-  while (s[i] != '\0') {
-    len++;
-    i++;
-  }
-  Stack st(len);
+string infix_to_postfix(string s) {
+  Stack st(s.length());
   string ans;
 
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < s.length(); i++) {
     char ch = s[i];
     if (is_operand(ch)) {
       ans += ch;
@@ -91,7 +95,6 @@ void infix_to_postfix(char* s) {
         ans += st.pop();
       }
       st.pop();
-
     } else {
       while (!st.is_empty() && precedence(ch) <= precedence(st.peek())) {
         ans += st.pop();
@@ -99,16 +102,33 @@ void infix_to_postfix(char* s) {
       st.push(ch);
     }
   }
+
   while (!st.is_empty()) {
     ans += st.pop();
   }
-  reverse(ans.begin(), ans.end());
 
-  cout << ans;
+  // cout << "PostFix Expression: " << ans << endl;
+  return ans;
 }
+
+string infix_to_prefix(string s) {
+  reverse_str(s);
+
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == '(') {
+      s[i] = ')';
+    } else if (s[i] == ')')
+      s[i] = '(';
+  }
+  string ans = infix_to_postfix(s);
+  reverse_str(ans);
+  return ans;
+}
+
 int main() {
-  char* exp = "(p+q)*(m-n)";
+  string exp = "(A-B/C)*(A/K-L)";
   cout << "Infix expression: " << exp << endl;
-  infix_to_postfix(exp);
+  cout << "Prefix Expression: " << infix_to_prefix(exp) << endl;
+  cout << "PostFix Expression: " << infix_to_postfix(exp);
   return 0;
 }
