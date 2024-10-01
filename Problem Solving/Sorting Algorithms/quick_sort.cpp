@@ -222,29 +222,63 @@
 //   for (int i = 0; i < n; i++) cout << arr[i] << " ";
 // }
 
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// int partition(int arr[], int low, int high) {
+//   int left = low;
+//   int right = high;
+//   int pivot = arr[left];
+//   while (left < right) {
+//     if (arr[left] <= pivot && left <= high - 1) left++;
+//     if (arr[right] > pivot && right >= low + 1) right--;
+//     if (left < right)
+//       swap(arr[left], arr[right]);
+//     else
+//       break;
+//   }
+//   swap(arr[low], arr[left]);
+//   return left;
+// }
+// void quicksort(int arr[], int low, int high) {
+//   if (low < high) {
+//     int index = partition(arr, low, high);
+//     quicksort(arr, low, index - 1);
+//     quicksort(arr, index + 1, high);
+//   }
+// }
+
+// int main() {
+//   int arr[] = {23, 12, 1, 54, 55, 11, 44, 343};
+//   int n = sizeof(arr) / sizeof(arr[0]);
+//   quicksort(arr, 0, n - 1);
+//   for (int i = 0; i < n; i++) cout << arr[i] << " ";
+// }
+
 #include <bits/stdc++.h>
 using namespace std;
 
 int partition(int arr[], int low, int high) {
-  int left = low;
-  int right = high;
-  int pivot = arr[left];
-  while (left < right) {
+  int left = low, right = high, pivot = arr[low];
+
+  while (low < high) {
     if (arr[left] <= pivot && left <= high - 1) left++;
-    if (arr[right] > pivot && right >= low + 1) right--;
-    if (left < right)
+    if (arr[right] >= pivot & right >= low + 1) right--;
+    if (left < right) {
       swap(arr[left], arr[right]);
-    else
+    } else {
       break;
+    }
   }
   swap(arr[low], arr[left]);
   return left;
 }
+
 void quicksort(int arr[], int low, int high) {
   if (low < high) {
-    int index = partition(arr, low, high);
-    quicksort(arr, low, index - 1);
-    quicksort(arr, index + 1, high);
+    int partition_index = partition(arr, low, high);
+    quicksort(arr, low, partition_index - 1);
+    quicksort(arr, partition_index + 1, high);
   }
 }
 

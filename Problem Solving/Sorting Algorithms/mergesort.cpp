@@ -384,19 +384,18 @@ void merge(int arr[], int low, int mid, int high) {
     right++;
   }
   for (int i = 0; i < temp.size(); i++) {
-    arr[low + i] = temp[i];
+    arr[i + low] = temp[i];
   }
 }
 
 void mergesort(int arr[], int low, int high) {
   if (low < high) {
-    int mid = (low + high) / 2;
+    int mid = low + (high - low) / 2;
     mergesort(arr, low, mid);
     mergesort(arr, mid + 1, high);
     merge(arr, low, mid, high);
   }
 }
-
 int main() {
   int arr[] = {9, 8, 7, 6, 5, 4, 3, 2, 1};
   int n = sizeof(arr) / sizeof(arr[0]);

@@ -1,101 +1,107 @@
 #include <iostream>
 using namespace std;
 
-class StackNode {
- private:
- public:
-  char data;
-  StackNode* next;
-
-  StackNode(int value) {
-    data = value;
-    next = nullptr;
-  }
-  ~StackNode() { delete next; }
-};
-
 class Stack {
  private:
+  int top;
+  int capacity;
+  char* array;
+
  public:
-  StackNode* top;
-
-  Stack() { top = nullptr; };
-  ~Stack() { delete top; }
-
-  bool is_empty() {
-    if (top == nullptr) return true;
-    return false;
+  Stack(int size) {
+    capacity = size;
+    array = new char[capacity];
+    top = -1;
   }
-  void push(StackNode*& head, char value) {
-    StackNode* new_node = new StackNode(value);
-    if (is_empty()) {
-      head = new_node;
+
+  ~Stack() { delete[] array; }
+
+  bool is_empty() { return top == -1; }
+
+  bool is_full() { return top == capacity - 1; }
+
+  void push(char value) {
+    if (is_full()) {
+      cout << "Stack overflow" << endl;
       return;
     }
-    new_node->next = head;
-    head = new_node;
-    return;
+    array[++top] = value;
   }
 
-  char pop(StackNode*& head) {
+  char pop() {
+    if (is_empty()) {
+      cout << "Stack underflow" << endl;
+      return '\0';
+    }
+    return array[top--];
+  }
+
+  char peek() {
     if (is_empty()) {
       return '\0';
     }
-    StackNode* temp = head;
-    head = head->next;
-    int value = temp->data;
-    delete temp;
-    return value;
-  }
-
-  char peek(StackNode* head) {
-    if (is_empty()) return '\0';
-    return head->data;
+    return array[top];
   }
 };
 
-int precedence(char ch) {
-  if (ch == '+' || ch == '-')
-    return 1;
-  else if (ch == '*' || ch == '/')
-    return 2;
-  else if (ch == '^')
+// Function to return precedence of operators
+int prec(char c) {
+  if (c == '^')
     return 3;
-  return 0;
+  else if (c == '/' || c == '*')
+    return 2;
+  else if (c == '+' || c == '-')
+    return 1;
+  else
+    return -1;
 }
 
-string infix_to_postfix(string exp) {
-  int i = 0;
-  Stack st;
-  StackNode* head;
-  string ans = "";
+// The main function to convert infix expression to postfix expression
+void infixToPostfix(string s) {
+  Stack st(
+      s.length());  // Manual stack creation with size based on input length
+  string result;
 
-  while (i < exp.length()) {
-    // check operand
-    if ((exp[i] >= 'A' && exp[i] <= 'Z') || (exp[i] >= 'a' && exp[i] <= 'z') ||
-        (exp[i] >= '0' && exp[i] <= '9')) {
-      ans += exp[i];
+  for (int i = 0; i < s.length(); i++) {
+    char c = s[i];
+
+    // If the scanned character is an operand, add it to the output string.
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+        (c >= '0' && c <= '9')) {
+      result += c;
     }
-    // Condition for opening bracket
-    else if (exp[i] == '(')
-      st.push(head, exp[i]);
-    // Condition for closing bracket
-    else if (exp[i] == ')') {
-      while (!st.is_empty() && st.peek(head) != '(') {
-        ans += st.pop(head);
-      }
-      st.pop(head);
+    // If the scanned character is an ‘(‘, push it to the stack.
+    else if (c == '(') {
+      st.push(c);
     }
-    // condtion for operator
-    else if (exp[i] == '+' || exp[i] == '-' || exp[i] == '/' || exp[i] == '*') {
-      while (!st.is_empty() &&
-             precedence(exp[i]) <= precedence(st.peek(head))) {
-        ans += st.pop(head);
+    // If the scanned character is a ‘)’, pop and output from the stack until an
+    // ‘(‘ is encountered.
+    else if (c == ')') {
+      while (!st.is_empty() && st.peek() != '(') {
+        result += st.pop();
       }
-      st.push(head, exp[i]);
+      st.pop();  // Popping the '(' from the stack
+    }
+    // If an operator is scanned
+    else {
+      while (!st.is_empty() && prec(c) <= prec(st.peek())) {
+        result += st.pop();
+      }
+      st.push(c);
     }
   }
 
-  while (st.is_empty()) {
-    if (st.) }
+  // Pop all the remaining elements from the stack
+  while (!st.is_empty()) {
+    result += st.pop();
+  }
+
+  cout << "Postfix expression: " << result << endl;
+}
+
+int main() {
+  string exp = "(p+q)*(m-n)";
+  cout << "Infix expression: " << exp << endl;
+  infixToPostfix(exp);
+  return 0;
 }

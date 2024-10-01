@@ -1,169 +1,114 @@
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
-// Node structure for the stack
-class StackNode {
- public:
-  char data;
-  StackNode* next;
-  StackNode(char value) {
-    data = value;
-    next = nullptr;
-  }
-};
-
-// Stack class to handle stack operations
 class Stack {
+ private:
  public:
-  StackNode* top;
+  int capacity;
+  int top;
+  char* arr;
 
-  Stack() { top = nullptr; }
+  Stack(int size) {
+    capacity = size;
+    top = -1;
+    arr = new char[capacity];
+  }
+  ~Stack() { delete[] arr; }
 
-  bool isEmpty() { return top == nullptr; }
+  // Methods
+  bool is_empty() {
+    if (top == -1) return true;
+    return false;
+  }
+
+  bool is_full() {
+    if (top == capacity - 1) return true;
+    return false;
+  }
 
   void push(char value) {
-    StackNode* newNode = new StackNode(value);
-    newNode->next = top;
-    top = newNode;
+    if (is_full()) {
+      cout << "Stackover flow\n";
+      return;
+    }
+    top++;
+    arr[top] = value;
   }
 
   char pop() {
-    if (isEmpty()) {
+    if (is_empty()) {
+      cout << "Stackunderflow\n";
       return '\0';
     }
-    StackNode* temp = top;
-    top = top->next;
-    char poppedValue = temp->data;
-    delete temp;
-    return poppedValue;
+    return arr[top--];
   }
 
   char peek() {
-    if (!isEmpty()) {
-      return top->data;
+    if (is_empty()) {
+      return '\0';
     }
-    return '\0';
+    return arr[top];
   }
 };
 
-// Function to check if character is an operand (either letter or digit)
-bool isOperand(char ch) {
-  return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-         (ch >= '0' && ch <= '9');
-}
-
-// Function to check if character is an operator
-bool isOperator(char ch) {
-  return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^');
-}
-
-// Function to get precedence of operators
 int precedence(char ch) {
-  if (ch == '+' || ch == '-') {
+  if (ch == '+' || ch == '-')
     return 1;
-  } else if (ch == '*' || ch == '/') {
+  else if (ch == '*' || ch == '/')
     return 2;
-  } else if (ch == '^') {
+  else if (ch == '^')
     return 3;
-  }
-  return 0;
+  return -1;
 }
 
-// Function to reverse a string
-void reverse(char str[], int length) {
-  int start = 0;
-  int end = length - 1;
-  while (start < end) {
-    char temp = str[start];
-    str[start] = str[end];
-    str[end] = temp;
-    start++;
-    end--;
+bool is_operand(char ch) {
+  if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') ||
+      (ch >= '0' && ch <= '9')) {
+    return true;
   }
+  return false;
 }
 
-// Function to convert infix expression to prefix
-void infixToPrefix(char infix[], char prefix[]) {
-  int length = 0;
-  while (infix[length] != '\0') {
-    length++;
-  }
-
-  // Reverse the infix expression
-  reverse(infix, length);
-
-  Stack operators;
-  Stack operands;
-
-  // Iterate through the reversed infix expression
-  for (int i = 0; i < length; i++) {
-    char ch = infix[i];
-
-    // If character is an operand, push to operand stack
-    if (isOperand(ch)) {
-      operands.push(ch);
-    }
-    // If character is ')', push to operator stack
-    else if (ch == ')') {
-      operators.push(ch);
-    }
-    // If character is '(', pop until ')' is found
-    else if (ch == '(') {
-      while (operators.peek() != ')' && !operators.isEmpty()) {
-        char op = operators.pop();
-        char operand1 = operands.pop();
-        char operand2 = operands.pop();
-        operands.push(operand1);  // Push operand1
-        operands.push(operand2);  // Push operand2
-        operands.push(op);        // Push operator
-      }
-      operators.pop();  // Pop ')'
-    }
-    // If the character is an operator
-    else if (isOperator(ch)) {
-      while (!operators.isEmpty() &&
-             precedence(operators.peek()) >= precedence(ch)) {
-        char op = operators.pop();
-        char operand1 = operands.pop();
-        char operand2 = operands.pop();
-        operands.push(operand1);  // Push operand1
-        operands.push(operand2);  // Push operand2
-        operands.push(op);        // Push operator
-      }
-      operators.push(ch);
-    }
-  }
-
-  // Pop remaining operators from the operator stack
-  while (!operators.isEmpty()) {
-    char op = operators.pop();
-    char operand1 = operands.pop();
-    char operand2 = operands.pop();
-    operands.push(operand1);  // Push operand1
-    operands.push(operand2);  // Push operand2
-    operands.push(op);        // Push operator
-  }
-
-  // Now the operands stack contains the prefix expression in reverse order
+void infix_to_postfix(char* s) {
+  int len = 0;
   int i = 0;
-  while (!operands.isEmpty()) {
-    prefix[i++] = operands.pop();
+  while (s[i] != '\0') {
+    len++;
+    i++;
   }
-  prefix[i] = '\0';
+  Stack st(len);
+  string ans;
 
-  // Reverse the final result to get the correct prefix expression
-  reverse(prefix, i);
+  for (int i = 0; i < len; i++) {
+    char ch = s[i];
+    if (is_operand(ch)) {
+      ans += ch;
+    } else if (ch == '(') {
+      st.push(ch);
+    } else if (ch == ')') {
+      while (!st.is_empty() && st.peek() != '(') {
+        ans += st.pop();
+      }
+      st.pop();
+
+    } else {
+      while (!st.is_empty() && precedence(ch) <= precedence(st.peek())) {
+        ans += st.pop();
+      }
+      st.push(ch);
+    }
+  }
+  while (!st.is_empty()) {
+    ans += st.pop();
+  }
+  reverse(ans.begin(), ans.end());
+
+  cout << ans;
 }
-
 int main() {
-  char infix[] = "(A-B/C)*(A/K-L)";
-  char prefix[100];
-
-  cout << "Infix Expression: " << infix << endl;
-
-  infixToPrefix(infix, prefix);
-
-  cout << "Prefix Expression: " << prefix << endl;
-
+  char* exp = "(p+q)*(m-n)";
+  cout << "Infix expression: " << exp << endl;
+  infix_to_postfix(exp);
   return 0;
 }

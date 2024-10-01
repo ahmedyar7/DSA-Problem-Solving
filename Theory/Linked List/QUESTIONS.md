@@ -15,6 +15,7 @@
 - Removing duplicates
 - Removing specific element occurences
 - Find the intersection point b/w two linked list
+- Sorting the Linked List
 
 ## Circular Linked List
 
@@ -38,6 +39,8 @@
 - Merging of two linked list
 - Check sorted
 - Removing duplicates
+- Sorted the Linked List
+- Revoving all the occurance of key in Doubly Linked List
 
 ## Circular Doubly Linked List
 

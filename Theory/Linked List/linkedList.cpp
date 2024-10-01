@@ -12,7 +12,7 @@ class SinglyLinkedList {
     next = nullptr;
   }
 
-  ~SinglyLinkedList() {}
+  ~SinglyLinkedList() { delete next; }
 
   void insert_at_tail(SinglyLinkedList*& head, int value) {
     SinglyLinkedList* new_SinglyLinkedList = new SinglyLinkedList(value);
@@ -160,9 +160,9 @@ class SinglyLinkedList {
     return;
   }
 
-  SinglyLinkedList* conatenate(SinglyLinkedList*& SinglyLinkedList1,
+  SinglyLinkedList* conatenate(SinglyLinkedList*& head,
                                SinglyLinkedList*& SinglyLinkedList2) {
-    SinglyLinkedList* first = SinglyLinkedList1;
+    SinglyLinkedList* first = head;
     SinglyLinkedList* second = SinglyLinkedList2;
 
     if (first == nullptr) return second;
@@ -172,43 +172,7 @@ class SinglyLinkedList {
       first = first->next;
     }
     first->next = second;
-    return SinglyLinkedList1;
-  }
-
-  SinglyLinkedList* merge_ll(SinglyLinkedList*& SinglyLinkedList1,
-                             SinglyLinkedList*& SinglyLinkedList2) {
-    SinglyLinkedList* first = SinglyLinkedList1;
-    SinglyLinkedList* second = SinglyLinkedList2;
-    SinglyLinkedList* last = nullptr;
-    SinglyLinkedList* third = nullptr;
-
-    if (first == nullptr) return second;
-    if (second == nullptr) return first;
-
-    if (first->data < second->data) {
-      third = last = first;
-      first = first->next;
-    } else {
-      third = last = second;
-      second = second->next;
-    }
-
-    while (first != nullptr && second != nullptr) {
-      if (first->data < second->data) {
-        last->next = first;
-        last = first;
-        first = first->next;
-      } else {
-        last->next = second;
-        last = second;
-        second = second->next;
-      }
-    }
-
-    if (first == nullptr) last->next = second;
-    if (second == nullptr) last->next = first;
-
-    return third;
+    return head;
   }
 
   bool is_sorted(SinglyLinkedList* head) {
@@ -241,31 +205,94 @@ class SinglyLinkedList {
       }
     }
   }
+  SinglyLinkedList* merge_ll(SinglyLinkedList*& SinglyLinkedList1,
+                             SinglyLinkedList*& SinglyLinkedList2) {
+    if (SinglyLinkedList1 == nullptr) return SinglyLinkedList2;
+    if (SinglyLinkedList2 == nullptr) return SinglyLinkedList1;
+
+    SinglyLinkedList* first = SinglyLinkedList1;
+    SinglyLinkedList* second = SinglyLinkedList2;
+    SinglyLinkedList* third = nullptr;
+    SinglyLinkedList* last = nullptr;
+
+    if (first->data < second->data) {
+      third = last = first;
+      first = first->next;
+    } else {
+      third = last = second;
+      second = second->next;
+    }
+
+    while (first != nullptr && second != nullptr) {
+      if (first->data < second->data) {
+        last->next = first;
+        last = first;
+        first = first->next;
+      } else {
+        last->next = second;
+        last = second;
+        second = second->next;
+      }
+    }
+
+    if (first == nullptr)
+      last->next = second;
+    else {
+      last->next = first;
+    }
+
+    return third;
+  }
+
+  SinglyLinkedList* find_mid(SinglyLinkedList* head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    SinglyLinkedList* slow = head;
+    SinglyLinkedList* fast = head->next;
+
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+
+    return slow;
+  }
+
+  SinglyLinkedList* sort_ll(SinglyLinkedList* head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    SinglyLinkedList* middle = find_mid(head);
+    SinglyLinkedList* left = head;
+    SinglyLinkedList* right = middle->next;
+    middle->next = nullptr;
+
+    left = sort_ll(left);
+    right = sort_ll(right);
+
+    return merge_ll(left, right);
+  }
 };
 
 int main() {
-  SinglyLinkedList* SinglyLinkedList1 = nullptr;
-  SinglyLinkedList* SinglyLinkedList2 = nullptr;
+  SinglyLinkedList* head = nullptr;
   SinglyLinkedList sll(0);
 
-  for (int i = 0; i <= 10; i++) {
-    if (i % 2 == 0) {
-      sll.insert_at_tail(SinglyLinkedList1, i * 2);
-    }
-  }
-  sll.display(SinglyLinkedList1);
+  sll.insert_at_tail(head, 3);
+  sll.insert_at_tail(head, 23);
+  sll.insert_at_tail(head, 51);
+  sll.insert_at_tail(head, 9);
+  sll.insert_at_tail(head, 10);
+  sll.insert_at_tail(head, 20);
+  sll.insert_at_tail(head, 29);
 
-  for (int i = 0; i <= 10; i++) {
-    if (i % 2 != 0) {
-      sll.insert_at_tail(SinglyLinkedList2, i * 9);
-      sll.insert_at_tail(SinglyLinkedList2, i * 9);
-    }
-  }
-  sll.display(SinglyLinkedList2);
+  cout << "Unsorted List: ";
+  sll.display(head);
 
-  SinglyLinkedList* merged = sll.merge_ll(SinglyLinkedList1, SinglyLinkedList2);
-  sll.display(merged);
-
-  sll.remove_duplicate(merged);
-  sll.display(merged);
+  cout << "\nSorted List: ";
+  SinglyLinkedList* sorted = sll.sort_ll(head);
+  sll.display(sorted);
 }
