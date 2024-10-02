@@ -275,24 +275,44 @@ class SinglyLinkedList {
 
     return merge_ll(left, right);
   }
+
+  SinglyLinkedList* segregate_oddeven(SinglyLinkedList* head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    SinglyLinkedList* odd = head;
+    SinglyLinkedList* even = head->next;
+    SinglyLinkedList* even_head = even;
+
+    while (odd && odd->next) {
+      odd->next = even->next;
+      odd = odd->next;
+      even->next = odd->next;
+      even = even->next;
+    }
+    odd->next = even_head;
+
+    return head;
+  }
 };
 
 int main() {
   SinglyLinkedList* head = nullptr;
   SinglyLinkedList sll(0);
 
+  sll.insert_at_tail(head, 2);
+  sll.insert_at_tail(head, 1);
   sll.insert_at_tail(head, 3);
-  sll.insert_at_tail(head, 23);
-  sll.insert_at_tail(head, 51);
-  sll.insert_at_tail(head, 9);
-  sll.insert_at_tail(head, 10);
-  sll.insert_at_tail(head, 20);
-  sll.insert_at_tail(head, 29);
+  sll.insert_at_tail(head, 5);
+  sll.insert_at_tail(head, 6);
+  sll.insert_at_tail(head, 4);
+  sll.insert_at_tail(head, 7);
 
-  cout << "Unsorted List: ";
+  cout << "Un-Segregated List: \n";
   sll.display(head);
 
-  cout << "\nSorted List: ";
-  SinglyLinkedList* sorted = sll.sort_ll(head);
-  sll.display(sorted);
+  cout << "Segregated List\n";
+  SinglyLinkedList* segregated = sll.segregate_oddeven(head);
+  sll.display(segregated);
 }

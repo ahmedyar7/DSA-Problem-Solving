@@ -16,6 +16,7 @@
 - Removing specific element occurences
 - Find the intersection point b/w two linked list
 - Sorting the Linked List
+- Segregating into odd and even
 
 ## Circular Linked List
 
