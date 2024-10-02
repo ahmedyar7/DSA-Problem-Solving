@@ -1,108 +1,137 @@
 #include <iostream>
-using namespace std;
 
 class Node {
  public:
-  int data;
+  char data;
   Node* next;
-  Node(int value) {
-    data = value;
-    next = nullptr;
+
+  Node(char value) : data(value), next(nullptr) {}
+};
+
+class Stack {
+ private:
+  Node* top;
+
+ public:
+  Stack() : top(nullptr) {}
+
+  ~Stack() {
+    while (!is_empty()) {
+      pop();
+    }
+  }
+
+  bool is_empty() { return top == nullptr; }
+
+  void push(char value) {
+    Node* newNode = new Node(value);
+    newNode->next = top;
+    top = newNode;
+  }
+
+  char pop() {
+    if (is_empty()) return '\0';
+    char value = top->data;
+    Node* temp = top;
+    top = top->next;
+    delete temp;
+    return value;
+  }
+
+  char peek() {
+    if (is_empty()) return '\0';
+    return top->data;
   }
 };
 
-// This function also work when entering the first node
-void push(Node*& top, int value) {
-  Node* new_node = new Node(value);
-  new_node->next = top;
-  top = new_node;
-  return;
-}
-
-int pop(Node*& top) {
-  int x = -1;
-  if (top == nullptr) {
-    cout << "Stack is Empty!\n";
-    return -1;  // Stack is empty
+void reverse_str(std::string& s) {
+  int n = s.length();
+  for (int i = 0; i < n / 2; i++) {
+    std::swap(s[i], s[n - i - 1]);
   }
-  Node* p = top;
-  top = top->next;
-  x = p->data;
-  delete p;
-  return x;
 }
 
-int peek(Node* top, int position) {
-  Node* p = top;
-  for (int i = 1; i <= position && p != nullptr; i++) p = p->next;
-  if (p != nullptr) return p->data;
+bool is_operand(char ch) {
+  return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+         (ch >= '0' && ch <= '9');
+}
+
+int precedence(char ch) {
+  if (ch == '+' || ch == '-') return 1;
+  if (ch == '*' || ch == '/') return 2;
+  if (ch == '^') return 3;
   return -1;
 }
 
-int stack_top(Node* top) {
-  if (top) return top->data;
-  return -1;
-}
+std::string infix_to_postfix(const std::string& s) {
+  Stack st;
+  std::string ans;
 
-int is_empty(Node* top) {
-  if (top == nullptr) return 1;
-  return 0;
-}
-
-void display(Node* top) {
-  Node* p = top;
-  while (p != nullptr) {
-    cout << p->data << " ";
-    p = p->next;
-  }
-  cout << "\n";
-}
-
-int main() {
-  Node* top = nullptr;
-
-  // Push Element to stack
-  push(top, 10);
-  push(top, 20);
-  push(top, 30);
-
-  cout << "Stack Element\n";
-  display(top);
-
-  // Peek to top element
-  cout << "Top Element: " << stack_top(top) << "\n";
-
-  // Pop element
-  cout << "Pop Element: " << pop(top) << "\n";
-
-  display(top);
-  cout << "Peek Element: " << peek(top, 0);
-}
-
-bool valid_parenthesis(char exp[]) {
-  Node* stack = nullptr;
-  for (int i = 0; exp[i] != '\0'; i++) {
-    if (exp[i] == '(') {
-      push(stack, '(');
+  for (char ch : s) {
+    if (is_operand(ch)) {
+      ans += ch;
+    } else if (ch == '(') {
+      st.push(ch);
+    } else if (ch == ')') {
+      while (!st.is_empty() && st.peek() != '(') {
+        ans += st.pop();
+      }
+      if (!st.is_empty()) st.pop();
+    } else {
+      while (!st.is_empty() && precedence(ch) <= precedence(st.peek())) {
+        ans += st.pop();
+      }
+      st.push(ch);
     }
+  }
 
-    else if (exp[i] == ')') {
-      if (stack == nullptr || pop(stack) != '(') {
+  while (!st.is_empty()) {
+    ans += st.pop();
+  }
+  return ans;
+}
+
+std::string infix_to_prefix(std::string s) {
+  reverse_str(s);
+  for (char& ch : s) {
+    if (ch == '(')
+      ch = ')';
+    else if (ch == ')')
+      ch = '(';
+  }
+
+  std::string ans = infix_to_postfix(s);
+  reverse_str(ans);
+  return ans;
+}
+
+bool valid_parenthesis(const std::string& s) {
+  Stack st;
+
+  for (char ch : s) {
+    if (ch == '(' || ch == '{' || ch == '[') {
+      st.push(ch);
+    } else if (ch == ')' || ch == '}' || ch == ']') {
+      if (st.is_empty()) return false;
+      char top = st.pop();
+      if ((ch == ')' && top != '(') || (ch == '}' && top != '{') ||
+          (ch == ']' && top != '[')) {
         return false;
       }
     }
   }
-  return stack == nullptr;
+
+  return st.is_empty();
 }
 
 int main() {
-  char exp[] = "((a+b)*(c-d))";
+  std::string exp = "{{[(A-B/C)]}}*((A/K-L))";
+  std::cout << "Infix expression: " << exp << std::endl;
 
-  if (valid_parenthesis(exp)) {
-    cout << "Parentheses are valid." << endl;
-  } else {
-    cout << "Parentheses are invalid." << endl;
-  }
+  std::cout << "Prefix Expression: " << infix_to_prefix(exp) << std::endl;
+  std::cout << "Postfix Expression: " << infix_to_postfix(exp) << std::endl;
+  std::cout << "Is valid: " << (valid_parenthesis(exp) ? "True" : "False")
+            << std::endl;
 
   return 0;
 }
