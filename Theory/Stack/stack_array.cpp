@@ -137,11 +137,14 @@ bool valid_parenthesis(string s) {
     if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
     } else if (ch == ')' || ch == ']' || ch == '}') {
-      if (st.is_empty())
-        return false;
+      if (st.is_empty()) return false;
 
-      else if (st.peek() == '(' || st.peek() == '{' || st.peek() == '[')
+      char top = st.peek();
+      if ((ch == ')' && top == '(') || (ch == ']' && top == '[') ||
+          (ch == '}' && top == '{'))
         st.pop();
+      else
+        return false;
     }
   }
 
@@ -149,7 +152,7 @@ bool valid_parenthesis(string s) {
 }
 
 int main() {
-  string exp = "{{[(A-B/C)]}}*((A/K-L))";
+  string exp = "{{[(A-B/C)]}}*((A/K-L)))";
   cout << "Infix expression: " << exp << endl;
 
   cout << "Infix Expression: ";

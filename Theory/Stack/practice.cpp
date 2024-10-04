@@ -82,30 +82,22 @@ string infix_to_postfix(string s) {
 
   for (int i = 0; i < s.length(); i++) {
     char ch = s[i];
-
     if (is_operand(ch)) {
       ans += ch;
-    }
-
-    else if (ch == '(') {
+    } else if (ch == '(') {
       st.push(ch);
-    }
-
-    else if (ch == ')') {
+    } else if (ch == ')') {
       while (!st.is_empty() && st.peek() != '(') {
         ans += st.pop();
       }
       st.pop();
-    }
-
-    else {
+    } else {
       while (!st.is_empty() && precedence(ch) <= precedence(st.peek())) {
         ans += st.pop();
       }
       st.push(ch);
     }
   }
-
   while (!st.is_empty()) {
     ans += st.pop();
   }
@@ -115,7 +107,6 @@ string infix_to_postfix(string s) {
 string infix_to_prefix(string s) {
   reverse_str(s);
   string ans;
-
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == '(') {
       s[i] = ')';
@@ -123,7 +114,6 @@ string infix_to_prefix(string s) {
       s[i] = '(';
     }
   }
-
   ans = infix_to_postfix(s);
   reverse_str(ans);
   return ans;
@@ -133,23 +123,22 @@ bool valid_parenthesis(string s) {
   Stack st;
   for (int i = 0; i < s.length(); i++) {
     char ch = s[i];
-
     if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
     } else if (ch == ')' || ch == '}' || ch == ']') {
-      if (st.is_empty())
-        return false;
-      else if (st.peek() == '(' || st.peek() == '{' || st.peek() == '[') {
+      if (st.is_empty()) return false;
+      char top = st.peek();
+      if ((ch == ')' && top == '(') || (ch == '}' && top == '{') ||
+          (ch == ']' && top == '['))
         st.pop();
-      }
+      else
+        return false;
     }
   }
-
-  return st.is_empty();
 }
 
 int main() {
-  std::string exp = "{{(A-B/C)]}}*((A/K-L))";
+  std::string exp = "(])";
   std::cout << "Infix expression: " << exp << std::endl;
 
   std::cout << "Prefix Expression: " << infix_to_prefix(exp) << std::endl;

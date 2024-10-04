@@ -1,83 +1,104 @@
 #include <iostream>
+using namespace std;
 
 class Node {
+ private:
  public:
   char data;
   Node* next;
 
-  Node(char value) : data(value), next(nullptr) {}
+  Node(char value) {
+    data = value;
+    next = nullptr;
+  }
 };
 
 class Stack {
  private:
-  Node* top;
-
  public:
-  Stack() : top(nullptr) {}
-
-  ~Stack() {
-    while (!is_empty()) {
-      pop();
-    }
-  }
-
-  bool is_empty() { return top == nullptr; }
+  Node* top;
+  Stack() { top = nullptr; }
 
   void push(char value) {
-    Node* newNode = new Node(value);
-    newNode->next = top;
-    top = newNode;
+    Node* new_node = new Node(value);
+    if (top == nullptr) {
+      top = new_node;
+      return;
+    }
+
+    new_node->next = top;
+    top = new_node;
+    return;
   }
 
   char pop() {
-    if (is_empty()) return '\0';
+    if (top == nullptr) return '\0';
     char value = top->data;
-    Node* temp = top;
+    Node* head = top;
     top = top->next;
-    delete temp;
+    delete head;
     return value;
   }
 
   char peek() {
-    if (is_empty()) return '\0';
+    if (top == nullptr) return '\0';
     return top->data;
+  }
+
+  bool is_empty() {
+    if (top == nullptr) return true;
+    return false;
   }
 };
 
-void reverse_str(std::string& s) {
+void reverse_str(string s) {
   int n = s.length();
   for (int i = 0; i < n / 2; i++) {
-    std::swap(s[i], s[n - i - 1]);
+    char temp = s[i];
+    s[i] = s[n - i - 1];
+    s[n - i - 1] = temp;
   }
 }
 
 bool is_operand(char ch) {
-  return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-         (ch >= '0' && ch <= '9');
+  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+      (ch >= '0' && ch <= '9')) {
+    return true;
+  }
+  return false;
 }
 
 int precedence(char ch) {
   if (ch == '+' || ch == '-') return 1;
   if (ch == '*' || ch == '/') return 2;
   if (ch == '^') return 3;
+
   return -1;
 }
 
-std::string infix_to_postfix(const std::string& s) {
+string infix_to_postfix(string s) {
   Stack st;
-  std::string ans;
+  string ans;
 
-  for (char ch : s) {
+  for (int i = 0; i < s.length(); i++) {
+    char ch = s[i];
+
     if (is_operand(ch)) {
       ans += ch;
-    } else if (ch == '(') {
+    }
+
+    else if (ch == '(') {
       st.push(ch);
-    } else if (ch == ')') {
+    }
+
+    else if (ch == ')') {
       while (!st.is_empty() && st.peek() != '(') {
         ans += st.pop();
       }
-      if (!st.is_empty()) st.pop();
-    } else {
+      st.pop();
+    }
+
+    else {
       while (!st.is_empty() && precedence(ch) <= precedence(st.peek())) {
         ans += st.pop();
       }
@@ -91,32 +112,36 @@ std::string infix_to_postfix(const std::string& s) {
   return ans;
 }
 
-std::string infix_to_prefix(std::string s) {
+string infix_to_prefix(string s) {
   reverse_str(s);
-  for (char& ch : s) {
-    if (ch == '(')
-      ch = ')';
-    else if (ch == ')')
-      ch = '(';
+  string ans;
+
+  for (int i = 0; i < s.length(); i++) {
+    if (s[i] == '(') {
+      s[i] = ')';
+    } else if (s[i] == ')') {
+      s[i] = '(';
+    }
   }
 
-  std::string ans = infix_to_postfix(s);
+  ans = infix_to_postfix(s);
   reverse_str(ans);
   return ans;
 }
 
-bool valid_parenthesis(const std::string& s) {
+bool valid_parenthesis(string s) {
   Stack st;
+  for (int i = 0; i < s.length(); i++) {
+    char ch = s[i];
 
-  for (char ch : s) {
     if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
     } else if (ch == ')' || ch == '}' || ch == ']') {
       if (st.is_empty()) return false;
-      char top = st.pop();
-      if ((ch == ')' && top != '(') || (ch == '}' && top != '{') ||
-          (ch == ']' && top != '[')) {
-        return false;
+      char top = st.peek();
+      if ((ch == ')' && top == '(') || (ch == '}' && top == '{') ||
+          (ch == ']' && top == '[')) {
+        st.pop();
       }
     }
   }
@@ -125,7 +150,7 @@ bool valid_parenthesis(const std::string& s) {
 }
 
 int main() {
-  std::string exp = "{{[(A-B/C)]}}*((A/K-L))";
+  std::string exp = "(])";
   std::cout << "Infix expression: " << exp << std::endl;
 
   std::cout << "Prefix Expression: " << infix_to_prefix(exp) << std::endl;
