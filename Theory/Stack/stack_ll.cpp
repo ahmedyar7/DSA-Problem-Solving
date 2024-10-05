@@ -150,13 +150,15 @@ bool valid_parenthesis(string s) {
 }
 
 int main() {
-  std::string exp = "(])";
-  std::cout << "Infix expression: " << exp << std::endl;
+  string exp = "{{[(A-B/C)]}}*((A/K-L)))";
+  cout << "Infix expression: " << exp << endl;
 
-  std::cout << "Prefix Expression: " << infix_to_prefix(exp) << std::endl;
-  std::cout << "Postfix Expression: " << infix_to_postfix(exp) << std::endl;
-  std::cout << "Is valid: " << (valid_parenthesis(exp) ? "True" : "False")
-            << std::endl;
+  cout << "Infix Expression: ";
+  cout << infix_to_prefix(exp);
 
+  cout << "\nPostfix Expression: ";
+  cout << infix_to_postfix(exp);
+
+  cout << "\n Is valid " << valid_parenthesis(exp);
   return 0;
 }
