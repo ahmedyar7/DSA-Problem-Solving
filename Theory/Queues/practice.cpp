@@ -1,82 +1,84 @@
 #include <iostream>
 using namespace std;
 
+class Node {
+ public:
+  int data;
+  Node* next;
+
+  Node(int data) {
+    this->data = data;
+    next = nullptr;
+  }
+};
+
 class Queue {
  private:
-  int front;
-  int rear;
-  int size;
-  int *queue;
+  Node* front;
+  Node* rear;
 
  public:
-  Queue(int capacity) {
-    size = capacity;
-    front = -1;
-    rear = -1;
-    queue = new int[size];
+  Queue() {
+    front = nullptr;
+    rear = nullptr;
   }
 
-  bool empty() {
-    if (front == rear) return true;
-    return false;
-  }
-
-  bool full() {
-    if (rear == size - 1) return true;
-    return false;
-  }
+  bool empty() { return front == nullptr; }
 
   void enqueue(int value) {
-    if (full()) {
-      return;
+    Node* new_node = new Node(value);
+    if (rear == nullptr) {
+      front = rear = new_node;
+    } else {
+      rear->next = new_node;
+      rear = new_node;
     }
-    rear++;
-    queue[rear] = value;
-    if (front == -1) {
-      front = 0;
-    }
-    return;
   }
 
   int dequeue() {
-    if (empty()) return -1;
-    int value = queue[front];
-    front++;
-    if (front > rear) {
-      front = rear = -1;
+    if (empty()) {
+      return -1;
     }
+    Node* temp = front;
+    int value = front->data;
+    front = front->next;
+    delete temp;
     return value;
   }
 
   int peek() {
-    if (empty()) {
-      return -1;
-    }
-    return queue[front];
+    if (empty()) return -1;
+    return front->data;
   }
 
   void display() {
-    if (empty()) return;
-    for (int i = front; i <= rear; i++) {
-      cout << queue[i] << " ";
+    Node* temp = front;
+    while (temp != nullptr) {
+      cout << "[" << temp->data << "] -> ";
+      temp = temp->next;
     }
-    cout << "QUEUE_END\n";
+    cout << "NULL\n";
   }
 
-  ~Queue() { delete[] queue; }
+  ~Queue() { delete front, rear; }
 };
 
 int main() {
-  Queue qu(5);
+  Queue q;  // Create an empty queue
 
-  qu.enqueue(2);
-  qu.enqueue(3);
-  qu.enqueue(4);
-  qu.enqueue(5);
-  qu.enqueue(6);
+  q.enqueue(10);  // Insert 10
+  q.enqueue(20);  // Insert 20
+  q.enqueue(30);  // Insert 30
 
-  qu.display();
+  q.display();  // Display the queue: 10 20 30
 
-  qu.dequeue();
-  qu.display();
+  q.dequeue();  // Remove front element (10)
+  q.display();  // Display the queue: 20 30
+
+  q.enqueue(40);  // Insert 40
+  q.display();    // Display the queue: 20 30 40
+
+  cout << "Front element is: " << q.peek() << endl;  // Peek at the front: 20
+
+  return 0;
 }
