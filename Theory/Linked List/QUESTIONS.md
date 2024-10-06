@@ -17,6 +17,7 @@
 - Find the intersection point b/w two linked list
 - Sorting the Linked List
 - Segregating into odd and even
+- Remove the nth node from the end of the list
 
 ## Circular Linked List
 
