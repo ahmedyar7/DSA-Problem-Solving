@@ -1,92 +1,82 @@
 #include <iostream>
 using namespace std;
 
-class Node {
- private:
- public:
-  int data;
-  Node* next;
-
-  Node(int data) {
-    this->data = data;
-    next = nullptr;
-  }
-};
-
 class Queue {
  private:
-  Node* front;
-  Node* rear;
+  int front;
+  int rear;
+  int size;
+  int *queue;
 
  public:
-  Queue() {
-    front = nullptr;
-    rear = nullptr;
+  Queue(int capacity) {
+    size = capacity;
+    front = -1;
+    rear = -1;
+    queue = new int[size];
   }
 
-  bool empty() { return front == nullptr; }
+  bool empty() {
+    if (front == rear) return true;
+    return false;
+  }
+
+  bool full() {
+    if (rear == size - 1) return true;
+    return false;
+  }
 
   void enqueue(int value) {
-    Node* new_node = new Node(value);
-    if (rear == nullptr) {
-      front = rear = new_node;
+    if (full()) {
       return;
-    } else {
-      rear->next = new_node;
-      rear = new_node;
     }
+    rear++;
+    queue[rear] = value;
+    if (front == -1) {
+      front = 0;
+    }
+    return;
   }
 
   int dequeue() {
-    if (empty()) {
-      return -1;
+    if (empty()) return -1;
+    int value = queue[front];
+    front++;
+    if (front > rear) {
+      front = rear = -1;
     }
-    Node* temp = front;
-    int result = front->data;
-    front = front->next;
-    delete temp;
-    return result;
+    return value;
   }
 
-  int first() {
+  int peek() {
     if (empty()) {
       return -1;
     }
-    return front->data;
+    return queue[front];
   }
 
   void display() {
     if (empty()) return;
-    Node* current = front;
-    while (current != nullptr) {
-      cout << "[" << current->data << "] <-> ";
-      current = current->next;
+    for (int i = front; i <= rear; i++) {
+      cout << queue[i] << " ";
     }
-    cout << "null\n";
+    cout << "QUEUE_END\n";
   }
 
-  ~Queue() {
-    if (!empty()) {
-      dequeue();
-    }
-  }
+  ~Queue() { delete[] queue; }
 };
 
 int main() {
-  Queue q;
+  Queue qu(5);
 
-  q.enqueue(5);
-  q.enqueue(15);
-  q.enqueue(52);
-  q.enqueue(53);
-  q.enqueue(54);
-  q.enqueue(525);
+  qu.enqueue(2);
+  qu.enqueue(3);
+  qu.enqueue(4);
+  qu.enqueue(5);
+  qu.enqueue(6);
 
-  q.display();
+  qu.display();
 
-  q.dequeue();
-  q.dequeue();
-  q.dequeue();
-
-  q.display();
+  qu.dequeue();
+  qu.display();
 }
