@@ -6,6 +6,7 @@ class Node {
   int data;
   Node* next;
 
+ public:
   Node(int data) {
     this->data = data;
     next = nullptr;
@@ -23,22 +24,18 @@ class Queue {
     rear = nullptr;
   }
 
-  bool empty() { return front == nullptr; }
+  bool empty() { return (front == nullptr); }
 
   void enqueue(int value) {
     Node* new_node = new Node(value);
     if (rear == nullptr) {
       front = rear = new_node;
-    } else {
-      rear->next = new_node;
-      rear = new_node;
     }
+    rear->next = new_node;
+    rear = new_node;
   }
 
   int dequeue() {
-    if (empty()) {
-      return -1;
-    }
     Node* temp = front;
     int value = front->data;
     front = front->next;
@@ -46,10 +43,7 @@ class Queue {
     return value;
   }
 
-  int peek() {
-    if (empty()) return -1;
-    return front->data;
-  }
+  int peek() { return front->data; }
 
   void display() {
     Node* temp = front;
@@ -57,10 +51,8 @@ class Queue {
       cout << "[" << temp->data << "] -> ";
       temp = temp->next;
     }
-    cout << "NULL\n";
+    cout << "null\n";
   }
-
-  ~Queue() { delete front, rear; }
 };
 
 int main() {
