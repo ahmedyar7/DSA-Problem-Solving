@@ -16,7 +16,8 @@
                 "        \"C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/um\",",
                 "        \"C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/winrt\"",
                 "      ],",
-                "      \"defines\": [\"_DEBUG\","
+                "      \"defines\": [\"_DEBUG\",",
+                "${workspaceFolder}"
             ],
             "defines": [
                 "_DEBUG",

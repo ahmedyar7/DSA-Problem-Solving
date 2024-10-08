@@ -43,8 +43,9 @@ class Node {
   }
 
   Node* middle_element(Node* head) {
-    if (head == nullptr || head->next == nullptr) return head;
-
+    if (head == nullptr || head->next == nullptr) {
+      return nullptr;
+    }
     Node* slow = head;
     Node* fast = head->next;
 
@@ -58,50 +59,10 @@ class Node {
   Node* merge_2_sorted_list(Node*& node1, Node*& node2) {
     if (node1 == nullptr) return node2;
     if (node2 == nullptr) return node1;
-
-    Node* first = node1;
-    Node* second = node2;
-    Node* last = nullptr;
-    Node* third = nullptr;
-
-    if (first->data < second->data) {
-      third = last = first;
-      first = first->next;
-    } else {
-      third = last = second;
-      second = second->next;
-    }
-
-    while (first != nullptr && second != nullptr) {
-      if (first->data < second->data) {
-        last->next = first;
-        last = first;
-        first = first->next;
-      } else {
-        last->next = second;
-        last = second;
-        second = second->next;
-      }
-    }
-    if (first == nullptr)
-      last->next = second;
-    else
-      last->next = first;
-    return third;
   }
 
   Node* sort_ll(Node* head) {
-    if (head == nullptr || head->next == nullptr) return head;
-
-    Node* middle = middle_element(head);
-    Node* left_side = head;
-    Node* right_side = middle->next;
-    middle->next = nullptr;
-
-    left_side = sort_ll(left_side);
-    right_side = sort_ll(right_side);
-
-    return merge_2_sorted_list(left_side, right_side);
+    // code
   }
 
   Node* removeNthFromEnd(Node*& head, int n) {
