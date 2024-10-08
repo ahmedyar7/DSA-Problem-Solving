@@ -298,18 +298,22 @@ SinglyLinkedList* SinglyLinkedList::segregate_oddeven(SinglyLinkedList* head) {
 
 int main() {
   SinglyLinkedList* head = nullptr;
-  SinglyLinkedList::insert_at_tail(head, 2);
-  SinglyLinkedList::insert_at_tail(head, 1);
-  SinglyLinkedList::insert_at_tail(head, 3);
-  SinglyLinkedList::insert_at_tail(head, 5);
-  SinglyLinkedList::insert_at_tail(head, 6);
-  SinglyLinkedList::insert_at_tail(head, 4);
-  SinglyLinkedList::insert_at_tail(head, 7);
+
+  SinglyLinkedList sll(0);
+
+  // Call methods on the instance of the linked list
+  sll.insert_at_tail(head, 2);
+  sll.insert_at_tail(head, 1);
+  sll.insert_at_tail(head, 3);
+  sll.insert_at_tail(head, 5);
+  sll.insert_at_tail(head, 6);
+  sll.insert_at_tail(head, 4);
+  sll.insert_at_tail(head, 7);
 
   cout << "Un-Segregated List: \n";
-  SinglyLinkedList::display(head);
+  sll.display(head);
 
   cout << "Segregated List\n";
-  SinglyLinkedList* segregated = SinglyLinkedList::segregate_oddeven(head);
-  SinglyLinkedList::display(segregated);
+  SinglyLinkedList* segregated = sll.segregate_oddeven(head);
+  sll.display(segregated);
 }

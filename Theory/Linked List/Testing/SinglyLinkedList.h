@@ -24,8 +24,8 @@ class SinglyLinkedList {
   void display(SinglyLinkedList* head);
   bool is_looped(SinglyLinkedList* head);
   void insert_at_sorted(SinglyLinkedList*& head, int value);
-  //   SinglyLinkedList* concatenate(SinglyLinkedList*& head,
-  // SinglyLinkedList*& SinglyLinkedList2);
+  SinglyLinkedList* concatenate(SinglyLinkedList*& head,
+                                SinglyLinkedList*& SinglyLinkedList2);
   bool is_sorted(SinglyLinkedList* head);
   void remove_duplicate(SinglyLinkedList*& head);
   SinglyLinkedList* merge_ll(SinglyLinkedList*& SinglyLinkedList1,
