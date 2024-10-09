@@ -1,154 +1,138 @@
 #include <iostream>
 using namespace std;
 
-class CircularDoublyLinkedList {
+class Node {
+ private:
  public:
   int data;
-  CircularDoublyLinkedList* next;
-  CircularDoublyLinkedList* previous;
+  Node* next;
+  Node* prev;
 
-  CircularDoublyLinkedList(int value) {
-    data = value;
+  Node(int data) {
+    this->data = data;
     next = nullptr;
-    previous = nullptr;
+    prev = nullptr;
   }
 
-  ~CircularDoublyLinkedList() {}
-
-  void insert_at_tail(CircularDoublyLinkedList*& head, int value) {
-    CircularDoublyLinkedList* new_node = new CircularDoublyLinkedList(value);
-
+  void insert_at_head(Node*& head, int value) {
+    Node* new_node = new Node(value);
     if (head == nullptr) {
       head = new_node;
-      new_node->next = head;
-      new_node->previous = head;
+      new_node->next = new_node;
+      new_node->prev = new_node;
+      return;
     }
 
-    CircularDoublyLinkedList* temp = head;
-    while (temp->next != head) {
-      temp = temp->next;
-    }
+    Node* last = head->prev;
 
-    temp->next = new_node;
-    new_node->previous = temp;
     new_node->next = head;
-    head->previous = new_node;
-  }
-
-  void display(CircularDoublyLinkedList* head) {
-    if (head == nullptr) {
-      cout << "List is empty\n";
-      return;
-    }
-
-    CircularDoublyLinkedList* temp = head;
-    do {
-      cout << temp->data << " <-> ";
-      temp = temp->next;
-    } while (temp != head);
-    cout << "HEAD\n";
-  }
-
-  void insert_at_head(CircularDoublyLinkedList*& head, int value) {
-    CircularDoublyLinkedList* new_node = new CircularDoublyLinkedList(value);
-
-    if (head == nullptr) {
-      head = new_node;
-      new_node->next = head;
-      new_node->previous = head;
-      return;
-    }
-
-    CircularDoublyLinkedList* last = head;
-    while (last->next != head) {
-      last = last->next;
-    }
+    head->prev = new_node;
     last->next = new_node;
-    new_node->next = head;
-    head->previous = new_node;
+    new_node->prev = last;
+
     head = new_node;
   }
 
-  void insert_at_position(CircularDoublyLinkedList*& head, int value,
-                          int position) {
-    CircularDoublyLinkedList* new_node = new CircularDoublyLinkedList(value);
-
-    if (position < 0 || head == nullptr) {
-      cout << "Invalid Position\n";
+  void insert_at_tail(Node*& head, int value) {
+    Node* new_node = new Node(value);
+    if (head == nullptr) {
+      head = new_node;
+      new_node->next = new_node;
+      new_node->prev = new_node;
       return;
     }
 
-    if (position == 1) {
+    Node* last = head->prev;
+    last->next = new_node;
+    new_node->prev = last;
+    new_node->next = head;
+    head->prev = new_node;
+  }
+
+  void insert_at_position(Node*& head, int value, int pos) {
+    Node* new_node = new Node(value);
+
+    cout << "New node created\n";
+
+    if (head == nullptr || pos <= 0) return;
+    cout << "First if condition meet\n";
+
+    if (pos == 1) {
+      cout << "2nd if condition meet\n ";
       insert_at_head(head, value);
       return;
     }
 
-    CircularDoublyLinkedList* temp = head;
-    for (int i = 1; i < position - 1 && temp != head; i++) {
+    Node* temp = head;
+    Node* last = head->prev;
+
+    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
       temp = temp->next;
     }
-    new_node->previous = temp;
+    cout << "reached to desired node\n";
     new_node->next = temp->next;
     temp->next = new_node;
-    temp->next->previous = new_node;
+    new_node->prev = temp;
+    temp->next->next->prev = new_node;
+    cout << "temp next points to newnode\n";
+    cout << "newnnode next point to temp-.next next\n";
+    cout << "newnode previous pointe the temp\n";
+    cout << "final condition\n";
+
+    return;
   }
 
-  void delete_head(CircularDoublyLinkedList*& head) {
-    if (head == nullptr) {
-      cout << "Empty List\n";
-      return;
-    }
-
-    if (head->next == head) {
-      delete head;
-      head->next = nullptr;
-      return;
-    }
-
-    CircularDoublyLinkedList* last = head;
-    while (last->next != head) {
-      last = last->next;
-    }
-
-    CircularDoublyLinkedList* temp = head;
+  void delete_at_head(Node*& head) {
+    if (head == nullptr) return;
+    Node* temp = head;
+    Node* last = head->prev;
+    last->next = head->next;
     head = head->next;
-    head->previous = last;
-    last->next = head;
+    head->prev = last;
+
     delete temp;
   }
 
-  void delete_at_position(CircularDoublyLinkedList*& head, int position) {
-    if (position < 0 || head == nullptr) {
-      cout << "Invalid Position\n";
+  void delete_at_position(Node*& head, int pos) {
+    if (head == nullptr || pos <= 0) {
       return;
     }
-    if (position == 1) {
-      delete_head(head);
+    if (pos == 1) {
+      delete_at_head(head);
       return;
     }
-    CircularDoublyLinkedList* temp = head;
-    for (int i = 1; i < position && temp->next != head; i++) {
+    Node* temp = head;
+    for (int i = 1; i < pos && temp->next != head; i++) {
       temp = temp->next;
     }
-    temp->previous->next = temp->next;
-    temp->next->previous = temp->previous;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
     delete temp;
+  }
+
+  void display(Node* head) {
+    Node* temp = head;
+    do {
+      cout << "[" << temp->data << "] <-> ";
+      temp = temp->next;
+    } while (temp != head);
+    cout << "null\n";
   }
 };
 
 int main() {
-  CircularDoublyLinkedList* head = nullptr;
-  CircularDoublyLinkedList cdll(0);
+  Node* head = nullptr;
+  Node n(0);
 
-  for (int i = 0; i < 10; i++) {
-    cdll.insert_at_tail(head, i);
-  }
+  n.insert_at_head(head, 1);
+  n.insert_at_head(head, 10);
+  n.insert_at_head(head, 21);
 
-  cdll.insert_at_head(head, 200);
-  cdll.insert_at_head(head, 2002);
-  cdll.insert_at_position(head, 3333, 3);
-  cdll.display(head);
-  cdll.delete_head(head);
-  cdll.delete_at_position(head, 5);
-  cdll.display(head);
+  n.insert_at_tail(head, 23);
+  n.insert_at_tail(head, 232);
+  n.insert_at_tail(head, 2322);
+
+  n.display(head);
+  n.insert_at_position(head, 23, 3);
+  n.display(head);
 }
