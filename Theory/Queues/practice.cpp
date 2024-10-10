@@ -1,76 +1,119 @@
 #include <iostream>
 using namespace std;
 
-class CircularQueue {
- private:
+class Node {
  public:
-  int front;
-  int rear;
+  int data;
+  Node* next;
+  Node* prev;
+
+  Node(int data) {
+    this->data = data;
+    next = nullptr;
+    prev = nullptr;
+  }
+};
+
+class Deque {
+ private:
+  Node* front;
+  Node* rear;
   int size;
-  int* queue;
-  CircularQueue(int size) {
-    this->size = size;
-    front = -1;
-    rear = -1;
-    queue = new int[size];
+
+ public:
+  Deque() {
+    front = nullptr;
+    rear = nullptr;
+    size = 0;
   }
 
-  bool full() { return (front == (rear + 1) % size); }
-  bool empty() { return front == -1; }
+  bool empty() { return size == 0; }
 
-  void enqueue(int value) {
-    if (full()) return;
+  void insert_front(int value) {
+    Node* new_node = new Node(value);
     if (empty()) {
-      front = rear = 0;
+      front = rear = new_node;
     } else {
-      rear = (rear + 1) % size;
+      new_node->next = front;
+      front->prev = new_node;
+      front = new_node;
     }
-    queue[rear] = value;
+    size++;
   }
 
-  int dequeue() {
-    if (empty()) return -1;
-    int value = queue[front];
-    front = (front + 1) % size;
-    if (front == rear) {
-      front = rear = -1;
+  void insert_rear(int value) {
+    Node* new_node = new Node(value);
+    if (empty()) {
+      front = rear = new_node;
+    } else {
+      rear->next = new_node;
+      new_node->prev = rear;
+      rear = new_node;
     }
+    size++;
+  }
+
+  int delete_front() {
+    if (empty()) {
+      front = rear = nullptr;
+    }
+    Node* temp = front;
+    front = front->next;
+    int value = temp->data;
+    delete temp;
+    size--;
+
     return value;
   }
 
-  int peek() {
-    if (empty()) return -1;
-    return queue[front];
+  int delete_rear() {
+    if (empty()) {
+      front = rear = nullptr;
+    }
+    Node* temp = rear;
+    rear = rear->prev;
+    int value = rear->data;
+    delete temp;
+    size--;
+
+    return value;
   }
 
+  int get_first() { return front->data; }
+  int get_rear() { return rear->data; }
+
   void display() {
-    int i = front;
-    while (true) {
-      cout << queue[i] << " ";
-      if (i == rear) break;
-      i = (i + 1) % size;
+    Node* temp = front;
+    while (temp != nullptr) {
+      cout << "[" << temp->data << "] -> ";
+      temp = temp->next;
     }
-    cout << endl;
+    cout << "null\n";
+  }
+
+  ~Deque() {
+    while (!empty()) {
+      delete_front();
+    }
   }
 };
 
 int main() {
-  CircularQueue cq(5);
+  Deque qe;
 
-  cq.enqueue(5);
-  cq.enqueue(15);
-  cq.enqueue(25);
-  cq.enqueue(35);
+  qe.insert_front(5);
+  qe.insert_front(15);
+  qe.insert_front(25);
+  qe.insert_front(35);
 
-  cq.display();
+  qe.display();
 
-  cq.dequeue();
-  cq.display();
+  qe.delete_front();
+  qe.display();
 
-  cq.enqueue(5);
-  cq.enqueue(5);
-  cq.enqueue(5);
-  cq.enqueue(5);
-  cq.enqueue(5);
-  cq.display();
+  qe.insert_rear(32);
+  qe.insert_rear(3232);
+  qe.insert_rear(322);
+
+  qe.display();
 }
