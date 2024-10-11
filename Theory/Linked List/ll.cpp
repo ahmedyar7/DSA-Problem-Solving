@@ -13,8 +13,6 @@ class Node {
     next = nullptr;
   }
 
-  // ~Node() { delete next; }
-
   void insert_at_tail(Node*& head, int value) {
     Node* new_node = new Node(value);
     if (head == nullptr) {
@@ -135,6 +133,47 @@ class Node {
       current->next = new_node;
     }
     return dummy->next;
+  }
+
+  Node* reverse_ll(Node* head) {
+    Node* p = head;
+    Node* q = nullptr;
+    Node* r = nullptr;
+
+    while (p != nullptr) {
+      r = q;
+      p = p;
+      p = p->next;
+    }
+    return q;
+  }
+
+  Node* get_kth_node(Node* temp, int k) {
+    k -= 1;
+    while (temp != nullptr && k > 0) {
+      k--;
+      temp = temp->next;
+    }
+    return temp;
+  }
+
+  Node* reverse_in_group(Node* head, int k) {
+    Node* temp = head;
+    Node* prev_node = nullptr;
+    Node* kth_node = nullptr;
+
+    while (temp != nullptr) {
+      kth_node = get_kth_node(temp, k);
+      if (kth_node == nullptr) {
+        if (prev_node) {
+          prev_node->next = temp;
+        }
+        break;
+      }
+    }
+
+    Node* next_node = kth_node->next;
+    kth_node->next = nullptr;
   }
 };
 

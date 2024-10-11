@@ -2,114 +2,83 @@
 using namespace std;
 
 class Node {
- private:
  public:
   char data;
   Node* next;
-
-  Node(char value) {
-    data = value;
+  Node(char data) {
+    this->data = data;
     next = nullptr;
   }
-
-  ~Node() { delete next; }
 };
 
 class Stack {
- private:
  public:
   Node* head;
-
   Stack() { head = nullptr; }
-  ~Stack() { delete head; }
 
-  bool empty() {
-    if (head == nullptr) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  bool empty() { return head == nullptr; }
 
   void push(char value) {
     Node* new_node = new Node(value);
-
     if (head == nullptr) {
       head = new_node;
       return;
     }
-
     new_node->next = head;
     head = new_node;
     return;
   }
 
   char pop() {
-    if (head == nullptr) {
-      return '\0';
-    }
-
-    char value = head->data;
+    Node* temp = head;
+    char value = temp->data;
     head = head->next;
-    // delete head;
     return value;
   }
 
-  char peek() {
-    if (head == nullptr) {
-      return '\0';
-    }
-    return head->data;
-  }
+  char peek() { return head->data; }
 };
+
+int precedence(char ch) {
+  if (ch == '+' || ch == '-') return 1;
+  if (ch == '*' || ch == '/') return 2;
+  if (ch == '^') return 3;
+
+  return -1;
+}
+
+void reverse_string(string& s) {
+  int n = s.length();
+  for (int i = 0; i < n / 2; i++) {
+    char temp = s[i];
+    s[i] = s[n - i - 1];
+    s[n - i - 1] = temp;
+  }
+}
+
+bool operand(char ch) {
+  return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+          (ch >= '0' && ch <= '9'));
+}
 
 bool valid_parenthesis(string s) {
   Stack st;
-
   for (int i = 0; i < s.length(); i++) {
     char ch = s[i];
-
     if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
     } else if (ch == ')' || ch == '}' || ch == ']') {
       if (st.empty()) return false;
       char top = st.peek();
       if ((ch == ')' && top == '(') || (ch == '}' && top == '{') ||
-          (ch == ']' && top == '[')) {
+          (ch == ']' && top == '['))
         st.pop();
-      } else {
+      else {
         return false;
       }
     }
   }
-
   return st.empty();
-}
-
-bool is_operand(char ch) {
-  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-      (ch >= '0' && ch <= '9')) {
-    return true;
-  }
-  return false;
-}
-
-int precedence(char ch) {
-  if (ch == '+' || ch == '-') return 1;
-  if (ch == '/' || ch == '*') return 2;
-  if (ch == '^') return 3;
-
-  return -1;
-}
-
-void reverse_str(string s) {
-  int n = s.length();
-
-  for (int i = 0; i < n / 2; i++) {
-    char temp = s[n - i - 1];
-    s[i] = s[n - i - 1];
-    s[n - i - 1] = temp;
-  }
 }
 
 string infix_to_postfix(string s) {
@@ -118,8 +87,7 @@ string infix_to_postfix(string s) {
 
   for (int i = 0; i < s.length(); i++) {
     char ch = s[i];
-
-    if (is_operand(ch)) {
+    if (operand(ch)) {
       ans += ch;
     } else if (ch == '(') {
       st.push(ch);
@@ -139,13 +107,12 @@ string infix_to_postfix(string s) {
   while (!st.empty()) {
     ans += st.pop();
   }
-
   return ans;
 }
 
 string infix_to_prefix(string s) {
-  reverse_str(s);
-  string ans;
+  reverse_string(s);
+  cout << "String go revrsed\n";
 
   for (int i = 0; i < s.length(); i++) {
     if (s[i] == '(') {
@@ -155,14 +122,16 @@ string infix_to_prefix(string s) {
     }
   }
 
-  ans = infix_to_postfix(s);
-  reverse_str(ans);
+  cout << "parnenthesis got changed\n";
 
+  string ans = infix_to_postfix(s);
+  reverse_string(ans);
+  cout << "go the aans wer string\n";
   return ans;
 }
 
 int main() {
-  string exp = "{(A-B/C)*(A/K-L)";
+  string exp = "(A-B/C)*(A/K-L)";
   cout << "Infix expression: " << exp << endl;
 
   cout << "Prefix Expression: ";
