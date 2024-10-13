@@ -150,4 +150,6 @@
 
 - Subarray with sum K
 
-##
+## 12th October
+- Learning about the Valid and invalid anagram
+
