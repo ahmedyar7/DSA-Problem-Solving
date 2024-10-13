@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "random": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "xtree": "cpp",
+    "cmath": "cpp",
+    "complex": "cpp",
+    "valarray": "cpp"
+  }
+}
