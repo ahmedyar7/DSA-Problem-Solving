@@ -5,37 +5,89 @@
 #include "node.h"
 using namespace std;
 
+void menu();
+
 int main() {
-  Node* head = nullptr;
   DoublyLinkedList dll;
+  Node* head = nullptr;
+  int choice;
+  int value;
+  int position;
 
-  cout << "Checking the insert at head function\n";
-  dll.insert_at_head(head, 2);
-  dll.insert_at_head(head, 12);
-  dll.insert_at_head(head, 22);
-  dll.insert_at_head(head, 32);
+  while (true) {
+    menu();
+    cin >> choice;
 
-  dll.display_H_T(head);
+    switch (choice) {
+      case 1:  // Display List
+        dll.display_H_T(head);
+        break;
 
-  cout << "Checking the insert at tail function\n";
+      case 2:  // Insert at Head
+        cout << "Enter value to insert at head: ";
+        cin >> value;
+        dll.insert_at_head(head, value);
+        break;
 
-  dll.insert_at_tail(head, 2);
-  dll.insert_at_tail(head, 23);
-  dll.insert_at_tail(head, 24);
-  dll.display_H_T(head);
+      case 3:  // Insert at Tail
+        cout << "Enter value to insert at tail: ";
+        cin >> value;
+        dll.insert_at_tail(head, value);
+        break;
 
-  cout << "Insert at position\n";
-  dll.insert_at_location(head, 1, 1);
-  dll.insert_at_location(head, 2, 2);
-  dll.insert_at_location(head, 3, 3);
+      case 4:  // Insert at Position
+        cout << "Enter position to insert at: ";
+        cin >> position;
+        cout << "Enter value to insert: ";
+        cin >> value;
+        dll.insert_at_location(head, position, value);
+        break;
 
-  dll.display_H_T(head);
+      case 5:  // Delete at Position
+        cout << "Enter position to delete: ";
+        cin >> position;
+        value = dll.delete_at_position(head, position);
+        if (value != -1)
+          cout << "Deleted value: " << value << endl;
+        else
+          cout << "Invalid position!" << endl;
+        break;
 
-  cout << "Cheking of the value in node\n";
-  cout << dll.search_node(head, 32);
+      case 6:  // Search for a Node
+        cout << "Enter value to search: ";
+        cin >> value;
+        if (dll.search_node(head, value))
+          cout << "Value " << value << " found in the list.\n";
+        else
+          cout << "Value " << value << " not found in the list.\n";
+        break;
 
-  cout << "Deleting the node from the doubly linked list\n";
+      case 7:  // Reverse the List
+        head = dll.reverse_dll(head);
+        cout << "List has been reversed.\n";
+        break;
 
-  dll.delete_at_position(head, 2);
-  dll.display_H_T(head);
+      case 8:  // Exit
+        cout << "Exiting...\n";
+        return 0;
+
+      default:
+        cout << "Invalid choice! Please try again.\n";
+    }
+  }
+
+  return 0;
+}
+
+void menu() {
+  cout << "\n--- Doubly Linked List Menu ---\n";
+  cout << "1. Display List\n";
+  cout << "2. Insert at Head\n";
+  cout << "3. Insert at Tail\n";
+  cout << "4. Insert at Position\n";
+  cout << "5. Delete at Position\n";
+  cout << "6. Search for a Node\n";
+  cout << "7. Reverse the List\n";
+  cout << "8. Exit\n";
+  cout << "Enter your choice: ";
 }

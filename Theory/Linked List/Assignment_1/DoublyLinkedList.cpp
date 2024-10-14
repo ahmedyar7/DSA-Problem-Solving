@@ -106,6 +106,60 @@ int DoublyLinkedList::delete_at_position(Node*& head, int position) {
   return value;
 }
 
-void DoublyLinkedList::reverse_dll(Node* head) {
-  // code
+Node* DoublyLinkedList::merge(Node*& head1, Node*& head2) {
+  if (head1 == nullptr) return head2;
+  if (head2 == nullptr) return head1;
+
+  Node* first = head1;
+  Node* second = head2;
+  Node* last = nullptr;
+  Node* third = nullptr;
+
+  if (first->get_data() < second->get_data()) {
+    third = last = first;
+    first = first->get_next();
+  } else {
+    third = last = second;
+    second = second->get_next();
+  }
+
+  while (first != nullptr && second != nullptr) {
+    if (first->get_data() < second->get_data()) {
+      last->set_next(first);
+      last = first;
+      first = first->get_next();
+    } else {
+      last->set_next(second);
+      last = second;
+      second = second->get_next();
+    }
+  }
+
+  if (first == nullptr) {
+    last->set_next(second);
+  } else {
+    last->set_next(first);
+  }
+
+  return third;
+}
+
+Node* DoublyLinkedList::reverse_dll(Node* head) {
+  if (head == nullptr || head->get_next() == nullptr) {
+    return head;
+  }
+
+  Node* current = head;
+  Node* temp = nullptr;
+
+  while (current != nullptr) {
+    temp = current->get_prev();
+    current->set_prev(current->get_next());
+    current->set_next(temp);
+    current = current->get_prev();
+  }
+  if (temp != head) {
+    head = temp->get_prev();
+  }
+  return head;
 }

@@ -21,7 +21,10 @@ class DoublyLinkedList {
   bool search_node(Node* head, int search_value);
 
   //. -- REVERSING --
-  void reverse_dll(Node* head);
+  Node* reverse_dll(Node* head);
+
+  //. -- MERGING --
+  Node* merge(Node*& head1, Node*& head2);
 };
 
 #endif
