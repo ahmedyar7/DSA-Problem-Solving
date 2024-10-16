@@ -10,6 +10,30 @@ void DoublyLinkedList ::display_H_T(Node* head) {
   cout << "NUll\n";
 }
 
+void DoublyLinkedList::display_T_H(Node* head) {
+  if (head == nullptr) {
+    cout << "The list is empty.\n";
+    return;
+  }
+
+  Node* temp = head;
+
+  // Move to the last node
+  while (temp->get_next() != nullptr) {
+    temp = temp->get_next();
+  }
+
+  // Traverse from the last node to the beginning
+  while (temp != nullptr) {
+    cout << "[" << temp->get_data() << "]";
+    temp = temp->get_prev();
+    if (temp != nullptr) {
+      cout << " <-> ";
+    }
+  }
+  cout << " <-> NULL\n";
+}
+
 void DoublyLinkedList::insert_at_head(Node*& head, int value) {
   Node* new_node = new Node(value);
   if (head == nullptr) {
@@ -79,31 +103,37 @@ bool DoublyLinkedList::search_node(Node* head, int search_value) {
   return false;
 }
 
-int DoublyLinkedList::delete_at_position(Node*& head, int position) {
-  if (position <= 0) {
-    cout << "Invalid Position\n";
-    return -1;
-  }
-
-  if (position == 1) {
-    Node* temp = head;
-    int value = temp->get_data();
-    head = head->get_next();
-    delete temp;
-    return value;
-  }
-
+int DoublyLinkedList::delete_value(Node*& head, int value) {
   Node* temp = head;
-  for (int i = 1; i < position && temp->get_next() != nullptr; i++) {
+  while (temp != nullptr) {
+    if (temp->get_data() == value) {
+      // If the node to delete is the head node
+      if (temp == head) {
+        head = temp->get_next();
+        if (head != nullptr) {
+          head->set_prev(nullptr);
+        }
+      }
+      // If the node is in the middle or end of the list
+      else {
+        if (temp->get_prev() != nullptr) {
+          temp->get_prev()->set_next(temp->get_next());
+        }
+        if (temp->get_next() != nullptr) {
+          temp->get_next()->set_prev(temp->get_prev());
+        }
+      }
+      int deleted_value = temp->get_data();
+      Node* node_to_delete = temp;
+      temp = temp->get_next();
+      delete node_to_delete;
+
+      return deleted_value;
+    }
     temp = temp->get_next();
   }
-  int value = temp->get_data();
 
-  temp->get_prev()->set_next(temp->get_next());
-  temp->get_next()->set_prev(temp->get_prev());
-
-  delete temp;
-  return value;
+  return -1;
 }
 
 Node* DoublyLinkedList::merge(Node*& head1, Node*& head2) {

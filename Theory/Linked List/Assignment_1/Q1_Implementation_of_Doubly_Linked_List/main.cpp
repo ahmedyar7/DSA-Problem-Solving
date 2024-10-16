@@ -44,9 +44,9 @@ int main() {
         break;
 
       case 5:  // Delete at Position
-        cout << "Enter position to delete: ";
+        cout << "Enter Valie to delete: ";
         cin >> position;
-        value = dll.delete_at_position(head, position);
+        value = dll.delete_value(head, value);
         if (value != -1)
           cout << "Deleted value: " << value << endl;
         else
@@ -85,7 +85,7 @@ void menu() {
   cout << "2. Insert at Head\n";
   cout << "3. Insert at Tail\n";
   cout << "4. Insert at Position\n";
-  cout << "5. Delete at Position\n";
+  cout << "5. Delete Value\n";
   cout << "6. Search for a Node\n";
   cout << "7. Reverse the List\n";
   cout << "8. Exit\n";

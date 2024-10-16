@@ -8,6 +8,7 @@ class DoublyLinkedList {
  public:
   // . -- DISPLAY --
   void display_H_T(Node* head);
+  void display_T_H(Node* head);
 
   //.  -- INSERTION --
   void insert_at_head(Node*& head, int value);
@@ -15,7 +16,7 @@ class DoublyLinkedList {
   void insert_at_location(Node*& head, int position, int value);
 
   //. -- DELETION --
-  int delete_at_position(Node*& head, int position);
+  int delete_value(Node*& head, int value);
 
   //. -- SEARCHING --
   bool search_node(Node* head, int search_value);
