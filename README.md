@@ -1,4 +1,4 @@
-&### 7th August 2024 | Wednesday
+## 7th August 2024 | Wednesday
 
 - [Selection Sort Learning & Dry Run](https://www.youtube.com/watch?v=HGk_ypEuS24&t=167s)
 - [Bubble Sort Learning & Dry Run](https://www.youtube.com/watch?v=HGk_ypEuS24&t=167s)
@@ -151,5 +151,5 @@
 - Subarray with sum K
 
 ## 12th October
-- Learning about the Valid and invalid anagram
 
+- Learning about the Valid and invalid anagram
