@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "music_playlist.cpp"
 #include "music_playlist.h"
 #include "song.h"
 using namespace std;
@@ -38,4 +39,6 @@ int main() {
   cout << "\nfrom end to begin\n";
 
   list.display_end_to_begin(head);
+
+  cout << list.search_song(head, "kushkush2");
 }
