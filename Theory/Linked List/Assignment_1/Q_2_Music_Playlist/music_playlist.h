@@ -5,30 +5,17 @@
 
 class MusicPlaylist {
  public:
-  //. ---  Insertion ---
-  void add_song_at_start(Song*& head, string song_name);
-  void add_song_at_end(Song*& head, string song_name);
-  void add_song_at_position(Song*& head, string song_name, int position);
-
-  //. --- Removal ---
-  Song* remove_song_by_name(Song*& head, string song_name);
-
-  //. --- Display ---
+  void add_song_at_start(Song*& head, const char* song_name);
+  void add_song_at_end(Song*& head, const char* song_name);
+  void add_song_at_position(Song*& head, const char* song_name, int position);
+  Song* remove_song_by_name(Song*& head, const char* song_name);
   void display_begin_to_end(Song* head);
   void display_end_to_begin(Song* head);
-
-  //. --- Search Song ---
-  bool search_song(Song* head, string song_name);
-
-  //. --- Play Next Song ---
-  string play_next_song(Song* head);
-
-  //. --- Play Previous Song ---
-  string play_previous_song(Song* head);
-
-  //. --- Save Playlist ---
-  void save_playlist(Song* head, string filename);
-  void load_playlist(Song*& head, string filename);
+  bool search_song(Song* head, const char* song_name);
+  const char* play_next_song(Song* head);
+  const char* play_previous_song(Song* head);
+  void save_playlist(Song* head, const char* filename);
+  void load_playlist(Song*& head, const char* filename);
 };
 
 #endif

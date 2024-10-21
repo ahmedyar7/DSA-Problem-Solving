@@ -9,33 +9,33 @@ void display_menu();
 
 int main() {
   MusicPlaylist playlist;
-  Song* head = nullptr;  // Pointer to the head of the playlist
+  Song* head = nullptr;
   int choice;
-  string song_name;
+  char song_name[100];
   int position;
-  string filename;
+  char filename[100];
 
   do {
     display_menu();
     cin >> choice;
-    cin.ignore();  // Ignore newline character after reading choice
+    cin.ignore();
 
     switch (choice) {
       case 1:
         cout << "Enter song name: ";
-        getline(cin, song_name);
+        cin.getline(song_name, 100);
         playlist.add_song_at_start(head, song_name);
         break;
 
       case 2:
         cout << "Enter song name: ";
-        getline(cin, song_name);
+        cin.getline(song_name, 100);
         playlist.add_song_at_end(head, song_name);
         break;
 
       case 3:
         cout << "Enter song name: ";
-        getline(cin, song_name);
+        cin.getline(song_name, 100);
         cout << "Enter position: ";
         cin >> position;
         playlist.add_song_at_position(head, song_name, position);
@@ -43,7 +43,7 @@ int main() {
 
       case 4:
         cout << "Enter song name to remove: ";
-        getline(cin, song_name);
+        cin.getline(song_name, 100);
         playlist.remove_song_by_name(head, song_name);
         break;
 
@@ -59,7 +59,7 @@ int main() {
 
       case 7:
         cout << "Enter song name to search: ";
-        getline(cin, song_name);
+        cin.getline(song_name, 100);
         if (playlist.search_song(head, song_name)) {
           cout << song_name << " found in the playlist." << endl;
         } else {
@@ -77,13 +77,13 @@ int main() {
 
       case 10:
         cout << "Enter filename to save playlist: ";
-        getline(cin, filename);
+        cin.getline(filename, 100);
         playlist.save_playlist(head, filename);
         break;
 
       case 11:
         cout << "Enter filename to load playlist: ";
-        getline(cin, filename);
+        cin.getline(filename, 100);
         playlist.load_playlist(head, filename);
         break;
 
