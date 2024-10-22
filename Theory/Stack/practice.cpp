@@ -1,68 +1,69 @@
 #include <iostream>
 using namespace std;
 
+class Node {
+ private:
+ public:
+  char data;
+  Node* next;
+
+  Node(char data) {
+    this->data = data;
+    next = nullptr;
+  }
+};
+
 class Stack {
  private:
-  int size;
-  int top;
-  char* arr;
+  Node* top;
 
  public:
-  Stack(int size) {
-    this->size = size;
-    top = -1;
-    arr = new char[size];
-  }
+  Stack() { top = nullptr; }
 
-  bool empty() { return top == -1; }
-  bool full() { return top == size - 1; }
+  bool empty() { return top == nullptr; }
 
   void push(char value) {
-    if (full()) {
-      cout << "Stack is Full\n";
+    Node* new_node = new Node(value);
+    if (empty()) {
+      top = new_node;
       return;
     }
-    top++;
-    arr[top] = value;
+    new_node->next = top;
+    top = new_node;
     return;
   }
 
   char pop() {
-    if (empty()) {
-      cout << "Stack is Empty\n";
-      return '\0';
-    }
-    int value = arr[top];
-    top--;
+    Node* temp = top;
+    top = top->next;
+    char value = temp->data;
+    delete temp;
     return value;
   }
 
-  char peek() { return arr[top]; }
+  char peek() { return top->data; }
 };
 
-bool valid_parenthesis(char arr[]) {
+bool valid_parenthesis(char str[]) {
+  Stack st;
   int i = 0;
-  int len = 0;
-  while (arr[len] != '\0') {
-    len++;
-  }
-  Stack st(len);
-  while (arr[i] != '\0') {
-    char ch = arr[i];
 
-    if (ch == '(') {
+  while (str[i] != '\0') {
+    char ch = str[i];
+
+    if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
-    } else if (ch == ')') {
+    } else if (ch == ')' || ch == '}' || ch == ']') {
       if (st.empty()) return false;
       char top = st.peek();
-
-      if ((ch == ')' && top == '(') || (ch == '}' && top == '{') ||
-          (ch == ']' && top == '[')) {
+      if ((ch == ')' && top == '(') || (ch == ']' && top == '[') ||
+          (ch == '}' && top == '{')) {
         st.pop();
       } else {
         return false;
       }
     }
+
     i++;
   }
   return st.empty();
@@ -70,9 +71,7 @@ bool valid_parenthesis(char arr[]) {
 
 void reverse_string(char arr[]) {
   int len = 0;
-  while (arr[len] != '\0') {
-    len++;
-  }
+  while (arr[len] != '\0') len++;
 
   for (int i = 0; i < len / 2; i++) {
     char temp = arr[i];
@@ -83,59 +82,47 @@ void reverse_string(char arr[]) {
 
 int precedence(char ch) {
   if (ch == '+' || ch == '-') return 1;
-  if (ch == '/' || ch == '*') return 2;
+  if (ch == '*' || ch == '/') return 2;
   if (ch == '^') return 3;
 
   return -1;
 }
 
 bool is_operand(char ch) {
-  if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-      (ch >= '0' && ch <= '9'))
-    return true;
-  return false;
+  return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
+          (ch >= '0' && ch <= '9'));
 }
 
-void infix_to_postfix(char infix[], char ans[]) {
-  Stack st(100);
-
+void infix_to_postfix(char infix[], char postfix[]) {
+  Stack st;
   int i = 0;
   int j = 0;
 
   while (infix[i] != '\0') {
     char ch = infix[i];
-
     if (is_operand(ch)) {
-      ans[j++] = ch;
-    }
-
-    else if (ch == '(') {
+      postfix[j++] = ch;
+    } else if (ch == '(') {
       st.push(ch);
-    }
-
-    else if (ch == ')') {
-      while (!st.empty() && st.peek() != '(') {
-        ans[j++] = st.pop();
+    } else if (ch == ')') {
+      while (!st.empty() & st.peek() != '(') {
+        postfix[j++] = st.pop();
       }
       if (!st.empty()) {
         st.pop();
       }
-    }
-
-    else {
+    } else {
       while (!st.empty() && precedence(ch) <= precedence(st.peek())) {
-        ans[j++] = st.pop();
+        postfix[j++] = st.pop();
       }
       st.push(ch);
     }
     i++;
   }
-
   while (!st.empty()) {
-    ans[j++] = st.pop();
+    postfix[j++] = st.pop();
   }
-
-  ans[j] = '\0';
+  postfix[j] = '\0';
 }
 
 void infix_to_prefix(char infix[], char prefix[]) {
@@ -160,7 +147,7 @@ void infix_to_prefix(char infix[], char prefix[]) {
     prefix[j] = postfix[j];
     j++;
   }
-  prefix[j] = '\0';  // Null terminate the prefix expression
+  prefix[j] = '\0';
 }
 
 int main() {
@@ -172,10 +159,10 @@ int main() {
   infix_to_postfix(exp, ans);
   cout << ans << endl;
 
-  // cout << "Prefix  Expression \n\n";
-  // char ans1[100];
-  // infix_to_prefix(exp, ans1);
-  // cout << ans1 << endl;
+  cout << "Prefix  Expression \n\n";
+  char ans1[100];
+  infix_to_prefix(exp, ans1);
+  cout << ans1 << endl;
 
   cout << "Is valid: " << (valid_parenthesis(exp) ? "Yes" : "No") << endl;
 
