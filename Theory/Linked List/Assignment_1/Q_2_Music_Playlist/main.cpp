@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "music_playlist.cpp"
 #include "music_playlist.h"
