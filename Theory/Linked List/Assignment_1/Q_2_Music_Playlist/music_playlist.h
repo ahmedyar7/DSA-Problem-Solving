@@ -4,7 +4,6 @@
 #include "song.h"
 
 class MusicPlaylist {
- private:
  public:
   //. ---  Insertion ---
   void add_song_at_start(Song*& head, string song_name);

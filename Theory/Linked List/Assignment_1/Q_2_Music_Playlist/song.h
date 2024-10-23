@@ -8,16 +8,11 @@ class Song {
  private:
   Song* next;
   Song* prev;
-  char song_name[100];
+  string song_name;
 
  public:
-  Song(const char* song_name) {
-    int i = 0;
-    while (song_name[i] != '\0' && i < 99) {
-      this->song_name[i] = song_name[i];
-      i++;
-    }
-    this->song_name[i] = '\0';
+  Song(string song_name) {
+    this->song_name = song_name;
     next = nullptr;
     prev = nullptr;
   }
@@ -26,7 +21,7 @@ class Song {
 
   Song* get_next_song() { return next; }
   Song* get_prev_song() { return prev; }
-  const char* get_song() { return song_name; }
+  string get_song() { return song_name; }
 };
 
 #endif
