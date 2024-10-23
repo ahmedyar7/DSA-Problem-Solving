@@ -5,37 +5,35 @@
 #include "song.h"
 using namespace std;
 
-void display_menu();
-
 int main() {
   MusicPlaylist playlist;
-  Song* head = nullptr;
+  Song* head = nullptr;  // Pointer to the head of the playlist
   int choice;
-  char song_name[100];
+  string song_name;
   int position;
-  char filename[100];
+  string filename;
 
   do {
     display_menu();
     cin >> choice;
-    cin.ignore();
+    cin.ignore();  // Ignore newline character after reading choice
 
     switch (choice) {
       case 1:
         cout << "Enter song name: ";
-        cin.getline(song_name, 100);
+        getline(cin, song_name);
         playlist.add_song_at_start(head, song_name);
         break;
 
       case 2:
         cout << "Enter song name: ";
-        cin.getline(song_name, 100);
+        getline(cin, song_name);
         playlist.add_song_at_end(head, song_name);
         break;
 
       case 3:
         cout << "Enter song name: ";
-        cin.getline(song_name, 100);
+        getline(cin, song_name);
         cout << "Enter position: ";
         cin >> position;
         playlist.add_song_at_position(head, song_name, position);
@@ -43,7 +41,7 @@ int main() {
 
       case 4:
         cout << "Enter song name to remove: ";
-        cin.getline(song_name, 100);
+        getline(cin, song_name);
         playlist.remove_song_by_name(head, song_name);
         break;
 
@@ -59,7 +57,7 @@ int main() {
 
       case 7:
         cout << "Enter song name to search: ";
-        cin.getline(song_name, 100);
+        getline(cin, song_name);
         if (playlist.search_song(head, song_name)) {
           cout << song_name << " found in the playlist." << endl;
         } else {
@@ -77,13 +75,13 @@ int main() {
 
       case 10:
         cout << "Enter filename to save playlist: ";
-        cin.getline(filename, 100);
+        getline(cin, filename);
         playlist.save_playlist(head, filename);
         break;
 
       case 11:
         cout << "Enter filename to load playlist: ";
-        cin.getline(filename, 100);
+        getline(cin, filename);
         playlist.load_playlist(head, filename);
         break;
 
