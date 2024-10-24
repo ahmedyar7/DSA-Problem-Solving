@@ -1,81 +1,77 @@
 #include <iostream>
 using namespace std;
 
-class Node {
- private:
- public:
-  int data;
-  Node* next;
-
-  Node(int data) {
-    this->data = data;
-    next = nullptr;
-  }
-};
-
 class Queue {
  private:
-  Node* front;
-  Node* rear;
+  int size;
+  int front;
+  int rear;
+  int *arr;
 
  public:
-  Queue() {
-    front = nullptr;
-    rear = nullptr;
+  Queue(int caps) {
+    size = caps;
+    front = -1;  // Correctly initialize front
+    rear = -1;   // Correctly initialize rear
+    arr = new int[size];
   }
 
-  bool empty() { return front == nullptr; }
+  ~Queue() { delete[] arr; }
+
+  bool is_full() {
+    return (rear ==
+            size - 1);  // The queue is full when rear reaches the last index
+  }
+
+  bool is_empty() {
+    return (front == rear);  // Queue is empty when front equals rear
+  }
 
   void enqueue(int value) {
-    Node* new_node = new Node(value);
-
-    if (rear == nullptr) {
-      rear = front = new_node;
-    } else {
-      rear->next = new_node;
-      rear = new_node;
+    if (is_full()) {
       return;
+    }
+    rear++;
+    arr[rear] = value;
+    if (front == -1) {
+      front = 0;
     }
   }
 
   int dequeue() {
-    if (empty()) {
-      cout << "The Queue is empty\n";
-      return -1;
+    if (is_empty()) return -1;
+
+    int value = arr[front];
+    front++;
+    if (front >= rear) {
+      front = rear = -1;
     }
-    int value = rear->data;
-    rear = rear->next;
     return value;
   }
 
   void display() {
-    Node* temp = front;
-    while (temp != nullptr) {
-      cout << temp->data << " ";
-      temp = temp->next;
+    if (is_empty()) {
+      cout << "Queue is empty" << endl;
+      return;
     }
-    cout << "end\n";
+    for (int i = front; i <= rear; i++) {
+      cout << arr[i] << " - ";
+    }
+    cout << "END-QUEUE\n";
   }
-
-  int peek() { return rear->data; }
 };
 
 int main() {
-  Queue q;
+  Queue qu(5);
 
-  q.enqueue(10);
-  q.enqueue(20);
-  q.enqueue(30);
+  qu.enqueue(2);
+  qu.enqueue(3);
+  qu.enqueue(4);
+  qu.enqueue(5);
+  qu.enqueue(6);
 
-  q.display();
+  qu.display();
 
-  q.dequeue();
-  q.display();
-
-  q.enqueue(40);
-  q.display();
-
-  cout << "Front element is: " << q.peek() << endl;
-
-  return 0;
+  qu.dequeue();
+  qu.display();
 }

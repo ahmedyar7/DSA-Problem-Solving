@@ -3,84 +3,95 @@ using namespace std;
 
 class CircularQueue {
  private:
-  int *queue;
-  int front, rear, capacity;
+  int* arr;
+  int front, rear, size;
 
  public:
-  CircularQueue(int capacity) {
-    this->capacity = capacity;
-    queue = new int[capacity];
+  // Constructor to initialize the queue
+  CircularQueue(int size) {
+    this->size = size;
+    arr = new int[size];
     front = rear = -1;
   }
 
   // Check if the queue is full
-  bool isFull() { return (front == (rear + 1) % capacity); }
+  bool isFull() { return ((rear + 1) % size == front); }
 
   // Check if the queue is empty
-  bool isEmpty() { return (front == -1); }
+  bool isEmpty() { return front == -1; }
 
   // Enqueue operation
   void enqueue(int value) {
     if (isFull()) {
-      cout << "Queue is full! Cannot enqueue " << value << endl;
+      cout << "The Queue is full\n";
       return;
     }
+
     if (isEmpty()) {
       front = rear = 0;
     } else {
-      rear = (rear + 1) % capacity;
+      rear = (rear + 1) % size;
     }
-    queue[rear] = value;
-    cout << "Enqueued " << value << endl;
+
+    arr[rear] = value;
   }
 
   // Dequeue operation
   int dequeue() {
     if (isEmpty()) {
-      cout << "Queue is empty! Cannot dequeue" << endl;
+      cout << "The Queue is empty\n";
       return -1;
     }
-    int result = queue[front];
-    if (front == rear) {  // Queue becomes empty after this dequeue
-      front = rear = -1;
+
+    int value = arr[front];  // Store the dequeued value
+
+    if (front == rear) {
+      front = rear = -1;  // Reset the queue after the last element is removed
     } else {
-      front = (front + 1) % capacity;
+      front = (front + 1) % size;  // Increment front and wrap around
     }
-    cout << "Dequeued " << result << endl;
-    return result;
+
+    return value;
   }
 
   // Peek operation to see the front element
   int peek() {
     if (isEmpty()) {
-      cout << "Queue is empty! Cannot peek" << endl;
+      cout << "Queue is empty\n";
       return -1;
     }
-    return queue[front];
+    return arr[front];
   }
 
-  // Display the queue
+  // Display the queue using a single loop
   void displayQueue() {
     if (isEmpty()) {
-      cout << "Queue is empty!" << endl;
+      cout << "Queue is empty\n";
       return;
     }
+
     cout << "Queue elements: ";
+
     int i = front;
     while (true) {
-      cout << queue[i] << " ";
-      if (i == rear) break;
-      i = (i + 1) % capacity;
+      cout << arr[i] << " ";  // Print the current element
+
+      if (i == rear) {  // Stop when we reach the rear element
+        break;
+      }
+
+      i = (i + 1) % size;  // Move to the next index, wrap around if needed
     }
+
     cout << endl;
   }
 
   // Destructor to free memory
-  ~CircularQueue() { delete[] queue; }
+  ~CircularQueue() { delete[] arr; }
 };
 
 int main() {
-  CircularQueue q(5);  // Initialize queue with a capacity of 5
+  CircularQueue q(5);  // Initialize queue with a size of 5
 
   q.enqueue(10);
   q.enqueue(20);
@@ -88,17 +99,17 @@ int main() {
   q.enqueue(40);
   q.enqueue(50);
 
-  q.displayQueue();
+  q.displayQueue();  // Display after initial enqueues
 
   q.dequeue();
   q.dequeue();
 
-  q.displayQueue();
+  q.displayQueue();  // Display after two dequeues
 
   q.enqueue(60);
   q.enqueue(70);
 
-  q.displayQueue();
+  q.displayQueue();  // Display after more enqueues
 
   return 0;
 }
