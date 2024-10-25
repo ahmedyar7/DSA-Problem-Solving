@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-class Queue {
+class CircularQueue {
  private:
   int size;
   int front;
@@ -9,69 +9,69 @@ class Queue {
   int *arr;
 
  public:
-  Queue(int caps) {
-    size = caps;
-    front = -1;  // Correctly initialize front
-    rear = -1;   // Correctly initialize rear
+  CircularQueue(int size) {
+    this->size = size;
+    front = -1;
+    rear = -1;
     arr = new int[size];
   }
 
-  ~Queue() { delete[] arr; }
-
-  bool is_full() {
-    return (rear ==
-            size - 1);  // The queue is full when rear reaches the last index
-  }
-
-  bool is_empty() {
-    return (front == rear);  // Queue is empty when front equals rear
-  }
+  bool empty() { return (front == -1); }
+  bool full() { return (rear + 1) % size == front; }
 
   void enqueue(int value) {
-    if (is_full()) {
-      return;
+    if (empty()) {
+      front = rear = 0;
+    } else {
+      rear = (rear + 1) % size;
     }
-    rear++;
     arr[rear] = value;
-    if (front == -1) {
-      front = 0;
-    }
   }
 
   int dequeue() {
-    if (is_empty()) return -1;
-
-    int value = arr[front];
-    front++;
-    if (front >= rear) {
+    if (empty()) {
+      return -1;
+    }
+    if (front == rear) {
       front = rear = -1;
     }
+    int value = arr[front];
+    front = (front + 1) % size;
+
     return value;
   }
 
   void display() {
-    if (is_empty()) {
-      cout << "Queue is empty" << endl;
-      return;
+    int i = front;
+    while (true) {
+      cout << arr[i] << " ";
+      if (i == rear) break;
+      i = (i + 1) % size;
     }
-    for (int i = front; i <= rear; i++) {
-      cout << arr[i] << " - ";
-    }
-    cout << "END-QUEUE\n";
+    cout << endl;
   }
 };
 
 int main() {
-  Queue qu(5);
+  CircularQueue q(5);  // Initialize queue with a size of 5
 
-  qu.enqueue(2);
-  qu.enqueue(3);
-  qu.enqueue(4);
-  qu.enqueue(5);
-  qu.enqueue(6);
+  q.enqueue(10);
+  q.enqueue(20);
+  q.enqueue(30);
+  q.enqueue(40);
+  q.enqueue(50);
 
-  qu.display();
+  q.display();  // Display after initial enqueues
 
-  qu.dequeue();
-  qu.display();
+  q.dequeue();
+  q.dequeue();
+
+  q.dequeue();  // Display after two dequeues
+
+  q.enqueue(60);
+  q.enqueue(70);
+
+  q.display();  // Display after more enqueues
+
+  return 0;
 }
