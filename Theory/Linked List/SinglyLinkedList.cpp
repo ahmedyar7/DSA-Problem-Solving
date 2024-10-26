@@ -1,6 +1,6 @@
-#include <climits>
-
 #include "SinglyLinkedList.h"
+
+#include <climits>
 using namespace std;
 
 SinglyLinkedList::SinglyLinkedList(int value) {

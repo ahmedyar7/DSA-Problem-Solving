@@ -1,55 +1,55 @@
-## Single Linked List
+### Single Linked List
 
-- Making it
-- Insert at tail
-- Insert at head
-- Finding Maximum and Minimum
-- Counting total Number of nodes
-- Reversing
-- Searching element
-- Check for cycles
-- Insert at Sorted position
-- Concatenation of 2 linked list
-- Merging of two linked list
-- Check sorted
-- Removing duplicates
-- Removing specific element occurences
-- Find the intersection point b/w two linked list
-- Sorting the Linked List
-- Segregating into odd and even
-- Remove the nth node from the end of the list
+- [x] Making it
+- [x] Insert at tail
+- [x] Insert at head
+- [x] Finding Maximum and Minimum
+- [x] Counting total number of nodes
+- [x] Reversing
+- [x] Searching element
+- [ ] Check for cycles
+- [ ] Insert at sorted position
+- [x] Concatenation of two linked lists
+- [x] Merging of two linked lists
+- [ ] Check sorted
+- [ ] Removing duplicates
+- [ ] Removing specific element occurrences
+- [ ] Find the intersection point between two linked lists
+- [ ] Sorting the linked list
+- [ ] Segregating into odd and even
+- [ ] Remove the nth node from the end of the list
 
-## Circular Linked List
+### Circular Linked List
 
-- Making them
-- Printing them
-- Inserting element
-- Deleting element at first and at any location
+- [ ] Making it
+- [ ] Printing it
+- [ ] Inserting element
+- [ ] Deleting element at first and at any location
 
-## Doubly Linked List
+### Doubly Linked List
 
-- Making it
-- Insert at tail
-- Insert at head
-- Finding Maximum and Minimum
-- Counting total Number of nodes
-- Reversing
-- Searching element
-- Check for cycles
-- Insert at Sorted position
-- Concatenation of 2 linked list
-- Merging of two linked list
-- Check sorted
-- Removing duplicates
-- Sorted the Linked List
-- Revoving all the occurance of key in Doubly Linked List
+- [ ] Making it
+- [ ] Insert at tail
+- [ ] Insert at head
+- [ ] Finding Maximum and Minimum
+- [ ] Counting total number of nodes
+- [ ] Reversing
+- [ ] Searching element
+- [ ] Check for cycles
+- [ ] Insert at sorted position
+- [ ] Concatenation of two linked lists
+- [ ] Merging of two linked lists
+- [ ] Check sorted
+- [ ] Removing duplicates
+- [ ] Sorting the linked list
+- [ ] Removing all occurrences of a key in the doubly linked list
 
-## Circular Doubly Linked List
+### Circular Doubly Linked List
 
-- Inserting element at tail
-- Inserting element at head
-- Inserting element at any position
-- Deleting element at tail
-- Deleting element at head
-- Deleting element at any position
-- Displaying element
+- [ ] Inserting element at tail
+- [ ] Inserting element at head
+- [ ] Inserting element at any position
+- [ ] Deleting element at tail
+- [ ] Deleting element at head
+- [ ] Deleting element at any position
+- [ ] Displaying elements

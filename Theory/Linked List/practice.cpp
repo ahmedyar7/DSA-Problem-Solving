@@ -1,58 +1,34 @@
+#include <climits>
 #include <iostream>
-using namespace std;
 
-class Node {
- public:
-  int data;
-  Node* next;
-
-  Node(int data) {
-    this->data = data;
-    next = nullptr;
-  }
-};
-
-int josophus(int n, int k) {
-  Node* head = new Node(1);
-  Node* prev = head;
-
-  for (int i = 2; i <= n; i++) {
-    Node* new_node = new Node(i);
-    prev->next = new_node;
-    prev = new_node;
-  }
-  prev->next = head;
-
-  Node* current_node = head;
-  Node* prev_node = prev;
-
-  while (current_node->next != current_node) {
-    for (int i = 1; i < k; i++) {
-      prev_node = current_node;
-      current_node = current_node->next;
-    }
-
-    cout << "Removing " << current_node->data << endl;
-    Node* temp = current_node;
-    prev_node->next = current_node->next;
-    current_node = current_node->next;
-    delete temp;
-  }
-
-  int result = current_node->data;
-  delete current_node;
-  return result;
-}
+#include "Node.h"
 
 int main() {
-  int n, k;
-  cout << "Enter the number of people: ";
-  cin >> n;
-  cout << "Enter the step count (k): ";
-  cin >> k;
+  Node* head1 = nullptr;
+  Node* head2 = nullptr;
+  Node sll(0);
 
-  int safePosition = josophus(n, k);
-  cout << "The safe position is: " << safePosition << endl;
+  sll.insert_at_tail(head1, 1);
+  sll.insert_at_tail(head1, 433);
+  sll.insert_at_tail(head2, 22);
+  sll.insert_at_tail(head2, 314);
+  sll.insert_at_tail(head1, 2435);
+  sll.insert_at_tail(head1, 235);
+  sll.insert_at_tail(head1, 235);
 
-  return 0;
+  sll.display(head1);
+
+  sll.insert_at_tail(head2, 6);
+  sll.insert_at_tail(head2, 7);
+  sll.insert_at_tail(head1, 8);
+  sll.insert_at_tail(head2, 9);
+  sll.insert_at_tail(head1, 10);
+  sll.display(head2);
+
+  // Node* concaten = sll.concatenate_linked_list(head1, head2);
+  Node* merge = sll.merged_linked_list(head1, head2);
+  sll.display(merge);
+
+  Node* sorted = sll.sort_ll(merge);
+  sll.display(sorted);
 }
