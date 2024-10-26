@@ -8,27 +8,21 @@ int main() {
   Node* head2 = nullptr;
   Node sll(0);
 
-  sll.insert_at_tail(head1, 1);
-  sll.insert_at_tail(head1, 433);
-  sll.insert_at_tail(head2, 22);
-  sll.insert_at_tail(head2, 314);
-  sll.insert_at_tail(head1, 2435);
-  sll.insert_at_tail(head1, 235);
-  sll.insert_at_tail(head1, 235);
+  ;
 
-  sll.display(head1);
+  Node* head3 = nullptr;
+  sll.insert_at_tail(head3, 1);
+  sll.insert_at_tail(head3, 2);
+  sll.insert_at_tail(head3, 3);
+  sll.insert_at_tail(head3, 4);
+  sll.insert_at_tail(head3, 5);
+  sll.insert_at_tail(head3, 5);
+  sll.insert_at_position(head3, 55, 2);
+  // sll.delete_head(head3);
+  sll.delete_at_position(head3, 2);
 
-  sll.insert_at_tail(head2, 6);
-  sll.insert_at_tail(head2, 7);
-  sll.insert_at_tail(head1, 8);
-  sll.insert_at_tail(head2, 9);
-  sll.insert_at_tail(head1, 10);
-  sll.display(head2);
+  // Node* oddeven = sll.segregate_into_odd_even(head3);
+  // sll.display(oddeven);
 
-  // Node* concaten = sll.concatenate_linked_list(head1, head2);
-  Node* merge = sll.merged_linked_list(head1, head2);
-  sll.display(merge);
-
-  Node* sorted = sll.sort_ll(merge);
-  sll.display(sorted);
+  sll.display(head3);
 }

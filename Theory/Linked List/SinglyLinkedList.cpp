@@ -204,6 +204,7 @@ void SinglyLinkedList::remove_duplicate(SinglyLinkedList*& head) {
     }
   }
 }
+
 SinglyLinkedList* SinglyLinkedList::merge_ll(
     SinglyLinkedList*& SinglyLinkedList1,
     SinglyLinkedList*& SinglyLinkedList2) {

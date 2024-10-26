@@ -154,9 +154,116 @@ class Node {
     return third;
   }
 
-  Node* find_middle_element(Node* head) {}
+  Node* find_middle_element(Node* head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+    Node* fast = head->next;
+    Node* slow = head;
 
-  Node* sort_ll(Node*& head) {}
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+    return slow;
+  }
+
+  Node* sort_ll(Node*& head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+    Node* middle = find_middle_element(head);
+    Node* left = head;
+    Node* right = middle->next;
+    middle->next = nullptr;
+
+    left = sort_ll(left);
+    right = sort_ll(right);
+
+    return merged_linked_list(left, right);
+  }
+
+  Node* segregate_into_odd_even(Node*& head) {
+    Node* odd = head;
+    Node* even = head->next;
+    Node* even_head = even;
+
+    while (odd && odd->next) {
+      odd->next = even->next;
+      odd = odd->next;
+      even->next = odd->next;
+      even = even->next;
+    }
+    odd->next = even_head;
+    return head;
+  }
+
+  void remove_duplicate(Node*& head) {
+    Node* prev = head;
+    Node* current = prev->next;
+
+    while (current != nullptr) {
+      if (prev->data != current->data) {
+        prev = current;
+        current = current->next;
+      } else {
+        prev->next = current->next;
+        delete current;
+        current = prev->next;
+      }
+    }
+  }
+
+  bool is_looped(Node*& head) {
+    Node* slow = head;
+    Node* fast = head;
+
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+
+      if (slow == fast) return true;
+    }
+    return false;
+  }
+
+  void insert_at_position(Node*& head, int value, int pos) {
+    Node* new_node = new Node(value);
+    if (pos <= 0 || head == nullptr) {
+      return;
+    }
+    if (pos == 1) {
+      insert_at_head(head, value);
+      return;
+    }
+    Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp != nullptr; i++) {
+      temp = temp->next;
+    }
+    new_node->next = temp->next;
+    temp->next = new_node;
+  }
+
+  void delete_head(Node*& head) {
+    if (head == nullptr) {
+      return;
+    }
+
+    Node* temp = head;
+    head = head->next;
+  }
+
+  void delete_at_position(Node*& head, int pos) {
+    if (pos <= 0) {
+      return;
+    }
+    if (pos == 1) delete_head(head);
+    Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp != nullptr; i++) {
+      temp = temp->next;
+    }
+    temp->next = temp->next->next;
+  }
 };
 
 #endif

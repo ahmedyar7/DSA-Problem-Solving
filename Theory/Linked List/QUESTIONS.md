@@ -7,17 +7,17 @@
 - [x] Counting total number of nodes
 - [x] Reversing
 - [x] Searching element
-- [ ] Check for cycles
-- [ ] Insert at sorted position
+- [x] Check for cycles
+- [x] Insert at sorted position
 - [x] Concatenation of two linked lists
 - [x] Merging of two linked lists
-- [ ] Check sorted
-- [ ] Removing duplicates
-- [ ] Removing specific element occurrences
-- [ ] Find the intersection point between two linked lists
-- [ ] Sorting the linked list
-- [ ] Segregating into odd and even
-- [ ] Remove the nth node from the end of the list
+- [x] Check sorted
+- [x] Removing duplicates
+- [x] Removing specific element occurrences
+- [x] Find the intersection point between two linked lists
+- [x] Sorting the linked list
+- [x] Segregating into odd and even
+- [x] Remove the nth node from the end of the list
 
 ### Circular Linked List
 
