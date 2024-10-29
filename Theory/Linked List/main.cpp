@@ -1,22 +1,24 @@
-#include "SinglyLinkedList.h"
+#include <iostream>
+
+#include "Node.h"
+using namespace std;
+
 int main() {
-  SinglyLinkedList* head = nullptr;
+  Node<int>* head = nullptr;
 
-  SinglyLinkedList sll(0);
+  // Create an object of Node to access methods
+  Node<int> cll(0);
 
-  // Call methods on the instance of the linked list
-  sll.insert_at_tail(head, 2);
-  sll.insert_at_tail(head, 1);
-  sll.insert_at_tail(head, 3);
-  sll.insert_at_tail(head, 5);
-  sll.insert_at_tail(head, 6);
-  sll.insert_at_tail(head, 4);
-  sll.insert_at_tail(head, 7);
+  cll.insert_at_head(head, 5);
+  cll.insert_at_head(head, 15);
+  cll.insert_at_head(head, 25);
 
-  cout << "Un-Segregated List: \n";
-  sll.display(head);
+  cll.insert_at_tail(head, 22);
+  cll.insert_at_tail(head, 32);
 
-  //   cout << "Segregated List\n";
-  //   SinglyLinkedList* segregated = sll.segregate_oddeven(head);
-  //   sll.display(segregated);
+  cll.insert_at_position(head, 2, 2222);
+  cll.delete_head(head);
+  cll.delete_at_position(head, 2);
+
+  cll.display(head);
 }

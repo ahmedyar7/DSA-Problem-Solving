@@ -1,6 +1,6 @@
 ### Single Linked List
 
-- [x] Making it
+- [ ] Making it
 - [x] Insert at tail
 - [x] Insert at head
 - [x] Finding Maximum and Minimum
