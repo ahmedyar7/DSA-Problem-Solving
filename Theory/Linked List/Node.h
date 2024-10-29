@@ -22,8 +22,8 @@ class Node {
     if (head == nullptr) {
       new_node->next = new_node;
       head = new_node;
+      return;
     }
-
     Node* temp = head;
     while (temp->next != head) {
       temp = temp->next;
@@ -39,6 +39,7 @@ class Node {
     if (head == nullptr) {
       new_node->next = new_node;
       head = new_node;
+      return;
     }
     Node* temp = head;
     while (temp->next != head) {
@@ -57,9 +58,10 @@ class Node {
     }
     if (pos == 1) {
       insert_at_head(head, value);
+      return;
     }
     Node* temp = head;
-    for (int i = 1; i < pos - 1 && temp != nullptr; i++) {
+    for (int i = 1; i < pos - 1 && temp->next != nullptr; i++) {
       temp = temp->next;
     }
     new_node->next = temp->next;
@@ -75,20 +77,22 @@ class Node {
     if (head->next == head) {
       delete head;
       head = nullptr;
+      return;
     }
     Node* temp = head;
     while (temp->next != head) {
       temp = temp->next;
     }
-    Node* old_head = head;
+    Node* temp_head = head;
     temp->next = head->next;
     head = head->next;
-    delete old_head;
+    delete temp_head;
+    return;
   }
 
   void delete_at_position(Node*& head, int pos) {
     if (pos <= 0) {
-      cout << "Invalid Position\n";
+      cout << "Invalid Postion\n";
       return;
     }
     if (pos == 1) {
@@ -96,12 +100,12 @@ class Node {
       return;
     }
     Node* temp = head;
-    for (int i = 1; i < pos - 1 && temp != nullptr; i++) {
+    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
       temp = temp->next;
     }
-    Node* to_delete = temp->next;
+    Node* temp_del = temp->next;
     temp->next = temp->next->next;
-    delete to_delete;
+    delete temp_del;
     return;
   }
 

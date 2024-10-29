@@ -16,7 +16,7 @@ int main() {
   cll.insert_at_tail(head, 22);
   cll.insert_at_tail(head, 32);
 
-  cll.insert_at_position(head, 2, 2222);
+  cll.insert_at_position(head, 2, 23222);
   cll.delete_head(head);
   cll.delete_at_position(head, 2);
 
