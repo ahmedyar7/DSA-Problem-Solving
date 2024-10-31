@@ -1,16 +1,28 @@
 #include <iostream>
 
-#include "queue.h"
-using namespace std;
+#include "patient.h"
+#include "waiting_room.h"
 
 int main() {
-  Queue<int> q(10);
-  q.enqueue(2);
-  q.enqueue(32);
-  q.enqueue(42);
-  q.dequeue();
+  WaitingRoom waitingRoom;
 
-  cout << q.first_element() << endl;
+  // Example usage:
+  waitingRoom.register_patient("Ahmed");
+  waitingRoom.register_patient("Umar");
+  waitingRoom.register_patient("Asjad");
 
-  q.display();
+  waitingRoom.show_all_patients();
+
+  waitingRoom.serve_patient();
+  waitingRoom.serve_patient();
+
+  if (waitingRoom.can_cancel_doc())
+    cout << "Doctor can go home.\n";
+  else
+    cout << "Patients are still waiting.\n";
+
+  waitingRoom.cancel_all();
+  waitingRoom.show_all_patients();
+
+  return 0;
 }
