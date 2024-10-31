@@ -5,20 +5,16 @@ using namespace std;
 
 int main() {
   Node<int>* head = nullptr;
+  Node<int> dll(0);
 
-  // Create an object of Node to access methods
-  Node<int> cll(0);
+  dll.insert_at_tail(head, 10);
+  dll.insert_at_tail(head, 20);
+  dll.insert_at_tail(head, 30);
+  dll.insert_at_tail(head, 40);
+  dll.insert_at_tail(head, 50);
 
-  cll.insert_at_head(head, 5);
-  cll.insert_at_head(head, 15);
-  cll.insert_at_head(head, 25);
+  dll.display(head);
 
-  cll.insert_at_tail(head, 22);
-  cll.insert_at_tail(head, 32);
-
-  cll.insert_at_position(head, 2, 23222);
-  cll.delete_head(head);
-  cll.delete_at_position(head, 2);
-
-  cll.display(head);
+  dll.reverse_dll(head);
+  dll.display(head);
 }

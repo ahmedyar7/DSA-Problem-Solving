@@ -1,56 +1,62 @@
 #ifndef NODE_H
 #define NODE_H
-
 #include <iostream>
 using namespace std;
 
 template <class T>
 class Node {
  private:
- public:
   T data;
   Node* next;
+  Node* prev;
 
+ public:
   Node(T data) {
     this->data = data;
     next = nullptr;
+    prev = nullptr;
   }
 
-  //. Insert at head
-  void insert_at_head(Node*& head, T value) {
+  void insert_at_tail(Node*& head, int value) {
     Node* new_node = new Node(value);
     if (head == nullptr) {
-      new_node->next = new_node;
       head = new_node;
       return;
     }
     Node* temp = head;
-    while (temp->next != head) {
+    while (temp->next != nullptr) {
       temp = temp->next;
     }
     temp->next = new_node;
+    new_node->prev = temp;
+    return;
+  }
+
+  void insert_at_head(Node*& head, int value) {
+    Node* new_node = new Node(value);
+    if (head == nullptr) {
+      head = new_node;
+      return;
+    }
     new_node->next = head;
+    head->prev = new_node;
     head = new_node;
-    return;
   }
 
-  void insert_at_tail(Node*& head, T value) {
-    Node* new_node = new Node(value);
+  void display(Node* head) {
     if (head == nullptr) {
-      new_node->next = new_node;
-      head = new_node;
+      cout << "Doubly Linked List is empty\n";
       return;
     }
-    Node* temp = head;
-    while (temp->next != head) {
-      temp = temp->next;
+
+    while (head != nullptr) {
+      cout << "[" << head->data << "] <-> ";
+      head = head->next;
     }
-    temp->next = new_node;
-    new_node->next = head;
-    return;
+    cout << "LISTEND\n";
   }
 
-  void insert_at_position(Node*& head, int pos, T value) {
+  void insert_at_position(Node*& head, int value, int pos) {
     Node* new_node = new Node(value);
     if (pos <= 0) {
       cout << "Invalid Position\n";
@@ -65,62 +71,59 @@ class Node {
       temp = temp->next;
     }
     new_node->next = temp->next;
+    temp->next->prev = new_node;
     temp->next = new_node;
+    new_node->prev = temp;
     return;
   }
 
-  void delete_head(Node*& head) {
+  T delete_at_head(Node*& head) {
     if (head == nullptr) {
-      cout << "List is empty\n";
-      return;
-    }
-    if (head->next == head) {
-      delete head;
-      head = nullptr;
-      return;
+      cout << "Doubly Linked List is empty\n";
+      return T();
     }
     Node* temp = head;
-    while (temp->next != head) {
-      temp = temp->next;
-    }
-    Node* temp_head = head;
-    temp->next = head->next;
+    T value = temp->data;
     head = head->next;
-    delete temp_head;
-    return;
+    delete temp;
+    return value;
   }
 
-  void delete_at_position(Node*& head, int pos) {
+  T delete_at_position(Node* head, int pos) {
     if (pos <= 0) {
-      cout << "Invalid Postion\n";
-      return;
+      cout << "Invalid Position\n";
+      return T();
     }
     if (pos == 1) {
-      delete_head(head);
-      return;
+      delete_at_head(head);
+      return T();
     }
     Node* temp = head;
-    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
+    for (int i = 1; i < pos && temp->next != nullptr; i++) {
       temp = temp->next;
     }
-    Node* temp_del = temp->next;
-    temp->next = temp->next->next;
-    delete temp_del;
-    return;
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    delete temp;
+    return T();
   }
 
-  //. Display
-  void display(Node* head) {
+  void reverse_dll(Node*& head) {
     if (head == nullptr) {
-      cout << "The circular list is empty\n";
+      cout << "Doubly Linked List is empty\n";
       return;
     }
-    Node* temp = head;
-    do {
-      cout << "[" << temp->data << "] -> ";
-      temp = temp->next;
-    } while (temp != head);
-    cout << "[" << temp->data << "]\n";
+    Node* current = head;
+    Node* temp = nullptr;
+    while (current != nullptr) {
+      temp = current->prev;
+      current->prev = current->next;
+      current->next = temp;
+      current = current->prev;
+    }
+    if (temp != nullptr) {
+      head = temp->prev;
+    }
   }
 };
 
