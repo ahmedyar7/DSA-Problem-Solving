@@ -1,108 +1,132 @@
 #include <iostream>
 using namespace std;
 
-template <class T>
-class CircularQueue {
+class DEQueue {
  private:
   int front;
   int rear;
   int size;
-  T *arr;
+  int *arr;
 
  public:
-  CircularQueue(int size) {
-    front = -1;
-    rear = -1;
+  // Constructor to initialize the deque
+  DEQueue(int size) {
     this->size = size;
-    arr = new T[size];
+    front = -1, rear = -1;
+    arr = new int[size];
   }
 
-  bool empty() {
-    if (front == -1)
-      return true;
-    else
-      return false;
-  }
+  // Destructor to release memory
+  ~DEQueue() { delete[] arr; }
 
+  // Check if deque is full
   bool full() {
-    if ((rear + 1) % size == front)
-      return true;
-    else
-      return false;
+    return (front == 0 && rear == size - 1) || (front == rear + 1);
   }
 
-  void enqueue(T value) {
+  // Check if deque is empty
+  bool empty() { return front == -1; }
+
+  // Insert element at the front
+  void push_front(int value) {
     if (full()) {
-      cout << "Queue is empty\n";
+      cout << "Dequeue is Full\n";
       return;
-    } else if (front == -1 && rear == -1) {
-      front = 0, rear = 0;
+    }
+    if (empty()) {
+      front = 0;
+      rear = 0;
+    } else if (front == 0) {
+      front = size - 1;
+    } else {
+      front = front - 1;
+    }
+    arr[front] = value;
+  }
+
+  // Insert element at the rear
+  void push_rear(int value) {
+    if (full()) {
+      cout << "Dequeue is Full\n";
+      return;
+    }
+    if (empty()) {
+      front = 0;
+      rear = 0;
+    } else if (rear == size - 1) {
+      rear = 0;
     } else {
       rear = (rear + 1) % size;
     }
     arr[rear] = value;
-    return;
   }
 
-  T dequeue() {
-    if (empty()) {
-      cout << "Queue is empty\n";
-      return T();
-    } else if (empty()) {
-      front = -1, rear = -1;
-
-    } else {
-      front = (front + 1) % size;
-    }
-    return arr[front];
-  }
-
-  T front_element() {
-    if (empty()) {
-      cout << "Queue is empty\n";
-      return T();
-    } else {
-      return arr[front];
-    }
-  }
-
+  // Display elements in the deque
   void display() {
     if (empty()) {
-      cout << "Queue is Empty\n";
+      cout << "Doubly ended queue is empty\n";
       return;
     }
     int i = front;
+    cout << "Deque elements: ";
     while (true) {
-      cout << "[" << arr[i] << "]-> ";
+      cout << "[" << arr[i] << "] -> ";
       if (i == rear) break;
       i = (i + 1) % size;
     }
-    cout << "ENDQUEUE\n";
+    cout << "QUEUE_END\n";
   }
 
-  ~CircularQueue() { delete[] arr; }
+  // Delete element from the front
+  int delete_front() {
+    if (empty()) {
+      cout << "Doubly ended queue is empty\n";
+      return -1;
+    }
+    int value = arr[front];
+    if (front == rear) {  // Only one element left
+      front = -1;
+      rear = -1;
+    } else if (front == size - 1) {  // Wrap around
+      front = 0;
+    } else {
+      front = front + 1;
+    }
+    return value;
+  }
+
+  // Delete element from the rear
+  int delete_rear() {
+    if (empty()) {
+      cout << "Doubly ended queue is empty\n";
+      return -1;
+    }
+    int value = arr[rear];
+    if (front == rear) {  // Only one element left
+      front = -1;
+      rear = -1;
+    } else if (rear == 0) {  // Wrap around
+      rear = size - 1;
+    } else {
+      rear = rear - 1;
+    }
+    return value;
+  }
 };
 
 int main() {
-  CircularQueue<int> q(5);  // Initialize queue with a size of 5
+  DEQueue q(5);
 
-  q.enqueue(10);
-  q.enqueue(20);
-  q.enqueue(30);
-  q.enqueue(40);
-  q.enqueue(50);
+  q.push_front(5);
+  q.push_front(10);
+  q.push_front(15);
 
-  q.display();  // Display after initial enqueues
+  q.display();
 
-  q.dequeue();
-  q.dequeue();
+  cout << "Deleted from front: " << q.delete_front() << endl;
 
-  q.display();  // Display after two dequeues
-
-  q.enqueue(60);
-  q.enqueue(70);
-
-  q.display();  // Display after more enqueues
+  q.push_rear(55);
+  q.display();
 
   return 0;
 }

@@ -14,7 +14,7 @@ class Deque {
     this->size = size;
     arr = new int[size];
     front = -1;
-    rear = 0;
+    rear = -1;
   }
 
   // Check if deque is full
