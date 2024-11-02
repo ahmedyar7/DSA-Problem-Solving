@@ -4,19 +4,23 @@
 using namespace std;
 
 int main() {
-  Node<int>* head1 = nullptr;
-  Node<int>* head2 = nullptr;
-  Node<int> dll(0);
+  Node* head = nullptr;
+  Node* head2 = nullptr;
+  Node cdll(0);
 
-  dll.insert_at_tail(head1, 10);
-  dll.insert_at_tail(head1, 20);
-  dll.insert_at_tail(head1, 20);
-  dll.insert_at_tail(head1, 30);
-  dll.insert_at_tail(head1, 20);
+  cdll.insert_at_head(head, 1);
+  cdll.insert_at_head(head, 2);
+  cdll.insert_at_head(head, 3);
+  cdll.insert_at_head(head, 4);
+  cdll.insert_at_head(head, 5);
 
-  // Node<int>* sorted = dll.sort_dll(head1);
+  cdll.display(head);
 
-  dll.display(head1);
-  dll.remove_duplicates(head1);
-  dll.display(head1);
+  cdll.insert_at_tail(head2, 1);
+  cdll.insert_at_tail(head2, 2);
+  cdll.insert_at_tail(head2, 3);
+  cdll.insert_at_tail(head2, 4);
+  cdll.insert_at_tail(head2, 5);
+
+  cdll.display(head2);
 }
