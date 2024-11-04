@@ -3,7 +3,6 @@
 #include "notepad.cpp"
 #include "notepad.h"
 #include "textstack.h"
-
 using namespace std;
 
 int main() {
@@ -12,28 +11,28 @@ int main() {
   char buffer[MAX_TEXT_SIZE];  // Buffer for input
 
   do {
-    std::cout << "Welcome to Notepad-like Word Processor!\n";
-    std::cout << "1. Add text\n";
-    std::cout << "2. Delete text\n";
-    std::cout << "3. Undo last action\n";
-    std::cout << "4. Display current text\n";
-    std::cout << "5. Exit\n";
-    std::cout << "Please select an option (1-5): ";
-    std::cin >> choice;
+    cout << "Welcome to Notepad-like Word Processor!\n";
+    cout << "1. Add text\n";
+    cout << "2. Delete text\n";
+    cout << "3. Undo last action\n";
+    cout << "4. Display current text\n";
+    cout << "5. Exit\n";
+    cout << "Please select an option (1-5): ";
+    cin >> choice;
 
-    std::cin.ignore();  // Ignore newline after choice input
+    cin.ignore();  // Ignore newline after choice input
 
     switch (choice) {
       case 1: {
-        std::cout << "Enter text to add: ";
-        std::cin.getline(buffer, MAX_TEXT_SIZE);
+        cout << "Enter text to add: ";
+        cin.getline(buffer, MAX_TEXT_SIZE);
         notepad.add_text(buffer);
         break;
       }
       case 2: {
         int length;
-        std::cout << "Enter number of characters to delete: ";
-        std::cin >> length;
+        cout << "Enter number of characters to delete: ";
+        cin >> length;
         notepad.delete_text(length);
         break;
       }
@@ -44,10 +43,10 @@ int main() {
         notepad.display();
         break;
       case 5:
-        std::cout << "Exiting application.\n";
+        cout << "Exiting application.\n";
         break;
       default:
-        std::cout << "Invalid option. Please try again.\n";
+        cout << "Invalid option. Please try again.\n";
         break;
     }
   } while (choice != 5);

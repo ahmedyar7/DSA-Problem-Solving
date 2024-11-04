@@ -1,8 +1,8 @@
-#include <iostream>
-using namespace std;
-
 #ifndef TEXTSTACK_H
 #define TEXTSTACK_H
+
+#include <iostream>
+using namespace std;
 
 const int MAX_TEXT_SIZE = 1000;
 const int MAX_STACK_SIZE = 100;
@@ -15,8 +15,9 @@ struct Command {
 
 class TextStack {
  private:
-  Command stack[MAX_STACK_SIZE];  // stack that will hold the commands regarding
-                                  // the text
+  // stack that will hold the commands regarding
+  // the text
+  Command stack[MAX_STACK_SIZE];
 
   int top_index;  // This will keep track of the current top position
 
@@ -44,4 +45,4 @@ class TextStack {
   }
 };
 
-#endif
+#endif  // TEXTSTACK_H

@@ -3,6 +3,12 @@
 #include <iostream>
 using namespace std;
 
+//. Constructor
+Notepad::Notepad() {
+  cursor_position = 0;  // point towards current position
+  text[0] = '\0';       // Initialize an empty string
+}
+
 //. Helper Function
 void Notepad::copy_text(char destination[], char source[]) {
   int i = 0;
@@ -13,13 +19,7 @@ void Notepad::copy_text(char destination[], char source[]) {
   destination[i] = '\0';
 }
 
-//. Constructor
-Notepad::Notepad() {
-  cursor_position = 0;  // point towards current position
-  text[0] = '\0';       // Initialize an empty string
-}
-
-//. Adding the text
+//. Adding The Text
 void Notepad::add_text(char new_text[]) {
   int new_text_length = 0;
 
@@ -42,7 +42,7 @@ void Notepad::add_text(char new_text[]) {
   command_stack.push(cmd);
 }
 
-// . Deleting the text
+// . Deleting The Text
 void Notepad::delete_text(int length) {
   if (length > cursor_position) {
     cout << "Invalid Delete length\n";
@@ -92,6 +92,7 @@ void Notepad::undo() {
   }
 }
 
+//. This Would Display The Text
 void Notepad::display() {
   cout << text << endl;
   for (int i = 0; i < cursor_position; i++) {
