@@ -20,8 +20,8 @@ class PriorityQueue {
     arr = new Element[size];
   }
 
-  bool full() { return (rear == size - 1); }
-  bool empty() { return (front == -1); }
+  bool full() const { return (rear == size - 1); }
+  bool empty() const { return (front == -1); }
 
   void enqueue(string value, int priority) {
     if (full()) {
@@ -51,16 +51,39 @@ class PriorityQueue {
     rear++;  // Update the rear index
   }
 
+  string dequeue() {
+    if (empty()) {
+      cout << "Priority Queue is empty\n";
+      return '\0';
+    }
+    string value = arr[front].data;
+    front++;
+    if (front > rear) {
+      front = -1, rear = -1;
+    }
+    return value;
+  }
+
+  string get_front() {
+    if (empty()) {
+      cout << "Priority Queue is empty\n";
+      return '\0';
+    }
+    return arr[front].data;
+  }
+
   void display() {
     if (empty()) {
       cout << "Priority Queue is empty\n";
       return;
     }
 
+    cout << "Elements: \n";
     for (int i = front; i <= rear; i++) {
       cout << "[" << arr[i].data << "] -> ";
     }
     cout << endl;
+    cout << "Priorty " << endl;
     for (int i = front; i <= rear; i++) {
       cout << "[" << arr[i].priority << "] -> ";
     }

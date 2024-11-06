@@ -94,10 +94,9 @@ Song* MusicPlaylist::remove_song_by_name(Song*& head, string song_name) {
 void MusicPlaylist::display_begin_to_end(Song* head) {
   Song* temp = head;
   while (temp != nullptr) {
-    cout << "[" << temp->get_song() << "] <-> ";
+    cout << temp->get_song() << endl;
     temp = temp->get_next_song();
   }
-  cout << "NUll\n";
 }
 
 void MusicPlaylist::display_end_to_begin(Song* head) {
@@ -115,13 +114,12 @@ void MusicPlaylist::display_end_to_begin(Song* head) {
 
   // Traverse from the last node to the beginning
   while (temp != nullptr) {
-    cout << "[" << temp->get_song() << "]";
+    cout << temp->get_song() << endl;
     temp = temp->get_prev_song();
     if (temp != nullptr) {
       cout << " <-> ";
     }
   }
-  cout << " NULL\n";
 }
 
 bool MusicPlaylist::search_song(Song* head, string song_name) {
@@ -172,7 +170,7 @@ void MusicPlaylist::save_playlist(Song* head, string filename) {
 void MusicPlaylist::load_playlist(Song*& head, string filename) {
   ifstream file(filename);
   if (!file.is_open()) {
-    cout << "Error opening file!" << std::endl;
+    cout << "Error opening file!" << endl;
     return;
   }
 
