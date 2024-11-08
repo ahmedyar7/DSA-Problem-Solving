@@ -1,90 +1,208 @@
 #ifndef NODE_H
-#define NODE_h
+#define NODE_H
 
 #include <iostream>
 using namespace std;
 
 class Node {
  private:
+ public:
   int data;
   Node* next;
-  Node* prev;
+  Node* head = nullptr;
 
- public:
   Node(int data) {
     this->data = data;
     next = nullptr;
-    prev = nullptr;
+  }
+};
+
+class LinkedList {
+ private:
+  Node* head;
+
+ public:
+  LinkedList() { head = nullptr; }
+
+  void insert_at_head(int value) {
+    Node* new_node = new Node(value);
+
+    if (head == nullptr) {
+      head = new_node;
+      return;
+    }
+    new_node->next = head;
+    head = new_node;
   }
 
-  void insert_at_head(Node*& head, int value) {
+  void insert_at_tail(int value) {
     Node* new_node = new Node(value);
     if (head == nullptr) {
-      new_node->next = new_node;
-      new_node->prev = new_node;
-      head = new_node;
-      head = new_node;
-      return;
-    } else {
-      Node* last = head->prev;
-      last->next = new_node;
-      new_node->next = head;
-      new_node->prev = last;
       head = new_node;
       return;
     }
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+    }
+    temp->next = new_node;
+    return;
   }
 
-  void insert_at_tail(Node*& head, int value) {
+  void insert_at_position(int value, int position) {
     Node* new_node = new Node(value);
-    if (head == nullptr) {
-      new_node->next = new_node;
-      new_node->prev = new_node;
-      head = new_node;
-      head = new_node;
+
+    if (position <= 0) {
+      cout << "Invalid Position\n";
       return;
-    } else {
-      Node* last = head->prev;
-      last->next = new_node;
-      new_node->prev = last;
-      new_node->next = head;
-      head->prev = new_node;
     }
+    if (position == 1) {
+      insert_at_head(value);
+      return;
+    }
+    Node* temp = head;
+    for (int i = 1; i < (position && temp->next != nullptr); i++) {
+      temp = temp->next;
+    }
+    new_node->next = temp->next;
+    temp->next = new_node;
+    return;
   }
 
-  void insert_at_position(Node*& head, int pos, int value) {
-    if (pos <= 0) {
-      cout << "Invalide Position\n";
+  void display() {
+    if (head == nullptr) {
+      cout << "Linked List is empty\n";
       return;
     }
-    if (pos == 1) {
-      insert_at_head(head, value);
-      return;
+    Node* temp = head;
+    while (temp != nullptr) {
+      cout << "[" << temp->data << "]-> ";
+      temp = temp->next;
     }
+    cout << "nullptr\n";
   }
 
-  void display(Node* head) {
+  int delete_at_head() {
     if (head == nullptr) {
-      cout << "empty\n";
-      return;
+      cout << "Linked List is empty\n";
+      return -1;
+    }
+    Node* temp = head;
+    int value = temp->data;
+    head = head->next;
+    delete temp;
+    return value;
+  }
+
+  int delete_at_position(int position) {
+    if (head == nullptr) {
+      cout << "Linked List is empty\n";
+      return -1;
+    }
+
+    if (position <= 0) {
+      cout << "Invalid Position\n";
+      return -1;
+    }
+
+    if (position == 1) {
+      delete_at_head();
+      return -1;
     }
 
     Node* temp = head;
-    do {
-      cout << "[" << temp->data << "] <-> ";
+    for (int i = 0; i < (position - 1 && temp->next); i++) {
       temp = temp->next;
-    } while (temp != head);
-
-    // Print the head again to indicate that it's a circular list
-    cout << "(back to HEAD [" << head->data << "])\n";
+    }
+    temp->next = temp->next->next;
+    return -1;
   }
 
-  void delete_head(Node*& head) {
-    // code
+  Node* reverse_nodes() {
+    Node* p = head;
+    Node* q = nullptr;
+    Node* r = nullptr;
+
+    while (p != nullptr) {
+      r = q;
+      q = p;
+      p = p->next;
+      q->next = r;
+    }
+    head = q;
+    return q;
   }
 
-  void delete_at_position(Node*& head, int pos) {
-    // code
+  Node* concatenation(LinkedList& otherlist) {
+    if (head == nullptr) return otherlist.head;
+    if (otherlist.head == nullptr) return head;
+
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+    }
+    temp->next = otherlist.head;
+    otherlist.head = nullptr;
+    return head;
+  }
+
+  Node* merged_ll(LinkedList& otherlist) {
+    if (head == nullptr) return otherlist.head;
+    if (otherlist.head == nullptr) return head;
+
+    Node* first = head;
+    Node* second = otherlist.head;
+    Node* third = nullptr;
+    Node* last = nullptr;
+
+    if (first->data < second->data) {
+      third = last = first;
+      first = first->next;
+    } else {
+      third = last = second;
+      second = second->next;
+    }
+
+    while (first != nullptr && second != nullptr) {
+      if (first->data < second->data) {
+        last->next = first;
+        last = first;
+        first = first->next;
+      } else {
+        last->next = second;
+        last = second;
+        second = second->next;
+      }
+    }
+
+    if (first == nullptr)
+      last->next = second;
+    else
+      last->next = first;
+    return third;
+  }
+
+  Node* find_middle_element() {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+    Node* slow = head;
+    Node* fast = head->next;
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+    return slow;
+  }
+
+  Node* sorting() {
+    if (head != nullptr || head->next != nullptr) {
+      return head;
+    }
+    Node* left = head;
+    Node* middle = find_middle_element();
+    Node* right = middle->next;
+    middle->next = nullptr;
   }
 };
 

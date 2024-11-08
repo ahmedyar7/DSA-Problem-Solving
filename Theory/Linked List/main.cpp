@@ -4,23 +4,22 @@
 using namespace std;
 
 int main() {
-  Node* head = nullptr;
-  Node* head2 = nullptr;
-  Node cdll(0);
+  LinkedList ll;
+  LinkedList ll2;
 
-  cdll.insert_at_head(head, 1);
-  cdll.insert_at_head(head, 2);
-  cdll.insert_at_head(head, 3);
-  cdll.insert_at_head(head, 4);
-  cdll.insert_at_head(head, 5);
+  ll.insert_at_tail(2);
+  ll.insert_at_tail(4);
+  ll.insert_at_tail(6);
+  ll.insert_at_tail(8);
+  ll.insert_at_tail(10);
 
-  cdll.display(head);
+  ll2.insert_at_tail(1);
+  ll2.insert_at_tail(3);
+  ll2.insert_at_tail(5);
+  ll2.insert_at_tail(7);
+  ll2.insert_at_tail(9);
 
-  cdll.insert_at_tail(head2, 1);
-  cdll.insert_at_tail(head2, 2);
-  cdll.insert_at_tail(head2, 3);
-  cdll.insert_at_tail(head2, 4);
-  cdll.insert_at_tail(head2, 5);
+  Node* merged = ll.merged_ll(ll2);
 
-  cdll.display(head2);
+  ll.display();
 }
