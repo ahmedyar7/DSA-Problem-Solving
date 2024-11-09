@@ -2,20 +2,23 @@
 
 #include "Node.h"
 #include "circular_ll.h"
+#include "doublyll.h"
 using namespace std;
 
 int main() {
-  CircularLinkedList cll;
+  Doublyll dll;
 
-  cll.insert_at_head(5);
-  cll.insert_at_head(15);
-  cll.insert_at_head(35);
-  cll.insert_at_head(45);
+  dll.insert_at_head(5);
+  dll.insert_at_head(53);
+  dll.insert_at_head(544);
+  dll.insert_at_head(5422);
+  dll.insert_at_head(542243);
 
-  cll.insert_at_tail(5);
-  cll.insert_at_tail(15);
-  cll.insert_at_tail(35);
-  cll.insert_at_tail(45);
+  dll.insert_at_tail(5);
+  dll.insert_at_tail(53);
+  dll.insert_at_tail(544);
+  dll.insert_at_tail(5422);
+  dll.insert_at_tail(542243);
 
-  cll.display();
+  dll.display();
 }
