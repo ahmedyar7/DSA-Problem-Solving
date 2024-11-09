@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <climits>
 #include <iostream>
 using namespace std;
 
@@ -19,9 +20,8 @@ class Node {
 
 class LinkedList {
  private:
-  Node* head;
-
  public:
+  Node* head;
   LinkedList() { head = nullptr; }
 
   void insert_at_head(int value) {
@@ -96,7 +96,7 @@ class LinkedList {
 
   int delete_at_position(int position) {
     if (head == nullptr) {
-      cout << "Linked List is empty\n";
+      cout << "The Linked List is empty\n";
       return -1;
     }
 
@@ -111,7 +111,7 @@ class LinkedList {
     }
 
     Node* temp = head;
-    for (int i = 0; i < (position - 1 && temp->next); i++) {
+    for (int i = 0; i < (position - 1 && temp->next != nullptr); i++) {
       temp = temp->next;
     }
     temp->next = temp->next->next;
@@ -175,10 +175,11 @@ class LinkedList {
       }
     }
 
-    if (first == nullptr)
+    if (first == nullptr) {
       last->next = second;
-    else
+    } else {
       last->next = first;
+    }
     return third;
   }
 
@@ -196,13 +197,72 @@ class LinkedList {
   }
 
   Node* sorting() {
-    if (head != nullptr || head->next != nullptr) {
+    if (head == nullptr || head->next == nullptr) {
       return head;
     }
-    Node* left = head;
-    Node* middle = find_middle_element();
-    Node* right = middle->next;
-    middle->next = nullptr;
+    Node* right = head;
+    Node* left = find_middle_element()->next;
+    find_middle_element()->next = nullptr;
+
+    LinkedList left_list;
+    LinkedList right_list;
+
+    left_list.head = left;
+    right_list.head = right;
+
+    Node* sorted_left = left_list.sorting();
+    Node* sorted_right = right_list.sorting();
+
+    LinkedList sortedlist;
+    sortedlist.head = sorted_left;
+    sortedlist.head = sortedlist.merged_ll(right_list);
+    return sortedlist.head;
+  }
+
+  bool searching(int value) {
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      if (temp->data == value) {
+        return true;
+      }
+      temp = temp->next;
+    }
+    return false;
+  }
+
+  void min_n_max() {
+    if (head == nullptr) {
+      return;
+    }
+    int min = INT_MAX;
+    int max = INT_MIN;
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      if (temp->data < min) {
+        min = temp->data;
+      }
+      if (temp->data > max) {
+        max = temp->data;
+      }
+      temp = temp->next;
+    }
+    cout << "Max: " << max << endl;
+    cout << "Min: " << min << endl;
+
+    return;
+  }
+
+  void count_nodes() {
+    if (head == nullptr) {
+      return;
+    }
+    int counter = 0;
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+      counter++;
+    }
+    cout << "Total Nodes: " << counter << endl;
   }
 };
 
