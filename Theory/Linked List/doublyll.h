@@ -209,6 +209,103 @@ class Doublyll {
     otherlist.head = nullptr;
     return head;
   }
+
+  node* merge_sorted_lists(node* head1, node* head2) {
+    if (head1 == nullptr) return head2;
+    if (head2 == nullptr) return head1;
+
+    node* first = head1;
+    node* second = head2;
+    node* third = nullptr;
+    node* last = nullptr;
+
+    if (first->data < second->data) {
+      third = last = first;
+      first = first->next;
+    } else {
+      third = last = second;
+      second = second->next;
+    }
+
+    while (first != nullptr && second != nullptr) {
+      if (first->data < second->data) {
+        last->next = first;
+        last = first;
+        first = first->next;
+      } else {
+        last->next = second;
+        last = second;
+        second = second->next;
+      }
+    }
+
+    if (first == nullptr) {
+      last->next = second;
+    } else {
+      last->next = first;
+    }
+
+    return third;
+  }
+
+  node* sorting() {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    node* left = head;
+    node* mid = find_middle_element();
+    node* right = mid->next;
+    mid->next = nullptr;
+
+    Doublyll left_half;
+    left_half.head = left;
+    left_half.head = left_half.sorting();
+
+    Doublyll right_half;
+    right_half.head = right;
+    right_half.head = right_half.sorting();
+
+    return merge_sorted_lists(left_half.head, right_half.head);
+  }
+
+  node* reverse_dll() {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+    node* current = head;
+    node* temp = nullptr;
+    while (current != nullptr) {
+      temp = current->prev;
+      current->prev = current->next;
+      current->next = temp;
+      current = current->prev;
+    }
+    head = temp->prev;
+    return head;
+  }
+
+  void remove_duplicates() {
+    if (head == nullptr || head->next == nullptr) {
+      return;
+    }
+    node* current = head;
+    while (current != nullptr) {
+      node* runner = current->next;
+      while (runner != nullptr) {
+        if (current->data == runner->data) {
+          node* duplicated = runner;
+          if (runner->prev != nullptr) runner->prev->next = runner->next;
+          if (runner->next != nullptr) runner->next->prev = runner->prev;
+          runner = runner->next;
+          delete duplicated;
+        } else {
+          runner = runner->next;
+        }
+      }
+      current = current->next;
+    }
+  }
 };
 
 #endif  // DOUBLY_LL_H
