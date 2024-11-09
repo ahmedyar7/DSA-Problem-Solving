@@ -256,13 +256,53 @@ class LinkedList {
     if (head == nullptr) {
       return;
     }
-    int counter = 0;
+    int counter = 1;
     Node* temp = head;
     while (temp->next != nullptr) {
-      temp = temp->next;
       counter++;
+      temp = temp->next;
     }
     cout << "Total Nodes: " << counter << endl;
+  }
+
+  Node* remove_duplicates() {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    Node* prev = head;
+    Node* current = head->next;
+
+    while (current != nullptr) {
+      if (current->data == prev->data) {
+        Node* delete_nodes = current;
+        prev->next = current->next;
+        current = current->next;
+        delete delete_nodes;
+      } else {
+        prev = current;
+        current = current->next;
+      }
+    }
+    return head;
+  }
+
+  Node* segregate_odd_n_even() {
+    if (head == nullptr || head->next == nullptr) return head;
+
+    Node* odd = head;
+    Node* even = head->next;
+    Node* even_head = even;
+
+    while ((odd != nullptr) && (even != nullptr) && (even->next != nullptr)) {
+      odd->next = even->next;
+      odd = odd->next;
+      even->next = odd->next;
+      even = even->next;
+    }
+    odd->next = even_head;
+
+    return head;
   }
 };
 
