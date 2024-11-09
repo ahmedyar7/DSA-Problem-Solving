@@ -7,18 +7,23 @@ using namespace std;
 
 int main() {
   Doublyll dll;
+  Doublyll dll2;
 
-  dll.insert_at_head(5);
-  dll.insert_at_head(53);
-  dll.insert_at_head(544);
-  dll.insert_at_head(5422);
-  dll.insert_at_head(542243);
-
+  dll.insert_at_tail(1);
+  dll.insert_at_tail(3);
   dll.insert_at_tail(5);
-  dll.insert_at_tail(53);
-  dll.insert_at_tail(544);
-  dll.insert_at_tail(5422);
-  dll.insert_at_tail(542243);
+  dll.insert_at_tail(7);
+  dll.insert_at_tail(9);
 
+  dll2.insert_at_tail(2);
+  dll2.insert_at_tail(4);
+  dll2.insert_at_tail(6);
+  dll2.insert_at_tail(8);
+  dll2.insert_at_tail(10);
+
+  // dll.head = dll.merging(dll2);
+  dll.display();
+
+  dll.head = dll.concatenation(dll2);
   dll.display();
 }
