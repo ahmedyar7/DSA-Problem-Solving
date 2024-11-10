@@ -1,30 +1,34 @@
 #include <iostream>
 using namespace std;
 
+class node {
+ public:
+  int data;
+  node* next;
+  node(int data) {
+    this->data = data;
+    next = nullptr;
+  }
+};
+
 class stack {
  private:
-  int top;
-  int size;
-  int *arr;
+  node* top;
 
  public:
-  stack(int size) {
-    this->size = size;
-    top = -1;
-    arr = new int[size];
-  }
+  stack() { top = nullptr; }
 
-  bool full() { return top == size - 1; }
-
-  bool empty() { return top == -1; }  // Corrected to return a value
+  bool empty() { return top == nullptr; }
 
   void push(int value) {
-    if (full()) {
-      cout << "Stack is full\n";
+    node* new_node = new node(value);
+    if (empty()) {
+      top = new_node;
       return;
     }
-    top++;
-    arr[top] = value;
+    new_node->next = top;
+    top = new_node;
+    return;
   }
 
   int pop() {
@@ -32,8 +36,10 @@ class stack {
       cout << "Stack is empty\n";
       return -1;
     }
-    int value = arr[top];
-    top--;
+    node* temp = top;
+    int value = temp->data;
+    top = top->next;
+    delete temp;
     return value;
   }
 
@@ -42,26 +48,26 @@ class stack {
       cout << "Stack is empty\n";
       return -1;
     }
-    return arr[top];
+    return top->data;
   }
 };
 
 class queue {
  private:
-  stack *st1;
-  stack *st2;
+  stack* st1;
+  stack* st2;
 
  public:
-  queue(int size) {
-    st1 = new stack(size);
-    st2 = new stack(size);
+  queue() {
+    st1 = new stack();
+    st2 = new stack();
   }
 
   void enqueue(int value) { st1->push(value); }
 
   int dequeue() {
     if (st1->empty() && st2->empty()) {
-      cout << "Queue is empty\n";
+      cout << "stack is empty\n";
       return -1;
     }
     while (!st1->empty()) {
@@ -70,9 +76,9 @@ class queue {
     return st2->pop();
   }
 
-  int front() {
+  int get_front() {
     if (st1->empty() && st2->empty()) {
-      cout << "Queue is empty\n";
+      cout << "stack is empty\n";
       return -1;
     }
     while (!st1->empty()) {

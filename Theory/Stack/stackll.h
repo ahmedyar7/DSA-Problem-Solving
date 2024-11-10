@@ -73,7 +73,7 @@ bool valid_parenthesis(char arr[]) {
   Stack<char> st;
   while (arr[i] != '\0') {
     char ch = arr[i];
-    if (ch == '[' || ch == '{' || ch == '(') {
+    if (ch == '(' || ch == '{' || ch == '[') {
       st.push(ch);
     } else if (ch == ')' || ch == '}' || ch == ']') {
       if (st.empty()) return false;
@@ -94,22 +94,21 @@ int precedence(char ch) {
   if (ch == '+' || ch == '-') return 1;
   if (ch == '*' || ch == '/') return 2;
   if (ch == '^') return 3;
-
   return -1;
 }
 
 bool is_operand(char ch) {
   if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-      (ch >= '0' && ch <= '9'))
+      (ch >= '0' && ch <= '0')) {
     return true;
+  }
   return false;
 }
 
 void reverse_string(char arr[]) {
   int n = 0;
-  while (arr[n] != '\0') {
-    n++;
-  }
+  while (arr[n] != '\0') n++;
+
   for (int i = 0; i < n / 2; i++) {
     char temp = arr[i];
     arr[i] = arr[n - i - 1];
@@ -144,7 +143,6 @@ void infix_to_postfix(char infix[], char postfix[]) {
     }
     i++;
   }
-
   while (!st.empty()) {
     postfix[j++] = st.pop();
   }
@@ -154,6 +152,7 @@ void infix_to_postfix(char infix[], char postfix[]) {
 
 void infix_to_prefix(char infix[], char prefix[]) {
   reverse_string(infix);
+
   int i = 0;
   while (infix[i] != '\0') {
     char ch = infix[i];
