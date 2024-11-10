@@ -1,22 +1,19 @@
 #include <iostream>
 
-#include "stack.h"
 #include "stackll.h"
 using namespace std;
 
 int main() {
   Stack<int> st;
 
-  st.push(10);
-  st.push(20);
-  st.push(30);
-  st.push(40);
-  st.push(50);
+  char exp[] = "((a+b)*(c-d))/(e+f)";
+  cout << valid_parenthesis(exp) << endl;
 
-  st.display();
+  char postfix[100];
+  infix_to_postfix(exp, postfix);
+  cout << postfix << endl;
 
-  st.pop();
-  st.display();
-  st.pop();
-  st.display();
+  char prefix[100];
+  infix_to_prefix(exp, prefix);
+  cout << prefix << endl;
 }
