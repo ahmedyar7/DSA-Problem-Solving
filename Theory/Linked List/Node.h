@@ -304,6 +304,33 @@ class LinkedList {
 
     return head;
   }
+
+  int josephus(int people, int steps) {
+    if (people <= 0 || steps <= 0) return -1;
+    Node* head = new Node(1);
+    Node* prev = head;
+    for (int i = 2; i <= people; i++) {
+      Node* new_node = new Node(i);
+      prev->next = new_node;
+      prev = new_node;
+    }
+    prev->next = head;
+    Node* current = head;
+    Node* prev_node = prev;
+    while (current->next != current) {
+      for (int i = 1; i < steps; i++) {
+        prev_node = current;
+        current = current->next;
+      }
+      prev_node->next = current->next;
+      Node* temp = current;
+      current = current->next;
+      delete temp;
+    }
+    int result = current->data;
+    delete current;
+    return result;
+  }
 };
 
 #endif
