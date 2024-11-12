@@ -1,4 +1,4 @@
-// Practice quue using the grid structure// Practice qesuiotn
+// Practice quue using the grid structure// Practice qesuiotngit a
 
 #include <iostream>
 using namespace std;
