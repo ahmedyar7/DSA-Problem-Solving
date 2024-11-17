@@ -10,8 +10,8 @@ int main() {
   // selection_sort(arr, n);
   // print_arr(arr, n);
 
-  insertion_sort(arr, n);
-  print_arr(arr, n);
+  // insertion_sort(arr, n);
+  // print_arr(arr, n);
 
   // bubble_sort(arr, n);
   // print_arr(arr, n);
@@ -19,6 +19,6 @@ int main() {
   // merge_sort(arr, 0, n - 1);
   // print_arr(arr, n);
 
-  // quick_sort(arr, 0, n - 1);
-  // print_arr(arr, n);
+  quick_sort(arr, 0, n - 1);
+  print_arr(arr, n);
 }
