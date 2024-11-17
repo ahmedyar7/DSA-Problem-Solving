@@ -112,3 +112,28 @@ void quick_sort(int arr[], int low, int high) {
     quick_sort(arr, index + 1, high);
   }
 }
+
+void count_sort(int arr[], int n) {
+  int min = arr[0];
+  int max = arr[0];
+
+  for (int i = 0; i < n; i++) {
+    if (arr[i] > max) max = arr[i];
+    if (arr[i] < min) min = arr[i];
+  }
+
+  int range = max - min + 1;
+  int *temp = new int[range]();
+
+  for (int i = 0; i < n; i++) {
+    temp[arr[i - min]]++;
+  }
+
+  int index = 0;
+  for (int i = 0; i < range; i++) {
+    if (temp[i] > 0) {
+      arr[index++] = i + min;
+      temp[i]--;
+    }
+  }
+}
