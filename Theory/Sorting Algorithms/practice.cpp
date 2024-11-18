@@ -108,7 +108,47 @@ void quick_sort(int arr[], int low, int high) {
   if (low < high) {
     int mid = low + (high - low) / 2;
     int index = partition(arr, low, high);
-    quick_sort(arr, low, index);
+    quick_sort(arr, low, index - 1);
     quick_sort(arr, index + 1, high);
   }
+}
+
+// Helper function for finding max and min
+int find_max(int arr[], int n) {
+  int max = arr[0];
+  for (int i = 0; i <= n - 1; i++) {
+    if (arr[i] > max) max = arr[i];
+  }
+  return max;
+}
+
+int find_min(int arr[], int n) {
+  int min = arr[0];
+  for (int i = 0; i <= n - 1; i++) {
+    if (arr[i] < min) min = arr[i];
+  }
+  return min;
+}
+
+// Implementation of count sort
+void count_sort(int arr[], int n) {
+  int min = find_min(arr, n);
+  int max = find_max(arr, n);
+  int range = max - min + 1;
+
+  int *counter_arr = new int[range]();
+
+  for (int i = 0; i < n; i++) {
+    counter_arr[arr[i]]++;
+  }
+
+  int index = 0;
+  for (int i = 0; i <= range - 1; i++) {
+    while (counter_arr[i] > 0) {
+      arr[index++] = i;
+      counter_arr[i]--;
+    }
+  }
+
+  delete[] counter_arr;
 }
