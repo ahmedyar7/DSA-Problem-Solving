@@ -23,9 +23,12 @@ int main() {
   // quick_sort(arr, 0, n - 1);
   // print_arr(arr, n);
 
-  count_sort(arr, n);
-  print_arr(arr, n);
+  // count_sort(arr, n);
+  // print_arr(arr, n);
 
   // radix_sort(arr, n);
   // print_arr(arr, n);
+
+  shell_sort(arr, n);
+  print_arr(arr, n);
 }

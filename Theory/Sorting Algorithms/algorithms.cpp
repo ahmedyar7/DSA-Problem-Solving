@@ -1,6 +1,13 @@
 #include <iostream>
 using namespace std;
 
+// Helper swapping function
+void swap(int *left, int *right) {
+  int temp = *left;
+  *left = *right;
+  *right = temp;
+}
+
 // Print the Sorted array
 void print_arr(int arr[], int n) {
   cout << "[";
@@ -11,45 +18,42 @@ void print_arr(int arr[], int n) {
   cout << endl;
 }
 
-// Implementation Of selection sort
+// Implementation of selection sort
 void selection_sort(int arr[], int n) {
   for (int i = 0; i <= n - 2; i++) {
     int mini = i;
     for (int j = i; j <= n - 1; j++) {
-      if (arr[j] < arr[mini]) mini = j;
+      if (arr[j] < arr[mini]) {
+        mini = j;
+      }
     }
-    int temp = arr[mini];
-    arr[mini] = arr[i];
-    arr[i] = temp;
+    swap(arr[mini], arr[i]);
   }
 }
 
 // Implementation of bubble sort
 void bubble_sort(int arr[], int n) {
-  for (int i = n - 1; i >= 0; i--) {
-    for (int j = 0; j <= i - 1; j++) {
+  for (int i = n - 1; i > 0; i--) {
+    for (int j = 0; j < n - 1; j++) {
       if (arr[j] > arr[j + 1]) {
-        int temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
+        swap(arr[j], arr[j + 1]);
       }
     }
   }
 }
 
-// Implementation of Insertion sort
+// Implementation of insertion sort
 void insertion_sort(int arr[], int n) {
   for (int i = 0; i <= n - 1; i++) {
     int j = i;
     while (j > 0 && arr[j - 1] > arr[j]) {
-      int temp = arr[j - 1];
-      arr[j - 1] = arr[j];
-      arr[j] = temp;
+      swap(arr[j - 1], arr[j]);
       j--;
     }
   }
 }
 
+// Implementation of merge sort
 void merge(int arr[], int low, int mid, int high) {
   int left = low;
   int right = mid + 1;
@@ -58,27 +62,17 @@ void merge(int arr[], int low, int mid, int high) {
   int *temp = new int[size];
 
   while (left <= mid && right <= high) {
-    if (arr[left] <= arr[right]) {
-      temp[k++] = arr[left++];
-    } else {
-      temp[k++] = arr[right++];
-    }
-  }
-
-  while (left <= mid) {
-    temp[k++] = arr[left++];
-  }
-  while (right <= high) {
+    if (arr[left] < arr[right]) temp[k++] = arr[left++];
     temp[k++] = arr[right++];
   }
 
-  for (int i = 0; i < size; i++) {
-    arr[low + i] = temp[i];
-  }
+  while (left <= mid) temp[k++] = arr[left++];
+
+  while (right <= high) temp[k++] = arr[right++];
+
+  for (int i = 0; i < size; i++) arr[low + i] = temp[i];
   delete[] temp;
 }
-
-// Implementation of Merge sort
 void merge_sort(int arr[], int low, int high) {
   if (low < high) {
     int mid = low + (high - low) / 2;
@@ -88,132 +82,121 @@ void merge_sort(int arr[], int low, int high) {
   }
 }
 
+// Implementation of quick sort
 int partition(int arr[], int low, int high) {
   int left = low;
-  int right = high - 1;
+  int right = high;
   int pivot = arr[low];
 
   while (true) {
     while (left <= right && arr[left] <= pivot) left++;
     while (left <= right && arr[right] > pivot) right--;
-    if (left > right) {
-      break;
-    }
-    int temp = arr[left];
-    arr[left] = arr[right];
-    arr[right] = temp;
+
+    if (left > right) break;
+
+    swap(arr[left], arr[right]);
   }
-  int temp = arr[low];
-  arr[low] = arr[right];
-  arr[right] = temp;
+
+  swap(arr[low], arr[right]);
+
   return right;
 }
-
-// Implementation of Quick sort
 void quick_sort(int arr[], int low, int high) {
   if (low < high) {
     int mid = low + (high - low) / 2;
     int index = partition(arr, low, high);
-    quick_sort(arr, low, index);
+    quick_sort(arr, low, index - 1);
     quick_sort(arr, index + 1, high);
   }
 }
 
-// Implementation of Counting sort
-void count_sort(int arr[], int n) {
-  int min = arr[0];
+// Helper function for finding max and min
+int find_max(int arr[], int n) {
   int max = arr[0];
-
-  for (int i = 0; i < n; i++) {
-    if (arr[i] > max) max = arr[i];
-    if (arr[i] < min) min = arr[i];
-  }
-
-  int range = max - min + 1;
-  int *temp = new int[range]();
-
-  for (int i = 0; i < n; i++) {
-    temp[arr[i] - min]++;
-  }
-
-  int index = 0;
-  for (int i = 0; i < range; i++) {
-    while (temp[i] > 0) {
-      arr[index++] = i + min;
-      temp[i]--;
-    }
-  }
-}
-
-// Implementation of Bucket sort
-void bucket_sort(int arr[], int n) {
-  int max = arr[0];
-  for (int i = 0; i < n; i++) {
-    if (arr[i] > max) max = arr[i];
-  }
-
-  int *buckets = new int[max + 1]();
-  for (int i = 0; i < n; i++) {
-    buckets[arr[i]]++;
-  }
-
-  int index = 0;
-  for (int i = 0; i < n; i++) {
-    while (buckets[i] > 0) {
-      arr[index++] = i;
-      buckets[i]--;
-    }
-  }
-}
-
-// Function to find the maximum value in the array
-int findMax(int arr[], int n) {
-  int max = arr[0];
-  for (int i = 1; i < n; i++) {
+  for (int i = 0; i <= n - 1; i++) {
     if (arr[i] > max) max = arr[i];
   }
   return max;
 }
 
-// Function to perform counting sort based on a specific digit
+int find_min(int arr[], int n) {
+  int min = arr[0];
+  for (int i = 0; i <= n - 1; i++) {
+    if (arr[i] < min) min = arr[i];
+  }
+  return min;
+}
+
+// Implementation of count sort
+void count_sort(int arr[], int n) {
+  int min = find_min(arr, n);
+  int max = find_max(arr, n);
+  int range = max - min + 1;
+
+  int *counter_arr = new int[range]();
+
+  for (int i = 0; i < n; i++) {
+    counter_arr[arr[i]]++;
+  }
+
+  int index = 0;
+  for (int i = 0; i <= range - 1; i++) {
+    while (counter_arr[i] > 0) {
+      arr[index++] = i;
+      counter_arr[i]--;
+    }
+  }
+
+  delete[] counter_arr;
+}
+
+// Implementation of radix sort
 void counting_sort(int arr[], int n, int exp) {
-  int *output = new int[n];  // Temporary array to store sorted numbers
-  int count[10] = {0};       // Count array for digits (0-9)
+  int *counter = new int[10]();
+  int *output = new int[n];
 
-  // Count occurrences of each digit
-  for (int i = 0; i < n; i++) {
-    int digit = (arr[i] / exp) % 10;  // Extract the digit at position `exp`
-    count[digit]++;
-  }
-
-  // Update count[i] to store the actual position of this digit in `output`
-  for (int i = 1; i < 10; i++) {
-    count[i] += count[i - 1];
-  }
-
-  // Build the output array
-  for (int i = n - 1; i >= 0; i--) {  // Traverse array backward for stability
+  // Adding number of occurance to the counter
+  for (int i = 0; i <= n - 1; i++) {
     int digit = (arr[i] / exp) % 10;
-    output[count[digit] - 1] = arr[i];
-    count[digit]--;
+    counter[digit]++;
   }
 
-  // Copy the sorted output array back to the original array
-  for (int i = 0; i < n; i++) {
+  // Finding the cummulative
+  for (int i = 1; i < 10; i++) {
+    counter[i] += counter[i - 1];
+  }
+
+  // Placing the in output by reverse traversal
+  for (int i = n - 1; i >= 0; i--) {
+    int digit = (arr[i] / exp) % 10;
+    output[--counter[digit]] = arr[i];
+  }
+
+  // Copying the element back to original array
+  for (int i = 0; i <= n - 1; i++) {
     arr[i] = output[i];
   }
 
-  // Free allocated memory
+  delete[] counter;
   delete[] output;
 }
 
-// Radix Sort implementation
 void radix_sort(int arr[], int n) {
-  int max = findMax(
-      arr, n);  // Find the maximum number to determine the number of digits
+  int max = find_max(arr, n);
+  for (int exp = 1; max / exp > 0; exp *= 10) counting_sort(arr, n, exp);
+}
 
-  // Perform counting sort for every digit (exp = 1, 10, 100, ...)
-  for (int exp = 1; max / exp > 0; exp *= 10) {
-    counting_sort(arr, n, exp);
+void shell_sort(int arr[], int n) {
+  // Outer Loop for finding gap
+  for (int gap = n / 2; gap >= 1; gap = gap / 2) {
+    // Inner loop for assigning gap
+    for (int i = gap; i < n; i++) {
+      int j = i;
+      // Swaping based upon comparision on gaps
+      while (j >= gap && arr[j - gap] > arr[j]) {
+        swap(arr[j - 1], arr[j]);
+        j = j - gap;
+      }
+    }
   }
 }
