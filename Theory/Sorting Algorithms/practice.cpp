@@ -150,29 +150,28 @@ void count_sort(int arr[], int n) {
   delete[] counter_arr;
 }
 
-// Implementation of radix sort
+// Helper function for implementing counting sort
 void counting_sort(int arr[], int n, int exp) {
   int *counter = new int[10]();
   int *output = new int[n];
 
-  // Adding number of occurance to the counter
+  // number of occurances
   for (int i = 0; i <= n - 1; i++) {
     int digit = (arr[i] / exp) % 10;
     counter[digit]++;
   }
 
-  // Finding the cummulative
+  // cummulative occrances
   for (int i = 1; i < 10; i++) {
     counter[i] += counter[i - 1];
   }
 
-  // Placing the in output by reverse traversal
+  // reverse feedingf
   for (int i = n - 1; i >= 0; i--) {
     int digit = (arr[i] / exp) % 10;
     output[--counter[digit]] = arr[i];
   }
 
-  // Copying the element back to original array
   for (int i = 0; i <= n - 1; i++) {
     arr[i] = output[i];
   }
@@ -181,20 +180,19 @@ void counting_sort(int arr[], int n, int exp) {
   delete[] output;
 }
 
+// Implementation of radix sort
 void radix_sort(int arr[], int n) {
   int max = find_max(arr, n);
   for (int exp = 1; max / exp > 0; exp *= 10) counting_sort(arr, n, exp);
 }
 
+// Implementation of Shell's Sort
 void shell_sort(int arr[], int n) {
-  // Outer Loop for finding gap
   for (int gap = n / 2; gap >= 1; gap = gap / 2) {
-    // Inner loop for assigning gap
     for (int i = gap; i < n; i++) {
       int j = i;
-      // Swaping based upon comparision on gaps
       while (j >= gap && arr[j - gap] > arr[j]) {
-        swap(arr[j - 1], arr[j]);
+        swap(arr[j - gap], arr[j]);
         j = j - gap;
       }
     }
