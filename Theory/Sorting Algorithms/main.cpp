@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "algorithms.cpp"
+// #include "algorithms.cpp"
+#include "practice.cpp"
 using namespace std;
 
 int main() {
@@ -19,11 +20,11 @@ int main() {
   // merge_sort(arr, 0, n - 1);
   // print_arr(arr, n);
 
-  // quick_sort(arr, 0, n - 1);
-  // print_arr(arr, n);
+  quick_sort(arr, 0, n - 1);
+  print_arr(arr, n);
 
   // count_sort(arr, n);
 
-  radix_sort(arr, n);
-  print_arr(arr, n);
+  // radix_sort(arr, n);
+  // print_arr(arr, n);
 }
