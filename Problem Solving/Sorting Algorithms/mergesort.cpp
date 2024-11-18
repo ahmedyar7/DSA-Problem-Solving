@@ -404,3 +404,58 @@ int main() {
 
   for (int i = 0; i < n; i++) cout << arr[i] << " ";
 }
+
+#include <iostream>
+using namespace std;
+
+void merge(int arr[], int low, int mid, int high) {
+  int left = low;
+  int right = mid + 1;
+  int temp[high - low + 1];  // Temporary array for merged elements
+  int k = 0;                 // Index for the temporary array
+
+  // Merge the two subarrays into temp
+  while (left <= mid && right <= high) {
+    if (arr[left] <= arr[right]) {
+      temp[k++] = arr[left++];
+    } else {
+      temp[k++] = arr[right++];
+    }
+  }
+
+  // Copy remaining elements of the left subarray (if any)
+  while (left <= mid) {
+    temp[k++] = arr[left++];
+  }
+
+  // Copy remaining elements of the right subarray (if any)
+  while (right <= high) {
+    temp[k++] = arr[right++];
+  }
+
+  // Copy the merged elements back into the original array
+  for (int i = 0; i < k; i++) {
+    arr[low + i] = temp[i];
+  }
+}
+
+void mergesort(int arr[], int low, int high) {
+  if (low < high) {
+    int mid = low + (high - low) / 2;
+    mergesort(arr, low, mid);       // Sort the left half
+    mergesort(arr, mid + 1, high);  // Sort the right half
+    merge(arr, low, mid, high);     // Merge the two halves
+  }
+}
+
+int main() {
+  int arr[] = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+  int n = sizeof(arr) / sizeof(arr[0]);
+
+  mergesort(arr, 0, n - 1);
+
+  for (int i = 0; i < n; i++) {
+    cout << arr[i] << " ";
+  }
+  return 0;
+}
