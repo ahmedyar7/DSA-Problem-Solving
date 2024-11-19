@@ -18,6 +18,23 @@ void print_arr(int arr[], int n) {
   cout << endl;
 }
 
+// Helper function for finding max and min
+int find_max(int arr[], int n) {
+  int max = arr[0];
+  for (int i = 0; i <= n - 1; i++) {
+    if (arr[i] > max) max = arr[i];
+  }
+  return max;
+}
+
+int find_min(int arr[], int n) {
+  int min = arr[0];
+  for (int i = 0; i <= n - 1; i++) {
+    if (arr[i] < min) min = arr[i];
+  }
+  return min;
+}
+
 // Implementation of selection sort
 void selection_sort(int arr[], int n) {
   for (int i = 0; i <= n - 2; i++) {
@@ -33,7 +50,7 @@ void selection_sort(int arr[], int n) {
 
 // Implementation of bubble sort
 void bubble_sort(int arr[], int n) {
-  for (int i = n - 1; i > 0; i--) {
+  for (int i = n - 1; i >= 0; i--) {
     for (int j = 0; j < n - 1; j++) {
       if (arr[j] > arr[j + 1]) {
         swap(arr[j], arr[j + 1]);
@@ -58,19 +75,20 @@ void merge(int arr[], int low, int mid, int high) {
   int left = low;
   int right = mid + 1;
   int k = 0;
-  int size = high - low + 1;
-  int *temp = new int[size];
+  int range = high - low + 1;
+  int *temp = new int[range];
 
   while (left <= mid && right <= high) {
-    if (arr[left] < arr[right]) temp[k++] = arr[left++];
-    temp[k++] = arr[right++];
+    if (arr[left] < arr[right])
+      temp[k++] = arr[left++];
+    else
+      temp[k++] = arr[right++];
   }
 
   while (left <= mid) temp[k++] = arr[left++];
-
   while (right <= high) temp[k++] = arr[right++];
+  for (int i = 0; i < range; i++) arr[low + i] = temp[i];
 
-  for (int i = 0; i < size; i++) arr[low + i] = temp[i];
   delete[] temp;
 }
 void merge_sort(int arr[], int low, int high) {
@@ -93,14 +111,12 @@ int partition(int arr[], int low, int high) {
     while (left <= right && arr[right] > pivot) right--;
 
     if (left > right) break;
-
     swap(arr[left], arr[right]);
   }
-
   swap(arr[low], arr[right]);
-
   return right;
 }
+
 void quick_sort(int arr[], int low, int high) {
   if (low < high) {
     int mid = low + (high - low) / 2;
@@ -110,39 +126,40 @@ void quick_sort(int arr[], int low, int high) {
   }
 }
 
-// Helper function for finding max and min
-int find_max(int arr[], int n) {
-  int max = arr[0];
-  for (int i = 0; i <= n - 1; i++) {
-    if (arr[i] > max) max = arr[i];
-  }
-  return max;
-}
-
-int find_min(int arr[], int n) {
-  int min = arr[0];
-  for (int i = 0; i <= n - 1; i++) {
-    if (arr[i] < min) min = arr[i];
-  }
-  return min;
-}
-
 // Implementation of count sort
 void count_sort(int arr[], int n) {
   int min = find_min(arr, n);
   int max = find_max(arr, n);
   int range = max - min + 1;
-
   int *counter_arr = new int[range]();
 
   for (int i = 0; i < n; i++) {
-    counter_arr[arr[i]]++;
+    counter_arr[arr[i] - min]++;
+  }
+  int index = 0;
+  for (int i = 0; i < range; i++) {
+    while (counter_arr[i] > 0) {
+      arr[index++] = i + min;
+      counter_arr[i]--;
+    }
   }
 
+  delete[] counter_arr;
+}
+
+// Implementation of bin/ bucket sort
+void bucket_sort(int arr[], int n) {
+  int min = find_min(arr, n);
+  int max = find_max(arr, n);
+  int range = max - min + 1;
+  int *counter_arr = new int[range]();
+
+  for (int i = 0; i < n; i++) counter_arr[arr[i] - min]++;
+
   int index = 0;
-  for (int i = 0; i <= range - 1; i++) {
+  for (int i = 0; i < range; i++) {
     while (counter_arr[i] > 0) {
-      arr[index++] = i;
+      arr[index++] = i + min;
       counter_arr[i]--;
     }
   }
@@ -155,45 +172,37 @@ void counting_sort(int arr[], int n, int exp) {
   int *counter = new int[10]();
   int *output = new int[n];
 
-  // number of occurances
   for (int i = 0; i <= n - 1; i++) {
     int digit = (arr[i] / exp) % 10;
     counter[digit]++;
   }
 
-  // cummulative occrances
-  for (int i = 1; i < 10; i++) {
-    counter[i] += counter[i - 1];
-  }
+  for (int i = 1; i < 10; i++) counter[i] += counter[i - 1];
 
-  // reverse feedingf
   for (int i = n - 1; i >= 0; i--) {
     int digit = (arr[i] / exp) % 10;
     output[--counter[digit]] = arr[i];
   }
 
-  for (int i = 0; i <= n - 1; i++) {
-    arr[i] = output[i];
-  }
+  for (int i = 0; i <= n - 1; i++) arr[i] = output[i];
 
   delete[] counter;
   delete[] output;
 }
 
-// Implementation of radix sort
 void radix_sort(int arr[], int n) {
   int max = find_max(arr, n);
   for (int exp = 1; max / exp > 0; exp *= 10) counting_sort(arr, n, exp);
 }
 
 // Implementation of Shell's Sort
-void shell_sort(int arr[], int n) {
+void shellsort(int arr[], int n) {
   for (int gap = n / 2; gap >= 1; gap = gap / 2) {
     for (int i = gap; i < n; i++) {
       int j = i;
       while (j >= gap && arr[j - gap] > arr[j]) {
         swap(arr[j - gap], arr[j]);
-        j = j - gap;
+        j -= gap;
       }
     }
   }

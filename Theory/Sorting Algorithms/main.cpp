@@ -5,7 +5,10 @@
 using namespace std;
 
 int main() {
-  int arr[] = {23, 12, 1, 54, 3, 0, 55, 11, 44, 233, 23111, 44, 343};
+  int arr[] = {23,    12, 1,  54,   3,    0,    55,   11, 44,  233,
+               23111, 13, 43, 1,    4354, 153,  5423, 44, 343, 23,
+               12,    1,  54, 3,    0,    55,   11,   44, 233, 23111,
+               13,    43, 1,  4354, 153,  5423, 44,   343};
   int n = sizeof(arr) / sizeof(arr[0]);
 
   // selection_sort(arr, n);
@@ -26,9 +29,12 @@ int main() {
   // count_sort(arr, n);
   // print_arr(arr, n);
 
+  // bucket_sort(arr, n);
+  // print_arr(arr, n);
+
   // radix_sort(arr, n);
   // print_arr(arr, n);
 
-  shell_sort(arr, n);
+  shellsort(arr, n);
   print_arr(arr, n);
 }
