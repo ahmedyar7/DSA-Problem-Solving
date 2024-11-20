@@ -1,105 +1,71 @@
 #include <iostream>
 using namespace std;
 
-struct Element {
-  string data;
-  int priority;
-};
-
 class PriorityQueue {
  private:
-  Element* arr;
   int front;
   int rear;
   int size;
+  int *arr;
 
  public:
   PriorityQueue(int size) {
+    front = -1;
+    rear = -1;
     this->size = size;
-    front = -1, rear = -1;
-    arr = new Element[size];
+    arr = new int[size];
   }
 
-  bool full() const { return (rear == size - 1); }
-  bool empty() const { return (front == -1); }
+  ~PriorityQueue() { delete[] arr; }
 
-  void enqueue(string value, int priority) {
+  bool empty() { return front == -1; }
+  bool full() { return rear == size - 1; }
+
+  void enqueue(int data) {
     if (full()) {
       cout << "Queue is full\n";
       return;
     }
-
-    // If Queue is empty, initialize front & rear
-    if (empty()) {
+    if (front == -1 && rear == -1) {
       front = 0;
       rear = 0;
-      arr[rear].data = value;
-      arr[rear].priority = priority;
-      return;
+      arr[rear] = data;
     }
 
-    // Find the correct position to insert new element based on priority
+    // sorting
     int i = rear;
-    while (i >= front && arr[i].priority < priority) {
+    while (i >= front && arr[i] < data) {
       arr[i + 1] = arr[i];  // Shift elements to the right
       i--;
     }
 
     // Insert the new element at the correct position
-    arr[i + 1].data = value;
-    arr[i + 1].priority = priority;
+    arr[i + 1] = data;
     rear++;  // Update the rear index
   }
 
-  string dequeue() {
+  int dequeue() {
     if (empty()) {
-      cout << "Priority Queue is empty\n";
-      return '\0';
+      cout << "Prioroity Queue is empty\n";
+      return -1;
     }
-    string value = arr[front].data;
+    int value = arr[front];
     front++;
     if (front > rear) {
-      front = -1, rear = -1;
+      front = -1;
+      rear = -1;
     }
     return value;
-  }
-
-  string get_front() {
-    if (empty()) {
-      cout << "Priority Queue is empty\n";
-      return '\0';
-    }
-    return arr[front].data;
-  }
-
-  void display() {
-    if (empty()) {
-      cout << "Priority Queue is empty\n";
-      return;
-    }
-
-    cout << "Elements: \n";
-    for (int i = front; i <= rear; i++) {
-      cout << "[" << arr[i].data << "] -> ";
-    }
-    cout << endl;
-    cout << "Priorty " << endl;
-    for (int i = front; i <= rear; i++) {
-      cout << "[" << arr[i].priority << "] -> ";
-    }
-
-    cout << "END\n";
   }
 };
 
 int main() {
   PriorityQueue pq(5);
+  pq.enqueue(10);
+  pq.enqueue(30);
+  pq.enqueue(20);
+  pq.enqueue(40);
+  pq.enqueue(50);
 
-  pq.enqueue("Ahmed", 5);
-  pq.enqueue("Yar", 1);
-  pq.enqueue("Umar", 3);
-  pq.enqueue("Malik", 4);
-  pq.enqueue("Muhammad", 2);
-
-  pq.display();
+  cout << pq.dequeue() << endl;
 }
