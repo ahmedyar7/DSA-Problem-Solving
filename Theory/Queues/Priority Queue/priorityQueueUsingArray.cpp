@@ -9,7 +9,7 @@ class PriorityQueue {
   int rear;   // Rear index of the queue
 
  public:
-  // Constructor to initialize queue with a given size
+  // Constructor to initialize queue with a given sizel
   PriorityQueue(int size) {
     this->size = size;
     front = -1;

@@ -22,19 +22,40 @@ class Priority_Queue {
     arr = new Plane[size];
   }
 
-  bool full() {
-    // code
-  }
-  bool empty() {
-    // code
+  bool full() { return (rear == size - 1); }
+  bool empty() { return (rear == front); }
+
+  void ARRIVE(string flight_id, int priority) {
+    if (full()) {
+      cout << "There is not Avaliable runway to land on!\n";
+      return;
+    } else if (front == -1 && rear == -1) {
+      front = 0;
+      rear = 0;
+      arr[rear].flight_number = flight_id;
+      arr[rear].priority = priority;
+    } else {
+      rear++;
+    }
+
+    int i = rear;
+    while (i >= front && arr[i].priority < priority) {
+      arr[i + 1] = arr[i];
+      i--;
+    }
+
+    arr[i + 1].data = value;
+    arr[i + 1].priority = priority;
+    rear++;  // Update the rear index
   }
 
-  void enqueue(string flight_id, int priority) {
-    // code
-  }
-
-  void dequeue() {
-    // code
+  void LAND() {
+    if (empty()) {
+      cout << "The Runway is empty!\n";
+      return;
+    } else {
+      return arr[front];
+    }
   }
 };
 
