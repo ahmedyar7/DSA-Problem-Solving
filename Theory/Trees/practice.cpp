@@ -38,12 +38,29 @@ class BinaryTree {
   // Helper function for the inorder traversal
   void inorder_traversal(Node* node) {
     if (node == nullptr) {
-      cout << "Node is null\n";
       return;
     }
     inorder_traversal(node->left);
     cout << node->data << " ";
     inorder_traversal(node->right);
+  }
+
+  // Implementation of Pre-order Traversal
+  void pre_order_traversal(Node* node) {
+    if (node == nullptr) {
+      return;
+    }
+    cout << node->data << " ";
+    pre_order_traversal(node->left);
+    pre_order_traversal(node->right);
+  }
+
+  // Implementation of Post-Order-Traversal
+  void post_order_traversal(Node* node) {
+    if (node == nullptr) return;
+    post_order_traversal(node->left);
+    post_order_traversal(node->right);
+    cout << node->data << " ";
   }
 
   // Delete Tree
@@ -69,8 +86,17 @@ class BinaryTree {
       cout << "Root node is empty\n";
       return;
     }
+    cout << "Pre-order Traversal\n";
+    pre_order_traversal(root);
+
+    cout << endl;
+
     cout << "In-order Traversal\n";
     inorder_traversal(root);
+    cout << endl;
+
+    cout << "Post order Traversal\n";
+    post_order_traversal(root);
     cout << endl;
   }
 
