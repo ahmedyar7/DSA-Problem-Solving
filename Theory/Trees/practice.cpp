@@ -30,6 +30,7 @@ class BinaryTree {
   }
 
   // Traversal functions
+  // Inorder Traversal
   void inorder_traversal(Node* root) {
     if (root == nullptr) return;
     inorder_traversal(root->left);
@@ -37,6 +38,7 @@ class BinaryTree {
     inorder_traversal(root->right);
   }
 
+  // Preorder Traversal
   void preorder_traversal(Node* root) {
     if (root == nullptr) return;
     cout << root->data << " ";
@@ -44,6 +46,7 @@ class BinaryTree {
     preorder_traversal(root->right);
   }
 
+  // Postorder Traversal
   void postorder_traversal(Node* root) {
     if (root == nullptr) return;
     postorder_traversal(root->left);
@@ -51,6 +54,7 @@ class BinaryTree {
     cout << root->data << " ";
   }
 
+  // Delete Tree
   void clear_tree(Node* root) {
     if (root == nullptr) return;
     clear_tree(root->left);
