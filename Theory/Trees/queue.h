@@ -16,4 +16,6 @@ class Queue {
 
  public:
   bool empty() { return front == nullptr; }
+
+  void enqueue(T value) { Node<T> }
 };
