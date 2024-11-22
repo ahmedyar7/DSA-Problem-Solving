@@ -2,6 +2,7 @@
 #include <functional>  // For std::function
 #include <iomanip>     // For better formatting
 #include <iostream>
+#include <queue>
 #include <string>
 #include <vector>
 using namespace std;
@@ -54,6 +55,22 @@ class BinaryTree {
     cout << root->data << " ";
   }
 
+  // Level Order Traversal
+  void levelorder_traversal(Node* root) {
+    if (root == nullptr) return;
+    queue<Node*> q;
+    q.push(root);  // Pushing Root Node
+
+    while (!q.empty()) {
+      Node* current = q.front();
+      cout << current->data << " ";
+      q.pop();
+
+      if (current->left != nullptr) q.push(current->left);
+      if (current->right != nullptr) q.push(current->right);
+    }
+  }
+
   // Delete Tree
   void clear_tree(Node* root) {
     if (root == nullptr) return;
@@ -81,6 +98,9 @@ class BinaryTree {
     preorder_traversal(root);
     cout << "\nPostorder Traversal: ";
     postorder_traversal(root);
+    cout << endl;
+    cout << "\n Level Order Traversal: ";
+    levelorder_traversal(root);
     cout << endl;
   }
 

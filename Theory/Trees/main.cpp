@@ -8,13 +8,13 @@ int main() {
   BinaryTree tree;
 
   // Insert nodes to form a large, complete binary tree
-  tree.insert(50);  // Root
-  tree.insert(30);
-  tree.insert(70);
-  tree.insert(20);
-  tree.insert(40);
-  tree.insert(60);
-  tree.insert(80);
+  tree.insert(5);  // Root
+  tree.insert(9);
+  tree.insert(2);
+  tree.insert(8);
+  tree.insert(6);
+  tree.insert(11);
+  tree.insert(3);
   tree.insert(10);
   tree.insert(25);
   tree.insert(35);
@@ -27,10 +27,6 @@ int main() {
   // Display traversals
   cout << "Tree Traversals:\n";
   tree.display_traversals();
-
-  // Visualize tree using ASCII art
-  cout << "\nTree Visualization (ASCII Art):\n";
-  print_ascii_tree(tree.get_root());
 
   return 0;
 }
