@@ -50,19 +50,3 @@ void printInorder(TreeNode* root) {
   cout << root->data << " ";
   printInorder(root->right);
 }
-
-int main() {
-  // Example inputs
-  int preorder[] = {1, 2, 4, 5, 3, 6, 7};
-  int inorder[] = {4, 2, 5, 1, 6, 3, 7};
-  int n = 7;  // Number of nodes
-
-  int preorderIndex = 0;
-  TreeNode* root = constructTree(preorder, inorder, preorderIndex, 0, n - 1);
-
-  cout << "Inorder traversal of the constructed tree: ";
-  printInorder(root);
-  cout << endl;
-
-  return 0;
-}

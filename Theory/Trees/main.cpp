@@ -5,28 +5,29 @@
 using namespace std;
 
 int main() {
-  BinaryTree tree;
+  // Example inputs
+  int preorder[] = {1, 2, 4, 5, 3, 6, 7};
+  int inorder[] = {4, 2, 5, 1, 6, 3, 7};
+  int n = 7;  // Number of nodes
 
-  // Insert nodes to form a large, complete binary tree
-  tree.insert(5);  // Root
-  tree.insert(9);
-  tree.insert(2);
-  tree.insert(8);
-  tree.insert(6);
-  tree.insert(11);
-  tree.insert(3);
-  tree.insert(10);
-  tree.insert(25);
-  tree.insert(35);
-  tree.insert(45);
-  tree.insert(55);
-  tree.insert(65);
-  tree.insert(75);
-  tree.insert(85);
+  int preorderIndex = 0;
+  TreeNode* root = construct_tree(preorder, inorder, preorderIndex, 0, n - 1);
 
-  // Display traversals
-  cout << "Tree Traversals:\n";
-  tree.display_traversals();
+  cout << "Preorder traversal of the constructed tree: ";
+  preorder_traversal(root);
+  cout << endl;
+
+  cout << "Inorder traversal of the constructed tree: ";
+  inorder_traversal(root);
+  cout << endl;
+
+  cout << "Postorder traversal of the constructed tree: ";
+  postorder_traversal(root);
+  cout << endl;
+
+  cout << "Level traversal of the constructed tree: ";
+  levelorder_traversal(root);
+  cout << endl;
 
   return 0;
 }
