@@ -32,9 +32,9 @@ int main() {
   // bucket_sort(arr, n);
   // print_arr(arr, n);
 
-  // radix_sort(arr, n);
-  // print_arr(arr, n);
-
-  shell_sort(arr, n);
+  radix_sort(arr, n);
   print_arr(arr, n);
+
+  // shell_sort(arr, n);
+  // print_arr(arr, n);
 }
