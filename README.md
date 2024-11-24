@@ -1,155 +1,60 @@
-#### 7th August 2024 | Wednesday
+# DSA
 
-- [Selection Sort Learning & Dry Run](https://www.youtube.com/watch?v=HGk_ypEuS24&t=167s)
-- [Bubble Sort Learning & Dry Run](https://www.youtube.com/watch?v=HGk_ypEuS24&t=167s)
+This repository is dedicated to my journey of mastering **Data Structures and Algorithms (DSA)** and solving **LeetCode-style problems**. It contains a collection of solutions, implementations, and notes aimed at improving problem-solving skills and preparing for coding interviews.
 
-## 8th August 2024 | Thursday
+---
 
-- [Insertion Sort Learning & Dry Run](https://www.youtube.com/watch?v=HGk_ypEuS24&t=167s)
-- [Selection Sort Question Solving GFG](https://www.geeksforgeeks.org/problems/selection-sort/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=selection-sort)
-- [Bubble Sort Question Solving GFG](https://www.geeksforgeeks.org/problems/bubble-sort/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=bubble-sort)
-- [Fibonacci Recursion Leetcode](https://leetcode.com/problems/fibonacci-number/description/)
-- [Insertion Sort Question Solving](https://www.geeksforgeeks.org/problems/insertion-sort/0?category%5B%5D=Algorithms&page=1&query=category%5B%5DAlgorithmspage1&utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=insertion-sort)
+## 📂 Repository Structure
 
-##
+- **`/DSA`**: Core implementations of fundamental data structures (e.g., arrays, linked lists, trees, graphs, etc.) and algorithms (sorting, searching, dynamic programming, etc.).
+- **`/LeetCode`**: Solutions to various LeetCode problems organized by difficulty:
+  - **Easy**
+  - **Medium**
+  - **Hard**
+- **`/Notes`**: Detailed explanations, approaches, and dry runs for selected problems and concepts.
 
-## 9th August 2024 | Friday
+---
 
-- **`Recursion Basic Striver's Sheet`**
-  - Understand recursion by print something N times
-  - Print name N times using recursion
-  - Factorial of N numbers
-  - Reverse an array
-  - Check if a string is palindrome or not
-  - Fibonacci Number
+## 🚀 Goals
 
-##
+1. Strengthen understanding of DSA concepts through hands-on coding.
+2. Solve a wide variety of LeetCode problems across different categories.
+3. Develop efficient solutions with optimal time and space complexity.
+4. Prepare for technical interviews by practicing frequently asked problems.
 
-## 10th August | Saturday
+---
 
-- **`Strivers Basic Maths Questions`**
-  - Count Digits
-  - Reverse a Number
-  - Check Palindrome
-  - GCD Or HCF
-  - Armstrong Numbers
-  - Print all Divisors
-  - Check for Prime
+## 🛠️ Tools & Technologies
 
-## 11th August | Sunday
+- **Programming Language**: C++ (primarily) and Python (where applicable).
+- **IDE**: Visual Studio Code and LeetCode's Online IDE.
 
-##
+---
 
-## 12th August | Monday
+## 📈 Progress Tracker
 
-- Hashing Theory
-- Complete STL
+- [ ] Arrays
+- [ ] Linked Lists
+- [ ] Trees and Binary Trees
+- [ ] Graphs
+- [ ] Dynamic Programming
+- [ ] Backtracking
+- [ ] Greedy Algorithms
+- [ ] Sorting and Searching
 
-##
+---
 
-## 13th August | Tuesday
+## 🤝 Contributions
 
-- Maps (ordered, unordered)
-- [Counting frequencies of array elements](https://www.geeksforgeeks.org/problems/frequency-of-array-elements-1587115620/0)
-- [Find the highest/lowest frequency element](https://leetcode.com/problems/frequency-of-the-most-frequent-element/)
+This is a personal learning repository, but contributions, suggestions, and improvements are welcome! If you have feedback or ideas for optimization, feel free to open an issue or pull request.
 
-##
+---
 
-## 14th August | Wednesday
+## 📧 Contact
 
-- Learning Merge Sort
-- [Solving Merge Sort question](https://www.geeksforgeeks.org/problems/merge-sort/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=merge-sort)
-- Learning the Quick Sort algorithm
+Feel free to reach out for discussions, collaboration, or feedback:  
+[Your Email Address]
 
-##
+---
 
-## 15th August | Thursday
-
-- Quick Sort
-- Remove Duplicates
-- Left Rotate by one element
-- Check Sorted
-- 2nd largest element
-
-##
-
-## 16th August | Friday
-
-- Rotate Array by k places
-- Move zeros to the end
-
-##
-
-## 17th August | Saturday
-
-- Union of array
-- Intersection of array
-
-##
-
-## 18th August | Sunday
-
-- Missing Number
-- Consecutive ones
-- One's Two
-- Find the Duplicate Number I
-- Find the Duplicate Number II
-
-##
-
-## 19the August | Monday
-
-- Longest Sub array with sum K
-- Practice all the easy problem in the Strives DSA Sheet
-
-##
-
-## 20th August | Tuesday
-
-- Sort 0s, 1s and 2s
-- 2Sum
-- Majority Element
-
-##
-
-## 21st August | Wednesday
-
-- Kadane's Algorithm `LC`
-- Pairs with maxium sum `GFG`
-- Next Permutation
-- Alternate Positives and negatives
-- Buy and Sell Stocks\
-- Next Permutation
-
-##
-
-## 22nd August | Thursday
-
-- Leaders in array
-
-##
-
-## 23rd August | Friday
-
-- Longest Consecutive Sub Sequence of array
-- Set matrix zero
-- Rotate Matrix by 90 Degrees
-
-##
-
-## 24th August | Saturday
-
-##
-
-## 25th August | Sunday
-
-- Spiral Printing
-- Majority element
-
-## 26th August | Monday
-
-- Subarray with sum K
-
-## 12th October
-
-- Learning about the Valid and invalid anagram
+Let’s crack some algorithms and ace those interviews! 🚀
