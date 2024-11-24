@@ -3,101 +3,138 @@
 using namespace std;
 
 class TreeNode {
- private:
  public:
   int data;
-  TreeNode* right;
   TreeNode* left;
+  TreeNode* right;
 
   TreeNode(int data) {
     this->data = data;
-    right = nullptr;
     left = nullptr;
+    right = nullptr;
   }
 };
 
-// function to find the index in inorder array
-int find_index(int inorder_arr[], int start, int end, int value) {
-  for (int i = start; i <= end; i++) {
-    if (inorder_arr[i] == value) return i;
-  }
-  return -1;
-}
+class BinaryTree {
+ private:
+  TreeNode* root;
 
-// Function to construct the tree using Recusive calls
-TreeNode* construct_tree(int preorder_arr[], int inorder_arr[],
-                         int& preorder_index, int inorder_start,
-                         int inorder_end) {
-  if (inorder_start > inorder_end) {
-    return nullptr;
+  // Helper function for insertion
+  TreeNode* insert_node(TreeNode* node, int value) {
+    if (node == nullptr) return new TreeNode(value);
+    if (value > node->data) node->right = insert_node(node->right, value);
+    if (value < node->data) node->left = insert_node(node->left, value);
+    return node;
   }
 
-  // Root Node
-  int root_value = preorder_arr[preorder_index++];
-  TreeNode* rootnode = new TreeNode(root_value);
-
-  // Recursion base condition
-  if (inorder_start == inorder_end) return rootnode;
-
-  int rootindex =
-      find_index(inorder_arr, inorder_start, inorder_end, root_value);
-
-  // Recursive  calling the left subtree
-  rootnode->left = construct_tree(preorder_arr, inorder_arr, preorder_index,
-                                  inorder_start, rootindex - 1);
-  // Recursive  calling the right subtree
-  rootnode->right = construct_tree(preorder_arr, inorder_arr, preorder_index,
-                                   rootindex + 1, inorder_end);
-  return rootnode;  // return finaltree
-}
-
-// Implementation of inorder Traversal
-void inorder_traversal(TreeNode* root) {
-  if (root == nullptr) return;
-
-  inorder_traversal(root->left);
-  cout << root->data << " ";
-  inorder_traversal(root->right);
-}
-
-// Implementation of inorder traversal
-void preorder_traversal(TreeNode* root) {
-  if (root == nullptr) return;
-
-  cout << root->data << " ";
-  preorder_traversal(root->left);
-  preorder_traversal(root->right);
-}
-
-// Implementation of postorder traversal
-void postorder_traversal(TreeNode* root) {
-  if (root == nullptr) return;
-
-  postorder_traversal(root->left);
-  postorder_traversal(root->right);
-  cout << root->data << " ";
-}
-
-// Implementation of level order traversal
-void levelorder_traversal(TreeNode* root) {
-  if (root == nullptr) {
-    return;
+  // Tree Travesal Functions
+  void preorder_traversal(TreeNode* node) {
+    if (node == nullptr) return;
+    cout << node->data << " ";
+    preorder_traversal(node->left);
+    preorder_traversal(node->right);
   }
 
-  queue<TreeNode*> q;
-  q.push(root);
+  void inorder_traversal(TreeNode* node) {
+    if (node == nullptr) return;
+    inorder_traversal(node->left);
+    cout << node->data << " ";
+    inorder_traversal(node->right);
+  }
 
-  while (!q.empty()) {
-    TreeNode* current = q.front();
-    cout << current->data << " ";
-    q.pop();
+  void postorder_traversal(TreeNode* node) {
+    if (node == nullptr) return;
+    postorder_traversal(node->left);
+    postorder_traversal(node->right);
+    cout << node->data << " ";
+  }
 
-    if (current->left != nullptr) {
-      q.push(current->left);
-    }
+  void levelorder_traversal(TreeNode* node) {
+    if (node == nullptr) return;
 
-    if (current->right != nullptr) {
-      q.push(current->right);
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+      TreeNode* current = q.front();
+      cout << current->data << " ";
+      q.pop();
+      if (current->left != nullptr) q.push(current->left);
+      if (current->right != nullptr) q.push(current->right);
     }
   }
-}
+
+  void delete_tree(TreeNode* node) {
+    if (node == nullptr) return;
+    delete_tree(node->left);
+    delete_tree(node->right);
+    delete node;
+  }
+
+  int count_nodes(TreeNode* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+
+    int x = count_nodes(node->left);
+    int y = count_nodes(node->right);
+
+    return x + y + 1;
+  }
+
+ public:
+  BinaryTree() { root = nullptr; }
+  ~BinaryTree() { delete_tree(root); }
+
+  void insert(int value) {
+    if (value <= 0) return;
+    root = insert_node(root, value);
+  }
+
+  void display() {
+    cout << "Preorder Traversal\n";
+    preorder_traversal(root);
+    cout << endl << endl;
+
+    cout << "Inorder Traversal\n";
+    inorder_traversal(root);
+    cout << endl << endl;
+
+    cout << "Postorder Traversal\n";
+    postorder_traversal(root);
+    cout << endl << endl;
+
+    cout << "Level Order Traversal\n";
+    levelorder_traversal(root);
+    cout << endl << endl;
+  }
+
+  int find_index(int inorder_arr[], int start, int end, int value) {
+    for (int i = start; i <= end; i++)
+      if (inorder_arr[i] == value) return i;
+    return -1;
+  }
+
+  TreeNode* construct_tree(int preorder_arr[], int inorder_arr[],
+                           int& preorder_index, int inorder_start,
+                           int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder_arr[preorder_index++];
+    TreeNode* rootnode = new TreeNode(rootvalue);
+
+    if (inorder_start == inorder_end) return rootnode;
+
+    int rootindex =
+        find_index(inorder_arr, inorder_start, inorder_end, rootvalue);
+
+    rootnode->left = construct_tree(preorder_arr, inorder_arr, preorder_index,
+                                    inorder_start, rootindex - 1);
+    rootnode->left = construct_tree(preorder_arr, inorder_arr, preorder_index,
+                                    rootindex + 1, inorder_end);
+
+    return rootnode;
+  }
+
+  int count() { return count_nodes(root); }
+};
