@@ -8,7 +8,7 @@ int main() {
   int width = 1280, height = 720;
   initwindow(width, height, "Professional Notepad");
 
-  setbkcolor(Theme::BACKGROUND);
+  // setbkcolor(Theme::BACKGROUND);
   cleardevice();
 
   UIManager uiManager(width, height);
