@@ -1,174 +1,151 @@
-#include <conio.h>  // For getch()
+#include <conio.h>
 #include <graphics.h>
 
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "stack.h"
 
 using namespace std;
 
 struct Command {
-  enum Operation { ADD, remove };
+  enum Operation { ADD, REMOVE };
   Operation op;
-  std::string text;
+  string text;
 };
-// * stack to store string
 
-stack<Command> store;
+stack<Command> commandStack;
 
-void displayMenu() {
-  cleardevice();
+const int MAX_TEXT_LENGTH = 5000;
 
-  setbkcolor(WHITE);
-  setcolor(BLACK);
-  settextstyle(10, 0, 2);  // Set Triplex font, horizontal text, medium size
-  outtextxy(
-      50, 50,
-      const_cast<char *>(" 478817 - Hamza - Notepad - v.0.1 - (22-Nov-224)"));
-  outtextxy(50, 100, const_cast<char *>("1. New Text"));
-  outtextxy(50, 150, const_cast<char *>("2. Save Text"));
-  outtextxy(50, 200, const_cast<char *>("3. Exit"));
-  outtextxy(50, 250, const_cast<char *>("Enter your choice:"));
+// Function to display a title bar
+void drawTitleBar() {
+  setfillstyle(SOLID_FILL, LIGHTGRAY);  // Light gray title bar
+  bar(0, 0, 1280, 40);                  // Draw the title bar
+  setcolor(BLACK);                      // Black text for title
+  settextstyle(3, 0, 1);                // Set text size for title
+  outtextxy(10, 10, const_cast<char*>("Ahmed Yar - Notepad v1.2"));
 }
 
-// Function to display the current texts
-void displayText(const string &text) {
-  cleardevice();
-  setbkcolor(BLUE);       // Set background color to blue
-  setcolor(WHITE);        // Set text color to white
-  settextstyle(8, 0, 1);  // Smaller text style
-  outtextxy(50, 50, const_cast<char *>("Current Text:"));
+// Function to display a status bar
+void drawStatusBar(const string& status) {
+  setfillstyle(SOLID_FILL, LIGHTGRAY);  // Light gray status bar
+  bar(0, 680, 1280, 720);               // Draw status bar
+  setcolor(BLACK);                      // Black text for status
+  settextstyle(3, 0, 1);                // Set text style for status
+  outtextxy(10, 690, const_cast<char*>(status.c_str()));
+}
 
-  int y = 100;  // Start position for text display
-  for (size_t i = 0; i < text.length(); i += 10) {  // Break text into lines
-    string line = text.substr(i, 50);
-    outtextxy(100, y, const_cast<char *>(line.c_str()));
-    y += 30;  // Move down for the next line
+// Function to render text inside the editor
+void renderText(const string& text, int cursorPos) {
+  setfillstyle(SOLID_FILL,
+               WHITE);    // Set background color to white for the text area
+  bar(0, 40, 1280, 680);  // Clear the text area
+
+  drawTitleBar();
+  setcolor(BLACK);        // Black color for text
+  settextstyle(1, 0, 2);  // Set text style for regular text
+
+  int x = 10, y = 50;
+  for (size_t i = 0; i < text.length(); i++) {
+    if (text[i] == '\n' || x > 1260) {  // Wrap text to next line if necessary
+      x = 10;
+      y += 25;
+    }
+    if (i == cursorPos) {  // Render the cursor at the correct position
+      setfillstyle(SOLID_FILL, BLACK);  // Cursor color set to black
+      bar(x - 2, y, x, y + 20);         // Draw cursor
+    }
+    char temp[2] = {text[i], '\0'};  // Convert each character to a string
+    outtextxy(x, y, temp);           // Draw character at position (x, y)
+    x += 12;                         // Move x for the next character
   }
-  delay(2000);  // Allow user to read the displayed text
+
+  // Ensure the cursor is visible at the end of the text if necessary
+  if (cursorPos == text.length()) {
+    setfillstyle(SOLID_FILL, BLACK);  // Black color for cursor
+    bar(x - 2, y, x, y + 20);         // Draw cursor at the end
+  }
+
+  drawStatusBar("Press F5 to Save, F6 to Exit | Ctrl+Z to Undo");
 }
 
 // Main function
 int main() {
-  int gd = DETECT, gm;
-  initgraph(&gd, &gm, nullptr);
+  int width = 1280, height = 720;
+  initwindow(width, height, "Notepad by Ahmed Yar");
 
-  string text = "";  // Text being edited
-  char choice;
+  string text = "";
+  int cursorPos = 0;
+  char ch;
 
   while (true) {
-    displayMenu();  // Show menu
+    renderText(text, cursorPos);
 
-    choice = getch();  // Get the user's choice
+    ch = getch();
+    if (ch == 0 || ch == 224) ch = getch();  // Handle special keys
 
-    switch (choice) {
-      case '1': {  // Edit text
-        cleardevice();
-        outtextxy(
-            50, 50,
-            const_cast<char *>("Enter your text (press ENTER to finish):"));
+    switch (ch) {
+      case 8:  // Backspace
+        if (cursorPos > 0) {
+          cursorPos--;
+          Command remCommand = {Command::REMOVE, string(1, text[cursorPos])};
+          commandStack.push(remCommand);
+          text.erase(cursorPos, 1);
+        }
+        break;
 
-        string buffer = "";  // Use std::string for input
-        int pos = 0;         // Current position in the buffer
-        char ch;
-
-        while ((ch = getch()) != 13) {
-          // Undo oprations
-          if (ch == 26 && !store.empty())  // CTRL+Z and stack is not empty
-          {
-            Command lastCommand = store.top();
-            store.pop();
-
-            if (lastCommand.op == Command::ADD) {
-              // Remove the last added character
-              if (!buffer.empty()) {
-                buffer.pop_back();
-                pos--;  // Update cursor position
-              }
-            } else if (lastCommand.op == Command::remove) {
-              // Re-add the last removed character
-              buffer += lastCommand.text;
-              pos++;  // Update cursor position
-            }
-
-            // Clear the screen area and re-render the buffer
-            cleardevice();  // Clear graphics device
-            outtextxy(
-                50, 50,
-                const_cast<char *>("Enter your text (press ENTER to finish):"));
-            for (size_t i = 0; i < buffer.length(); i++) {
-              char temp[2] = {buffer[i], '\0'};
-              outtextxy(50 + (i * 10), 100, temp);
-            }
-          }
-
-          else if (ch == 8 && pos > 0) {  // Handle backspace
-            pos--;                        // Decrease position
-            // * delete text
-            char deletedChar =
-                buffer.back();  // Get the last character that is being removed
-            outtextxy(50, 50,
-                      const_cast<char *>(std::string(1, deletedChar).c_str()));
-            buffer.pop_back();  // Remove the last character from the string
-
-            setfillstyle(SOLID_FILL, BLUE);
-            bar(50 + (pos * 10), 100, 50 + (pos * 10) + 10,
-                120);  // Clear the character's space
-            // *creating cmmnd instance
-            Command remv_string;
-            remv_string.text = deletedChar;
-            remv_string.op = Command::remove;
-            store.push(remv_string);
-          } else if (pos < 999 && ch != 8) {  // Append character
-            buffer += ch;                     // Add the character to the string
-            char temp[2] = {ch, '\0'};
-            outtextxy(50 + (pos * 10), 100,
-                      temp);  // Display the character at the correct position
-            pos++;
-            Command add_string;
-            add_string.text = ch;
-            add_string.op = Command::ADD;
-            store.push(add_string);
+      case 26:  // Ctrl+Z for Undo
+        if (!commandStack.empty()) {
+          Command lastCommand = commandStack.top();
+          commandStack.pop();
+          if (lastCommand.op == Command::ADD) {
+            cursorPos--;
+            text.erase(cursorPos, 1);
+          } else if (lastCommand.op == Command::REMOVE) {
+            text.insert(cursorPos, lastCommand.text);
+            cursorPos += lastCommand.text.length();
           }
         }
-
-        text = buffer;  // Update the text variable with the entered string
         break;
-      }
 
-      case '2': {  // Save text
+      case 13:  // Enter
+        text.insert(cursorPos, "\n");
+        cursorPos++;
+        break;
+
+      case 27:  // ESC to exit
+        closegraph();
+        return 0;
+
+      case 59: {  // F5 for Save
         ofstream file("notepad.txt");
         if (file.is_open()) {
           file << text;
           file.close();
-          cleardevice();
-          outtextxy(50, 50, const_cast<char *>("Text saved to 'notepad.txt'"));
-        } else {
-          cleardevice();
-          outtextxy(50, 50,
-                    const_cast<char *>("Error: Could not save the text."));
+          drawStatusBar("Text saved to notepad.txt!");
         }
-        delay(2000);  // Allow user to read the message
         break;
       }
-      case '3': {  // Exit
-        cleardevice();
-        outtextxy(50, 50, const_cast<char *>("Exiting..."));
-        delay(1000);
+
+      case 61:  // F6 to Exit
         closegraph();
         return 0;
-      }
-      default: {  // Invalid choice
-        cleardevice();
-        outtextxy(50, 50, const_cast<char *>("Invalid choice! Try again."));
-        delay(500);  // Allow user to read the message
+
+      default:  // Add character to text
+        if (text.length() < MAX_TEXT_LENGTH) {
+          text.insert(cursorPos, 1, ch);
+          Command addCommand = {Command::ADD, string(1, ch)};
+          commandStack.push(addCommand);
+          cursorPos++;
+        } else {
+          drawStatusBar("Maximum text length reached!");
+        }
         break;
-      }
     }
   }
 
-  closegraph();
   return 0;
 }

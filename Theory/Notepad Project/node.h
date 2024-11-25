@@ -5,24 +5,22 @@ template <class T>
 class Node {
  private:
   T data;
-  Node *next;  // Pointer to the next node
+  Node* next;
 
  public:
-  Node(T data) {
-    this->data = data;
-    next = nullptr;
-  }
+  // Constructor
+  Node(T data) : data(data), next(nullptr) {}
 
-  // Default constructor
-  Node() { next = nullptr; }
+  // Default Constructor
+  Node() : next(nullptr) {}
 
-  T get_data() { return data; }
+  T get_data() const { return data; }
 
   void set_data(T data) { this->data = data; }
 
-  Node *get_next() { return next; }
+  Node* get_next() const { return next; }
 
-  void set_next(Node *next) { this->next = next; }
+  void set_next(Node* next) { this->next = next; }
 };
 
 #endif

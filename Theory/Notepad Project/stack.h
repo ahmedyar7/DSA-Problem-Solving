@@ -1,47 +1,55 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "Node.h"
-using namespace std;
+#include <stdexcept>
+
+#include "node.h"
 
 template <class T>
 class stack {
-  int size;
-  Node<T> *;
+ private:
+  Node<T>* head;
 
  public:
-  stack(int size) {
-    this->size = size;
-    = nullptr;
-  }
-  stack();  // Default constructor
+  // Default Constructor
+  stack() : head(nullptr) {}
 
+  // Destructor for cleanup
+  ~stack() {
+    while (!empty()) {
+      pop();
+    }
+  }
+
+  // Push operation
   void push(T data) {
-    Node<T> *new_node = new Node<T>(data);
-    new_node->setNext();
-    = new_node;
+    Node<T>* new_node = new Node<T>(data);
+    new_node->set_next(head);
+    head = new_node;
   }
 
+  // Pop operation
   void pop() {
-    if (!= nullptr) {
-      Node<T> *temp = ;
-      = temp->getNext();
-      temp->setNext(nullptr);
+    if (!empty()) {
+      Node<T>* temp = head;
+      head = head->get_next();
       delete temp;
     } else {
-      throw runtime_error("Stack is empty. Cannot pop.");
+      throw std::runtime_error("Stack is empty. Cannot pop.");
     }
   }
 
-  T top() {
-    if (!= nullptr) {
-      return->getData();
+  // Peek operation
+  T top() const {
+    if (!empty()) {
+      return head->get_data();
     } else {
-      throw runtime_error("Stack is empty. Cannot get top.");
+      throw std::runtime_error("Stack is empty. Cannot get top.");
     }
-
-    bool empty() { return == nullptr; }
   }
+
+  // Check if the stack is empty
+  bool empty() const { return head == nullptr; }
 };
 
 #endif
