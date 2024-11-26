@@ -19,7 +19,7 @@ class BinaryTree {
  private:
   TreeNode* root;
 
-  // Helper function for insertion
+  // Helper for insertion
   TreeNode* insert_node(TreeNode* node, int value) {
     if (node == nullptr) return new TreeNode(value);
     if (value > node->data) node->right = insert_node(node->right, value);
@@ -27,34 +27,47 @@ class BinaryTree {
     return node;
   }
 
-  // Tree Travesal Functions
-  void preorder_traversal(TreeNode* node) {
-    if (node == nullptr) return;
+  // Helper for delete
+  TreeNode* delete_binary_tree(TreeNode* node) {
+    if (node == nullptr) return nullptr;
+    delete_binary_tree(node->left);
+    delete_binary_tree(node->right);
+    return node;
+  }
+
+  // Helper function for traversals
+
+  void preorder_traversal(TreeNode* node) {  // Preorder Traversal
+    if (node == nullptr) {
+      return;
+    }
     cout << node->data << " ";
     preorder_traversal(node->left);
     preorder_traversal(node->right);
   }
 
-  void inorder_traversal(TreeNode* node) {
-    if (node == nullptr) return;
-    inorder_traversal(node->left);
-    cout << node->data << " ";
-    inorder_traversal(node->right);
-  }
-
-  void postorder_traversal(TreeNode* node) {
-    if (node == nullptr) return;
+  void postorder_traversal(TreeNode* node) {  // Postorder Traversal
+    if (node == nullptr) {
+      return;
+    }
     postorder_traversal(node->left);
     postorder_traversal(node->right);
     cout << node->data << " ";
   }
 
-  void levelorder_traversal(TreeNode* node) {
-    if (node == nullptr) return;
+  void inorder_traversal(TreeNode* node) {  // Inorder Traversal
+    if (node == nullptr) {
+      return;
+    }
+    inorder_traversal(node->left);
+    cout << node->data << " ";
+    inorder_traversal(node->right);
+  }
 
+  void levelorder_traversal(TreeNode* node) {  // Level order traversal
+    if (node == nullptr) return;
     queue<TreeNode*> q;
     q.push(root);
-
     while (!q.empty()) {
       TreeNode* current = q.front();
       cout << current->data << " ";
@@ -64,88 +77,66 @@ class BinaryTree {
     }
   }
 
-  void delete_tree(TreeNode* node) {
-    if (node == nullptr) return;
-    delete_tree(node->left);
-    delete_tree(node->right);
-    delete node;
+  int count_nodes(TreeNode* node) {  // Counts the the total nodes
+    if (node == nullptr) return 0;
+    int left = count_nodes(node->left);
+    int right = count_nodes(node->right);
+    return left + right + 1;
   }
 
-  int count_nodes(TreeNode* node) {
-    if (node == nullptr) {
-      return 0;
+  int get_height(TreeNode* node) {
+    if (node == nullptr) return -1;  // Base case
+    int left = get_height(node->left);
+    int right = get_height(node->right);
+    return max(left, right) + 1;
+  }
+
+  int count_nodes_with_deg2(TreeNode* node) {  // Nodes with degree = 2
+    if (node == nullptr) return 0;
+    int left = count_nodes_with_deg2(node->left);
+    int right = count_nodes_with_deg2(node->right);
+    if (node->left != nullptr && node->right != nullptr) {
+      return left + right + 1;
     }
+    return left + right;
+  }
 
-    int x = count_nodes(node->left);
-    int y = count_nodes(node->right);
+  int count_leaf_nodes(TreeNode* node) {  // Terminal nodes
+    if (node == nullptr) return 0;        // Base case
+    if (node->left == nullptr && node->right == nullptr) {
+      return 1;  // Increment for leaf node
+    }
+    int left = count_leaf_nodes(node->left);
+    int right = count_leaf_nodes(node->right);
+    return left + right;  // Sum up leaf nodes from both subtrees
+  }
 
-    return x + y + 1;
+  int find_index(int inorder_arr[], int inorder_start, int inorder_end,
+                 int value) {  // Find Preorder value in inorder array
+    // code
   }
 
  public:
   BinaryTree() { root = nullptr; }
-  ~BinaryTree() { delete_tree(root); }
 
-  void insert(int value) {
-    if (value <= 0) return;
-    root = insert_node(root, value);
-  }
+  void insert(int value) { root = insert_node(root, value); }
 
   void display() {
-    cout << "Preorder Traversal\n";
+    cout << "Preorder Display\n";
     preorder_traversal(root);
-    cout << endl << endl;
-
-    cout << "Inorder Traversal\n";
+    cout << "\nInorder Traversal\n";
     inorder_traversal(root);
-    cout << endl << endl;
-
-    cout << "Postorder Traversal\n";
+    cout << "\nPostorder Traversal\n";
     postorder_traversal(root);
-    cout << endl << endl;
 
-    cout << "Level Order Traversal\n";
+    cout << "\nLevel order Traversal\n";
     levelorder_traversal(root);
-    cout << endl << endl;
-  }
-
-  int find_index(int inorder_arr[], int start, int end, int value) {
-    for (int i = start; i <= end; i++)
-      if (inorder_arr[i] == value) return i;
-    return -1;
-  }
-
-  TreeNode* construct_tree(int preorder_arr[], int inorder_arr[],
-                           int& preorder_index, int inorder_start,
-                           int inorder_end) {
-    if (inorder_start > inorder_end) return nullptr;
-
-    int rootvalue = preorder_arr[preorder_index++];
-    TreeNode* rootnode = new TreeNode(rootvalue);
-
-    if (inorder_start == inorder_end) return rootnode;
-
-    int rootindex =
-        find_index(inorder_arr, inorder_start, inorder_end, rootvalue);
-
-    rootnode->left = construct_tree(preorder_arr, inorder_arr, preorder_index,
-                                    inorder_start, rootindex - 1);
-    rootnode->left = construct_tree(preorder_arr, inorder_arr, preorder_index,
-                                    rootindex + 1, inorder_end);
-
-    return rootnode;
-  }
-
-  int maxDepth(TreeNode* root) {
-    if (root == nullptr) {
-      return 0;
-    }
-
-    int left_height = maxDepth(root->left);
-    int right_height = maxDepth(root->right);
-
-    return 1 + max(left_height, right_height);
   }
 
   int count() { return count_nodes(root); }
+  int height() { return get_height(root); }
+  int leaf_nodes() { return count_leaf_nodes(root); }
+  int node_deg2() { return count_nodes_with_deg2(root); }
+
+  ~BinaryTree() { delete_binary_tree(root); }
 };
