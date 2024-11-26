@@ -1,3 +1,6 @@
+#ifndef BINARY_TREE_H
+#define BINARY_TREE_H
+
 #include <iostream>
 #include <queue>
 using namespace std;
@@ -56,9 +59,7 @@ class BinaryTree {
   }
 
   void inorder_traversal(TreeNode* node) {  // Inorder Traversal
-    if (node == nullptr) {
-      return;
-    }
+    if (node == nullptr) return;
     inorder_traversal(node->left);
     cout << node->data << " ";
     inorder_traversal(node->right);
@@ -147,7 +148,6 @@ class BinaryTree {
     inorder_traversal(root);
     cout << "\nPostorder Traversal\n";
     postorder_traversal(root);
-
     cout << "\nLevel order Traversal\n";
     levelorder_traversal(root);
   }
@@ -159,3 +159,5 @@ class BinaryTree {
 
   ~BinaryTree() { delete_binary_tree(root); }
 };
+
+#endif
