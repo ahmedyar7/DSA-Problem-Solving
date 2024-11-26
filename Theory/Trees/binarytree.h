@@ -1,168 +1,163 @@
-#include <cmath>
-#include <functional>  // For std::function
-#include <iomanip>     // For better formatting
+#ifndef BINARY_TREE_H
+#define BINARY_TREE_H
+
 #include <iostream>
 #include <queue>
-#include <string>
-#include <vector>
 using namespace std;
 
-// Node class definition
-class Node {
+class TreeNode {
  public:
   int data;
-  Node* left;
-  Node* right;
+  TreeNode* left;
+  TreeNode* right;
 
-  Node(int data) : data(data), left(nullptr), right(nullptr) {}
+  TreeNode(int data) {
+    this->data = data;
+    left = nullptr;
+    right = nullptr;
+  }
 };
 
-// BinaryTree class definition
 class BinaryTree {
  private:
-  Node* root;
+  TreeNode* root;
 
-  // Helper Function to insert nodes
-  Node* insert_node(Node* node, int value) {
-    if (node == nullptr) return new Node(value);
-    if (value < node->data) node->left = insert_node(node->left, value);
+  // Helper for insertion
+  TreeNode* insert_node(TreeNode* node, int value) {
+    if (node == nullptr) return new TreeNode(value);
     if (value > node->data) node->right = insert_node(node->right, value);
+    if (value < node->data) node->left = insert_node(node->left, value);
     return node;
   }
 
-  // Traversal functions
-  // Inorder Traversal
-  void inorder_traversal(Node* root) {
-    if (root == nullptr) return;
-    inorder_traversal(root->left);
-    cout << root->data << " ";
-    inorder_traversal(root->right);
+  // Helper for delete
+  TreeNode* delete_binary_tree(TreeNode* node) {
+    if (node == nullptr) return nullptr;
+    delete_binary_tree(node->left);
+    delete_binary_tree(node->right);
+    return node;
   }
 
-  // Preorder Traversal
-  void preorder_traversal(Node* root) {
-    if (root == nullptr) return;
-    cout << root->data << " ";
-    preorder_traversal(root->left);
-    preorder_traversal(root->right);
+  // Helper function for traversals
+
+  void preorder_traversal(TreeNode* node) {  // Preorder Traversal
+    if (node == nullptr) {
+      return;
+    }
+    cout << node->data << " ";
+    preorder_traversal(node->left);
+    preorder_traversal(node->right);
   }
 
-  // Postorder Traversal
-  void postorder_traversal(Node* root) {
-    if (root == nullptr) return;
-    postorder_traversal(root->left);
-    postorder_traversal(root->right);
-    cout << root->data << " ";
+  void postorder_traversal(TreeNode* node) {  // Postorder Traversal
+    if (node == nullptr) {
+      return;
+    }
+    postorder_traversal(node->left);
+    postorder_traversal(node->right);
+    cout << node->data << " ";
   }
 
-  // Level Order Traversal
-  void levelorder_traversal(Node* root) {
-    if (root == nullptr) return;
-    queue<Node*> q;
-    q.push(root);  // Pushing Root Node
+  void inorder_traversal(TreeNode* node) {  // Inorder Traversal
+    if (node == nullptr) return;
+    inorder_traversal(node->left);
+    cout << node->data << " ";
+    inorder_traversal(node->right);
+  }
 
+  void levelorder_traversal(TreeNode* node) {  // Level order traversal
+    if (node == nullptr) return;
+    queue<TreeNode*> q;
+    q.push(root);
     while (!q.empty()) {
-      Node* current = q.front();
+      TreeNode* current = q.front();
       cout << current->data << " ";
       q.pop();
-
       if (current->left != nullptr) q.push(current->left);
       if (current->right != nullptr) q.push(current->right);
     }
   }
 
-  // Delete Tree
-  void clear_tree(Node* root) {
-    if (root == nullptr) return;
-    clear_tree(root->left);
-    clear_tree(root->right);
-    delete root;
+  int count_nodes(TreeNode* node) {  // Counts the the total nodes
+    if (node == nullptr) return 0;
+    int left = count_nodes(node->left);
+    int right = count_nodes(node->right);
+    return left + right + 1;
+  }
+
+  int get_height(TreeNode* node) {
+    if (node == nullptr) return -1;  // Base case
+    int left = get_height(node->left);
+    int right = get_height(node->right);
+    return max(left, right) + 1;
+  }
+
+  int count_nodes_with_deg2(TreeNode* node) {  // Nodes with degree = 2
+    if (node == nullptr) return 0;
+    int left = count_nodes_with_deg2(node->left);
+    int right = count_nodes_with_deg2(node->right);
+    if (node->left != nullptr && node->right != nullptr) {
+      return left + right + 1;
+    }
+    return left + right;
+  }
+
+  int count_leaf_nodes(TreeNode* node) {  // Terminal nodes
+    if (node == nullptr) return 0;        // Base case
+    if (node->left == nullptr && node->right == nullptr) {
+      return 1;  // Increment for leaf node
+    }
+    int left = count_leaf_nodes(node->left);
+    int right = count_leaf_nodes(node->right);
+    return left + right;  // Sum up leaf nodes from both subtrees
+  }
+
+  int find_index(int inorder_arr[], int start, int end, int value) {
+    for (int i = start; i <= end; i++)
+      if (inorder_arr[i] == value) return i;
+    return -1;
+  }
+
+  TreeNode* construct_tree(int inorder_arr[], int preorder_arr[],
+                           int& preorder_index, int inorder_start,
+                           int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder_arr[preorder_index++];
+    TreeNode* root_node = new TreeNode(rootvalue);
+
+    if (inorder_start == inorder_end) return root_node;
+
+    int root_index =
+        find_index(inorder_arr, inorder_start, inorder_end, rootvalue);
+    root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
+                                     inorder_start, root_index - 1);
+    root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
+                                     root_index + 1, inorder_end);
   }
 
  public:
-  // Constructor
-  BinaryTree() : root(nullptr) {}
+  BinaryTree() { root = nullptr; }
 
-  // Insert function
   void insert(int value) { root = insert_node(root, value); }
 
-  // Display tree traversals
-  void display_traversals() {
-    if (root == nullptr) {
-      cout << "The tree is empty.\n";
-      return;
-    }
-    cout << "Inorder Traversal: ";
-    inorder_traversal(root);
-    cout << "\nPreorder Traversal: ";
+  void display() {
+    cout << "Preorder Display\n";
     preorder_traversal(root);
-    cout << "\nPostorder Traversal: ";
+    cout << "\nInorder Traversal\n";
+    inorder_traversal(root);
+    cout << "\nPostorder Traversal\n";
     postorder_traversal(root);
-    cout << endl;
-    cout << "\n Level Order Traversal: ";
+    cout << "\nLevel order Traversal\n";
     levelorder_traversal(root);
-    cout << endl;
   }
 
-  // Return the root (used for ASCII visualization)
-  Node* get_root() { return root; }
+  int count() { return count_nodes(root); }
+  int height() { return get_height(root); }
+  int leaf_nodes() { return count_leaf_nodes(root); }
+  int node_deg2() { return count_nodes_with_deg2(root); }
 
-  // Destructor
-  ~BinaryTree() { clear_tree(root); }
+  ~BinaryTree() { delete_binary_tree(root); }
 };
 
-// Helper Function: Converts tree to 2D grid for ASCII visualization
-void build_tree_grid(Node* root, vector<vector<string>>& grid, int row, int col,
-                     int depth, int offset) {
-  if (root == nullptr) return;
-
-  // Place the root in the grid
-  grid[row][col] = to_string(root->data);
-
-  // Calculate positions for left and right children
-  int child_offset = offset / 2;
-  if (root->left) {
-    grid[row + 1][col - child_offset] = "/";
-    build_tree_grid(root->left, grid, row + 2, col - child_offset * 2, depth,
-                    child_offset);
-  }
-  if (root->right) {
-    grid[row + 1][col + child_offset] = "\\";
-    build_tree_grid(root->right, grid, row + 2, col + child_offset * 2, depth,
-                    child_offset);
-  }
-}
-
-// Function: Visualizes the binary tree using ASCII art
-void print_ascii_tree(Node* root) {
-  if (root == nullptr) {
-    cout << "The tree is empty.\n";
-    return;
-  }
-
-  // Determine depth of the tree
-  function<int(Node*)> tree_depth = [&](Node* node) {
-    if (node == nullptr) return 0;
-    return 1 + max(tree_depth(node->left), tree_depth(node->right));
-  };
-
-  int depth = tree_depth(root);
-
-  // Dimensions for the grid
-  int rows = depth * 2 - 1;
-  int cols = pow(2, depth) * 2;  // Space for nodes and edges
-
-  // Initialize grid with spaces
-  vector<vector<string>> grid(rows, vector<string>(cols, " "));
-
-  // Build the grid representation of the tree
-  build_tree_grid(root, grid, 0, cols / 2, depth, cols / 4);
-
-  // Print the grid row by row
-  for (const auto& row : grid) {
-    for (const auto& cell : row) {
-      cout << cell;
-    }
-    cout << endl;
-  }
-}
+#endif

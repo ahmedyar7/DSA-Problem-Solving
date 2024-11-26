@@ -35,6 +35,6 @@ int main() {
   radix_sort(arr, n);
   print_arr(arr, n);
 
-  // shell_sort(arr, n);
-  // print_arr(arr, n);
+  shell_sort(arr, n);
+  print_arr(arr, n);
 }
