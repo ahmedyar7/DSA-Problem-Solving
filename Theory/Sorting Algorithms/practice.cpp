@@ -174,8 +174,10 @@ void counting_sort(int arr[], int n, int exp) {
     output[--counter[digit]] = arr[i];
   }
   for (int i = 0; i <= n - 1; i++) {
-    output[i] = arr[i];
+    arr[i] = output[i];
   }
+  delete[] counter;
+  delete[] output;
 }
 
 void radix_sort(int arr[], int n) {

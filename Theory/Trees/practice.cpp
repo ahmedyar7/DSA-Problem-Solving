@@ -111,9 +111,28 @@ class BinaryTree {
     return left + right;  // Sum up leaf nodes from both subtrees
   }
 
-  int find_index(int inorder_arr[], int inorder_start, int inorder_end,
-                 int value) {  // Find Preorder value in inorder array
-    // code
+  int find_index(int inorder_arr[], int start, int end, int value) {
+    for (int i = start; i <= end; i++)
+      if (inorder_arr[i] == value) return i;
+    return -1;
+  }
+
+  TreeNode* construct_tree(int inorder_arr[], int preorder_arr[],
+                           int& preorder_index, int inorder_start,
+                           int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder_arr[preorder_index++];
+    TreeNode* root_node = new TreeNode(rootvalue);
+
+    if (inorder_start == inorder_end) return root_node;
+
+    int root_index =
+        find_index(inorder_arr, inorder_start, inorder_end, rootvalue);
+    root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
+                                     inorder_start, root_index - 1);
+    root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
+                                     root_index + 1, inorder_end);
   }
 
  public:
