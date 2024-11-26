@@ -79,13 +79,11 @@ class BinaryTree {
 
   int count_nodes(TreeNode* node) {  // Counts the the total nodes
     if (node == nullptr) return 0;
-    int left = count_nodes(node->left);
-    int right = count_nodes(node->right);
-    return left + right + 1;
+    return count_nodes(node->left) + count_nodes(node->right) + 1;
   }
 
   int get_height(TreeNode* node) {
-    if (node == nullptr) return -1;  // Base case
+    if (node == nullptr) return -1;
     int left = get_height(node->left);
     int right = get_height(node->right);
     return max(left, right) + 1;
@@ -95,20 +93,14 @@ class BinaryTree {
     if (node == nullptr) return 0;
     int left = count_nodes_with_deg2(node->left);
     int right = count_nodes_with_deg2(node->right);
-    if (node->left != nullptr && node->right != nullptr) {
-      return left + right + 1;
-    }
+    if (node->left && node->right) return left + right + 1;
     return left + right;
   }
 
   int count_leaf_nodes(TreeNode* node) {  // Terminal nodes
-    if (node == nullptr) return 0;        // Base case
-    if (node->left == nullptr && node->right == nullptr) {
-      return 1;  // Increment for leaf node
-    }
-    int left = count_leaf_nodes(node->left);
-    int right = count_leaf_nodes(node->right);
-    return left + right;  // Sum up leaf nodes from both subtrees
+    if (node == nullptr) return 0;
+    if (node->left == nullptr && node->right == nullptr) return 1;
+    return count_leaf_nodes(node->left) + count_leaf_nodes(node->right);
   }
 
   int find_index(int inorder_arr[], int start, int end, int value) {
@@ -131,8 +123,8 @@ class BinaryTree {
         find_index(inorder_arr, inorder_start, inorder_end, rootvalue);
     root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
                                      inorder_start, root_index - 1);
-    root_node->left = construct_tree(inorder_arr, preorder_arr, preorder_index,
-                                     root_index + 1, inorder_end);
+    root_node->right = construct_tree(inorder_arr, preorder_arr, preorder_index,
+                                      root_index + 1, inorder_end);
   }
 
  public:
