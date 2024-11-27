@@ -43,7 +43,7 @@ class Algorithms {
 
   // Helper Function for the Quick Sort
   int partition(int arr[], int low, int high) {
-    int left = low;
+    int left = low + 1;
     int right = high;
     int pivot = arr[low];
 
@@ -56,6 +56,29 @@ class Algorithms {
 
     swap(arr[low], arr[right]);
     return right;
+  }
+
+  // Helper Function for the Radix Sort
+  void counting_sort(int arr[], int n, int exp) {
+    int *counter_arr = new int[10]();
+    int *output = new int[n];
+
+    for (int i = 0; i <= n - 1; i++) {
+      int digit = (arr[i] / exp) % 10;
+      counter_arr[digit]++;
+    }
+    for (int i = 1; i < 10; i++) {
+      counter_arr[i] += counter_arr[i - 1];
+    }
+    for (int i = n - 1; i >= 0; i--) {
+      int digit = (arr[i] / exp) % 10;
+      output[--counter_arr[digit]] = arr[i];
+    }
+    for (int i = 0; i <= n - 1; i++) {
+      arr[i] = output[i];
+    }
+    delete[] counter_arr;
+    delete[] output;
   }
 
  public:
@@ -108,7 +131,7 @@ class Algorithms {
   // Implementation of bubble sort
   void bubble_sort(int arr[], int n) {
     for (int i = n - 1; i >= 0; i--) {
-      for (int j = 0; j < n - 1; j++)
+      for (int j = 0; j < i; j++)
         if (arr[j + 1] < arr[j]) swap(arr[j + 1], arr[j]);
     }
   }
@@ -132,13 +155,13 @@ class Algorithms {
     int *counter_arr = new int[size]();
 
     for (int i = 0; i <= n - 1; i++) {
-      counter_arr[arr[i]]++;
+      counter_arr[arr[i] - min]++;
     }
 
     int index = 0;
-    for (int i = 0; i <= size; i++) {
+    for (int i = 0; i < size; i++) {
       while (counter_arr[i] > 0) {
-        arr[index++] = i;
+        arr[index++] = i + min;
         counter_arr[i]--;
       }
     }
@@ -155,10 +178,16 @@ class Algorithms {
 
   void quick_sort(int arr[], int low, int high) {
     if (low < high) {
-      int mid = low + (high - low) / 2;
       int index = partition(arr, low, high);
       quick_sort(arr, low, index - 1);
       quick_sort(arr, index + 1, high);
+    }
+  }
+
+  void radix_sort(int arr[], int n) {
+    int max = find_max(arr, n);
+    for (int exp = 1; max / exp >= 1; exp = exp * 10) {
+      counting_sort(arr, n, exp);
     }
   }
 };
