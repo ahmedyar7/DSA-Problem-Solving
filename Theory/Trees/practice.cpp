@@ -135,6 +135,16 @@ class BinaryTree {
     delete node;
   }
 
+  bool search_node(TreeNode* node, int key) {
+    if (node == nullptr) return false;
+    if (node->data == key)
+      return node;
+    else if (key > node->data)
+      return search_node(node->right, key);
+    else
+      return search_node(node->left, key);
+  }
+
  public:
   TreeNode* root;
   BinaryTree() { root = nullptr; }  // Initialize rootnode == null
@@ -153,6 +163,7 @@ class BinaryTree {
   void height() { cout << get_height(root); }
   void deg2() { cout << count_deg2(root); }
   void deg1() { cout << count_deg1(root); }
+  bool search(int key) { return search_node(root, key); }
 
   TreeNode* construct_tree(int preorder[], int inorder[], int& preorder_index,
                            int inorder_start, int inorder_end) {
