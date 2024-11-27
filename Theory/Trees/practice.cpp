@@ -62,8 +62,47 @@ class BinaryTree {
     }
   }
 
+  int find_index(int inorder[], int start, int end, int value) {
+    for (int i = start; i <= end; i++) {
+      if (inorder[i] == value) return i;
+    }
+    return -1;
+  }
   int count_nodes(TreeNode* node) {
     if (node == nullptr) return 0;
+    int left = count_nodes(node->left);
+    int right = count_nodes(node->right);
+    return left + right + 1;
+  }
+
+  int count_leafnodes(TreeNode* node) {
+    if (node == nullptr) return 0;
+    if (node->left == nullptr && node->right == nullptr) return 1;
+    return count_leafnodes(node->left) + count_leafnodes(node->right);
+  }
+
+  int get_height(TreeNode* node) {
+    if (node == nullptr) return -1;
+    return max(get_height(node->left), get_height(node->left)) + 1;
+  }
+
+  int count_deg2(TreeNode* node) {
+    if (node == nullptr) return 0;
+    int left = count_deg2(node->left);
+    int right = count_deg2(node->right);
+    if (node->left != nullptr && node->right != nullptr)
+      return left + right + 1;
+    return left + right;
+  }
+
+  int count_deg1(TreeNode* node) {
+    if (node == nullptr) return 0;
+    int left = count_deg1(node->left);
+    int right = count_deg1(node->right);
+    if ((node->left != nullptr && node->right == nullptr) &&
+        (node->left == nullptr && node->right != nullptr))
+      return left + right + 1;
+    return left + right;
   }
 
   // Helper Function for Deletion
@@ -87,5 +126,26 @@ class BinaryTree {
   void inorder() { inorder_traversal(root); }        // inorder
   void levelorder() { levelorder_traversal(root); }  // levelorder
 
-  ~BinaryTree() { delete_tree(root); }
+  void count() { cout << count_nodes(root); }  // Counts the total nodes
+  void count_leafs() { cout << count_leafnodes(root); }
+  void height() { cout << get_height(root); }
+  void deg2() { cout << count_deg2(root); }
+  void deg1() { cout << count_deg1(root); }
+
+  TreeNode* construct_tree(int preorder[], int inorder[], int& preorder_index,
+                           int inorder_start, int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder[preorder_index++];
+    TreeNode* rootnode = new TreeNode(rootvalue);
+
+    if (inorder_start == inorder_end) return rootnode;
+    int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
+
+    rootnode->left = construct_tree(preorder, inorder, preorder_index,
+                                    inorder_start, rootindex - 1);
+    rootnode->right = construct_tree(preorder, inorder, preorder_index,
+                                     rootindex + 1, inorder_end);
+  }
+  ~BinaryTree() { delete_tree(root); }  // Deletes Tres
 };
