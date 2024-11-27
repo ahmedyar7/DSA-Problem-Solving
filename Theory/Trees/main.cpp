@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "practice.cpp"
-
 using namespace std;
 
 int main() {
@@ -13,16 +12,17 @@ int main() {
   tree.insert(4);
   tree.insert(5);
   tree.insert(7);
-  tree.insert(6);
+  tree.insert(8);
 
-  tree.display();
+  cout << "Preorder Traversal\n";
+  tree.preorder();
 
-  cout << endl;
+  cout << "\nInorder Traversal\n";
+  tree.inorder();
 
-  cout << "Total Nodes: " << tree.count() << endl;
-  cout << "Height of Trees: " << tree.height() << endl;
-  cout << "Nodes with degree 2: " << tree.node_deg2() << endl;
-  cout << "Count Leaf Nodes: " << tree.leaf_nodes() << endl;
+  cout << "\nPostorder Traversal\n";
+  tree.postorder();
 
-  return 0;
+  cout << "\nLevel order Traversal\n";
+  tree.levelorder();
 }
