@@ -105,6 +105,28 @@ class BinaryTree {
     return left + right;
   }
 
+  int diameterHelper(TreeNode* root, int& diameter) {
+    if (root == nullptr) return 0;
+
+    // Recursively calculate the height of the left and right subtrees
+    int leftHeight = diameterHelper(root->left, diameter);
+    int rightHeight = diameterHelper(root->right, diameter);
+
+    // Update the diameter at each node: the longest path passes through the
+    // node
+    diameter = max(diameter, leftHeight + rightHeight);
+
+    // Return the height of the current node
+    return max(leftHeight, rightHeight) + 1;
+  }
+
+  int diameterOfBinaryTree(TreeNode* root) {
+    int diameter = 0;
+    diameterHelper(
+        root, diameter);  // Call the helper function that updates the diameter
+    return diameter;
+  }
+
   // Helper Function for Deletion
   void delete_tree(TreeNode* node) {
     if (node == nullptr) return;
