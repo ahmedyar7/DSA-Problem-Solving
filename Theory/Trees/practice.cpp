@@ -15,6 +15,43 @@ class TreeNode {
 };
 
 class BinaryTree {
+ public:
+  TreeNode* root;
+  BinaryTree() { root = nullptr; }  // Initialize rootnode == null
+
+  // Insertion in Binary Tree
+  void insert(int value) { root = insert_node(root, value); }
+
+  // Traversal In Binary Tree
+  void preorder() { preorder_traversal(root); }      // preorder
+  void postorder() { postorder_traversal(root); }    // postorder
+  void inorder() { inorder_traversal(root); }        // inorder
+  void levelorder() { levelorder_traversal(root); }  // levelorder
+
+  void count() { cout << count_nodes(root); }  // Counts the total nodes
+  void count_leafs() { cout << count_leafnodes(root); }
+  void height() { cout << get_height(root); }
+  void deg2() { cout << count_deg2(root); }
+  void deg1() { cout << count_deg1(root); }
+  bool search(int key) { return search_node(root, key); }
+
+  TreeNode* construct_tree(int preorder[], int inorder[], int& preorder_index,
+                           int inorder_start, int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder[preorder_index++];
+    TreeNode* rootnode = new TreeNode(rootvalue);
+
+    if (inorder_start == inorder_end) return rootnode;
+    int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
+
+    rootnode->left = construct_tree(preorder, inorder, preorder_index,
+                                    inorder_start, rootindex - 1);
+    rootnode->right = construct_tree(preorder, inorder, preorder_index,
+                                     rootindex + 1, inorder_end);
+  }
+  ~BinaryTree() { delete_tree(root); }  // Deletes Tres
+
  private:
   // Helper Function for insertion
   TreeNode* insert_node(TreeNode* node, int value) {
@@ -144,41 +181,4 @@ class BinaryTree {
     else
       return search_node(node->left, key);
   }
-
- public:
-  TreeNode* root;
-  BinaryTree() { root = nullptr; }  // Initialize rootnode == null
-
-  // Insertion in Binary Tree
-  void insert(int value) { root = insert_node(root, value); }
-
-  // Traversal In Binary Tree
-  void preorder() { preorder_traversal(root); }      // preorder
-  void postorder() { postorder_traversal(root); }    // postorder
-  void inorder() { inorder_traversal(root); }        // inorder
-  void levelorder() { levelorder_traversal(root); }  // levelorder
-
-  void count() { cout << count_nodes(root); }  // Counts the total nodes
-  void count_leafs() { cout << count_leafnodes(root); }
-  void height() { cout << get_height(root); }
-  void deg2() { cout << count_deg2(root); }
-  void deg1() { cout << count_deg1(root); }
-  bool search(int key) { return search_node(root, key); }
-
-  TreeNode* construct_tree(int preorder[], int inorder[], int& preorder_index,
-                           int inorder_start, int inorder_end) {
-    if (inorder_start > inorder_end) return nullptr;
-
-    int rootvalue = preorder[preorder_index++];
-    TreeNode* rootnode = new TreeNode(rootvalue);
-
-    if (inorder_start == inorder_end) return rootnode;
-    int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
-
-    rootnode->left = construct_tree(preorder, inorder, preorder_index,
-                                    inorder_start, rootindex - 1);
-    rootnode->right = construct_tree(preorder, inorder, preorder_index,
-                                     rootindex + 1, inorder_end);
-  }
-  ~BinaryTree() { delete_tree(root); }  // Deletes Tres
 };
