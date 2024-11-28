@@ -1,55 +1,63 @@
 #include <iostream>
 
-#include "notepad.cpp"
-#include "notepad.h"
+// #include "notepad.cpp"
+#include "notepad.h"  // Remove notepad.cpp include
 #include "textstack.h"
 using namespace std;
 
 int main() {
   Notepad notepad;
+  char input[MAX_TEXT_SIZE];
   int choice;
-  char buffer[MAX_TEXT_SIZE];  // Buffer for input
 
   do {
-    cout << "Welcome to Notepad-like Word Processor!\n";
-    cout << "1. Add text\n";
-    cout << "2. Delete text\n";
-    cout << "3. Undo last action\n";
-    cout << "4. Display current text\n";
-    cout << "5. Exit\n";
-    cout << "Please select an option (1-5): ";
+    cout << "\n1. Add Text\n2. Delete\n3. Move Up\n4. Move Down\n";
+    cout << "5. Move Left\n6. Move Right\n7. Undo\n8. Display\n";
+    cout << "9. Save\n10. Load\n11. Exit\n";
+    cout << "Choice: ";
     cin >> choice;
 
-    cin.ignore();  // Ignore newline after choice input
-
     switch (choice) {
-      case 1: {
-        cout << "Enter text to add: ";
-        cin.getline(buffer, MAX_TEXT_SIZE);
-        notepad.add_text(buffer);
+      case 1:
+        cout << "Enter text: ";
+        cin.ignore();
+        cin.getline(input, MAX_TEXT_SIZE);
+        notepad.add_text(input);
         break;
-      }
-      case 2: {
-        int length;
-        cout << "Enter number of characters to delete: ";
-        cin >> length;
-        notepad.delete_text(length);
+      case 2:
+        notepad.delete_text();
         break;
-      }
       case 3:
-        notepad.undo();
+        notepad.move_cursor_up();
         break;
       case 4:
-        notepad.display();
+        notepad.move_cursor_down();
         break;
       case 5:
-        cout << "Exiting application.\n";
+        notepad.move_cursor_left();
+        break;
+      case 6:
+        notepad.move_cursor_right();
+        break;
+      case 7:
+        notepad.undo();
+        break;
+      case 8:
+        notepad.display();
+        break;
+      case 9:
+        notepad.save_to_file("output.txt");
+        break;
+      case 10:
+        notepad.load_from_file("output.txt");
+        break;
+      case 11:
+        cout << "Exiting..." << endl;
         break;
       default:
-        cout << "Invalid option. Please try again.\n";
-        break;
+        cout << "Invalid choice!" << endl;
     }
-  } while (choice != 5);
+  } while (choice != 11);
 
   return 0;
 }
