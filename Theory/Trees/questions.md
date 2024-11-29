@@ -12,3 +12,4 @@
 - **Count edges**
 - **Making Tree from traversals**
 - **Balanced Binary tree**
+- **Diameter of the tree**
