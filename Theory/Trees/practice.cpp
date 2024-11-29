@@ -31,6 +31,7 @@ class BinaryTree {
   void height() { cout << get_height(root); }
   void deg2() { cout << count_deg2(root); }
   void deg1() { cout << count_deg1(root); }
+  bool isbalanced() { return balanced_tree(root); }
 
   Treenode* construct_tree(int preorder[], int inorder[], int& preorder_index,
                            int inorder_start, int inorder_end) {
@@ -150,5 +151,44 @@ class BinaryTree {
       if (inorder[i] == value) return i;
     }
     return -1;
+  }
+
+  bool balanced_tree(Treenode* node) {
+    if (node == nullptr) return false;
+    bool left = balanced_tree(node->left);
+    bool right = balanced_tree(node->right);
+
+    bool difference =
+        abs(get_height(node->left) - get_height(node->right) <= 1);
+    if (left && right && difference)
+      return true;
+    else
+      return false;
+  }
+
+  int diameter_of_tree(Treenode* node) {
+    if (node == nullptr) return 0;
+    int left_sub_tree = diameter_of_tree(node->left);
+    int right_sub_tree = diameter_of_tree(node->right);
+    int both_sub_tree = get_height(node->left) + get_height(node->right) + 1;
+
+    int diameter = 0;
+    diameter = max(left_sub_tree, max(right_sub_tree, both_sub_tree));
+    return diameter;
+  }
+
+  bool isSameTree(Treenode* p, Treenode* q) {
+    if (p == nullptr && q == nullptr) return true;
+    if (p == nullptr || q == nullptr) return false;
+
+    bool left = isSameTree(p->left, q->left);
+    bool right = isSameTree(p->right, q->right);
+    bool value = (p->data == q->data);
+
+    if (left && right && value)
+      return true;
+    else {
+      return false;
+    }
   }
 };
