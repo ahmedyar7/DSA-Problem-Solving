@@ -1,40 +1,26 @@
+#include <cstdlib>  // For rand() and srand()
+#include <ctime>    // For time()
 #include <iostream>
 
-// #include "algorithms.cpp"
 #include "practice.cpp"
 using namespace std;
 
 int main() {
-  int arr[] = {23,    12, 1,  54,   3,    0,    55,   11, 44,  233,
-               23111, 13, 43, 1,    4354, 153,  5423, 44, 343, 23,
-               12,    1,  54, 3,    0,    55,   11,   44, 233, 23111,
-               13,    43, 1,  4354, 153,  5423, 44,   343};
+  const int SIZE = 100;              // Size of the array
+  int arr[SIZE];                     // Array to store random numbers
+  int minRange = 1, maxRange = 100;  // Range of random numbers
+
+  // Seed the random number generator
+  srand(static_cast<unsigned int>(time(0)));
+
+  // Generate 100 random numbers and store them in the array
+  for (int i = 0; i < SIZE; ++i) {
+    arr[i] = minRange + (rand() % (maxRange - minRange + 1));
+  }
+
   int n = sizeof(arr) / sizeof(arr[0]);
 
-  // selection_sort(arr, n);
-  // print_arr(arr, n);
-
-  // insertion_sort(arr, n);
-  // print_arr(arr, n);
-
-  // bubble_sort(arr, n);
-  // print_arr(arr, n);
-
-  // merge_sort(arr, 0, n - 1);
-  // print_arr(arr, n);
-
-  // quick_sort(arr, 0, n - 1);
-  // print_arr(arr, n);
-
-  // count_sort(arr, n);
-  // print_arr(arr, n);
-
-  // bucket_sort(arr, n);
-  // print_arr(arr, n);
-
-  radix_sort(arr, n);
-  print_arr(arr, n);
-
-  shell_sort(arr, n);
-  print_arr(arr, n);
+  SortingAlgorithm sort;
+  sort.radix_sort(arr, n);
+  sort.print_arr(arr, n);
 }
