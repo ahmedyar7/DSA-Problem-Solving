@@ -1,25 +1,29 @@
 #include <iostream>
 
-#include "avl.cpp"
+#include "avl_practice.cpp"
 using namespace std;
 
 int main() {
-  AVLTree tree;
+  AVLTrees avlTree;
 
-  tree.insert(10);
-  tree.insert(20);
-  tree.insert(30);
-  tree.insert(40);
-  tree.insert(50);
-  tree.insert(25);
+  cout << "Inserting values into the AVL Tree..." << endl;
+  avlTree.insert(10);
+  avlTree.insert(20);
+  avlTree.insert(30);
+  avlTree.insert(40);
+  avlTree.insert(50);
+  avlTree.insert(25);
 
-  cout << "In-order traversal of the AVL tree: ";
-  tree.inOrderTraversal();
+  cout << "In-order traversal of the AVL Tree after insertion:" << endl;
+  avlTree.inorder();  // Expected: 10 20 25 30 40 50
+  cout << endl;
 
-  tree.remove(40);
+  cout << "Deleting value 40 from the AVL Tree..." << endl;
+  avlTree.delete_node(avlTree.root, 40);
 
-  cout << "In-order traversal after deletion: ";
-  tree.inOrderTraversal();
+  cout << "In-order traversal of the AVL Tree after deletion:" << endl;
+  avlTree.inorder();  // Expected: 10 20 25 30 50
+  cout << endl;
 
   return 0;
 }
