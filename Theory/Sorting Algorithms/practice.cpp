@@ -3,18 +3,18 @@ using namespace std;
 
 class SortingAlgorithm {
  public:
-  // Helper function for implementation of Print sortied array
   void print_arr(int arr[], int n) {
     for (int i = 0; i <= n - 1; i++) {
       cout << arr[i] << " ";
     }
+    cout << endl;
   }
 
   void selection_sort(int arr[], int n) {
     for (int i = 0; i <= n - 2; i++) {
       int mini = i;
       for (int j = i; j <= n - 1; j++) {
-        if (arr[j] < arr[mini]) {
+        if (arr[mini] > arr[j]) {
           mini = j;
         }
       }
@@ -59,12 +59,23 @@ class SortingAlgorithm {
     }
   }
 
+  void shell_sort(int arr[], int n) {
+    for (int gap = n / 2; gap >= 1; gap = gap / 2) {
+      for (int i = gap; i < n; i++) {
+        int j = i;
+        while (j >= gap && arr[j - gap] > arr[j]) {
+          swap(arr[j - gap], arr[j]);
+          j = j - gap;
+        }
+      }
+    }
+  }
+
   void count_sort(int arr[], int n) {
     int max = find_max(arr, n);
     int min = find_min(arr, n);
     int size = max - min + 1;
     int *counter_arr = new int[size]();
-
     for (int i = 0; i <= n - 1; i++) {
       counter_arr[arr[i]]++;
     }
@@ -77,54 +88,30 @@ class SortingAlgorithm {
     }
   }
 
-  void shell_sort(int arr[], int n) {
-    for (int gap = n / 2; gap >= 1; gap = gap / 2) {
-      for (int i = gap; i < n; i++) {
-        int j = i;
-        while (j >= i && arr[j - gap] > arr[j]) {
-          swap(arr[j - gap], arr[j]);
-          j = j - gap;
-        }
-      }
-    }
-  }
-
   void radix_sort(int arr[], int n) {
     int max = find_max(arr, n);
-    for (int exp = 1; max / exp >= 1; exp = exp * 10) {
+    for (int exp = 1; max / exp >= 1; exp = exp * 10)
       counting_sort(arr, n, exp);
-    }
   }
 
  private:
-  // helper function for the radix sort
   void counting_sort(int arr[], int n, int exp) {
     int *counter_arr = new int[10]();
     int *output = new int[n];
-
     for (int i = 0; i <= n - 1; i++) {
       int digit = (arr[i] / exp) % 10;
       counter_arr[digit]++;
     }
-
-    for (int i = 1; i < 10; i++) {
-      counter_arr[i] += counter_arr[i - 1];
-    }
-
+    for (int i = 1; i < 10; i++) counter_arr[i] += counter_arr[i - 1];
     for (int i = n - 1; i >= 0; i--) {
       int digit = (arr[i] / exp) % 10;
       output[--counter_arr[digit]] = arr[i];
     }
-
-    for (int i = 0; i <= n - 1; i++) {
-      arr[i] = output[i];
-    }
-
-    delete[] counter_arr;
+    for (int i = 0; i <= n - 1; i++) arr[i] = output[i];
     delete[] output;
+    delete[] counter_arr;
   }
 
-  // Helper functions for Count sort
   int find_max(int arr[], int n) {
     int max = arr[0];
     for (int i = 0; i <= n - 1; i++) {
@@ -145,7 +132,6 @@ class SortingAlgorithm {
     return min;
   }
 
-  // Helper Function for the Quick sort
   int partition(int arr[], int low, int high) {
     int left = low + 1;
     int right = high;
@@ -156,6 +142,7 @@ class SortingAlgorithm {
       while (left <= right && arr[right] > pivot) right--;
       if (left > right) {
         break;
+        ;
       }
       swap(arr[left], arr[right]);
     }
@@ -163,7 +150,6 @@ class SortingAlgorithm {
     return right;
   }
 
-  // Helper function for merge sort
   void merge(int arr[], int low, int mid, int high) {
     int left = low;
     int right = mid + 1;
@@ -182,6 +168,7 @@ class SortingAlgorithm {
     while (left <= mid) {
       temp[k++] = arr[left++];
     }
+
     while (right <= high) {
       temp[k++] = arr[right++];
     }
