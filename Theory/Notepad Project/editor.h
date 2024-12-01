@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 
+#include "configurations.cpp"  // Ensure the Command definition is included
 #include "stack.h"
 #include "ui_components.h"
 
@@ -45,7 +46,7 @@ class Editor {
 
     // Render text
     settextstyle(8, HORIZ_DIR, 1);
-    setcolor(Theme::TEXT);
+    // setcolor(Theme::TEXT);
 
     for (size_t i = 0; i < text.length(); i++) {
       if (text[i] == '\n' || x > 1240) {
@@ -60,7 +61,7 @@ class Editor {
       if (text[i] != ' ') {
         setcolor(COLOR(100, 100, 100));
         outtextxy(x + 1, y + 1, temp);
-        setcolor(Theme::TEXT);
+        // setcolor(Theme::TEXT);
         outtextxy(x, y, temp);
       } else {
         x += 8;
