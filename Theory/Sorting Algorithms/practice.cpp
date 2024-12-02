@@ -23,10 +23,13 @@ class SortingAlgorithm {
   }
 
   void bubble_sort(int arr[], int n) {
+    bool flag;
     for (int i = n - 1; i >= 0; i--) {
-      for (int j = 0; j < n - 1; j++) {
+      flag = false;
+      for (int j = 0; j < i; j++) {
         if (arr[j] > arr[j + 1]) {
           swap(arr[j], arr[j + 1]);
+          flag = true;
         }
       }
     }
