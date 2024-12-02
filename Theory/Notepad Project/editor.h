@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 
+#include "configurations.cpp"  // Ensure the Command definition is included
 #include "stack.h"
 #include "ui_components.h"
 
@@ -38,14 +39,10 @@ class Editor {
   void renderText() {
     ui.clearTextArea();
     ui.drawTitleBar();
-    ui.drawLineNumbers(1, 100);  // Adjust range as needed
+    ui.drawLineNumbers(1, 100);
 
-    int x = 50, y = 50;
-    int lineHeight = 25;
-
-    // Render text
-    settextstyle(8, HORIZ_DIR, 1);
-    setcolor(Theme::TEXT);
+    int x = 50, y = 50, lineHeight = 25;
+    settextstyle(8, HORIZ_DIR, 1);  // Consistent text styling
 
     for (size_t i = 0; i < text.length(); i++) {
       if (text[i] == '\n' || x > 1240) {
@@ -54,18 +51,9 @@ class Editor {
         if (text[i] == '\n') continue;
       }
 
-      ui.drawCursor(x, y, i == cursorPos);
-
       char temp[2] = {text[i], '\0'};
-      if (text[i] != ' ') {
-        setcolor(COLOR(100, 100, 100));
-        outtextxy(x + 1, y + 1, temp);
-        setcolor(Theme::TEXT);
-        outtextxy(x, y, temp);
-      } else {
-        x += 8;
-        continue;
-      }
+      setcolor(Theme::TextColor());
+      outtextxy(x, y, temp);
       x += 12;
     }
 
@@ -73,7 +61,6 @@ class Editor {
     ui.drawStatusBar("Press F5 to Save, F6 to Exit | Ctrl+Z to Undo",
                      cursorLine, cursorCol);
   }
-
   void handleInput(char ch) {
     switch (ch) {
       case 8:  // Backspace
