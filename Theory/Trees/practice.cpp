@@ -158,5 +158,19 @@ class BinaryTree {
     if (node == nullptr) return 0;
     int left_subtree = diameter_of_tree(node->left);
     int right_subtree = diameter_of_tree(node->right);
+    int both = 1 + get_height(node->left) + get_height(node->right);
+    int diameter = 0;
+    diameter = max(left_subtree, max(right_subtree, both));
+    return diameter;
+  }
+
+  bool same_tree(TreeNode* node1, TreeNode* node2) {
+    if (node1 == nullptr && node2 == nullptr) return true;
+    if (node1 == nullptr || node2 == nullptr) return false;
+    bool left_tree = same_tree(node1->left, node2->left);
+    bool right_tree = same_tree(node1->right, node2->right);
+    bool value = (node1->data == node2->data);
+    if (left_tree && right_tree, value) return true;
+    return false;
   }
 };
