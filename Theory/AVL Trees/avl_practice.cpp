@@ -3,13 +3,13 @@ using namespace std;
 
 class TreeNode {
  public:
-  int data;
-  int height;
+  int value;
   TreeNode* left;
   TreeNode* right;
+  int height;
 
-  TreeNode(int data) {
-    this->data = data;
+  TreeNode(int value) {
+    this->value = value;
     left = nullptr;
     right = nullptr;
     height = 1;
@@ -20,87 +20,57 @@ class AVLTrees {
  public:
   TreeNode* root;
   AVLTrees() { root = nullptr; }
-  void insert(int value) { insert_node(root, value); }
-  void remove(int value) { delete_node(root, value); }
+
+  void insert(int value) { root = insert_node(root, value); }
   void inorder() { inorder_traversal(root); }
+  void remove(int value) { delete_node(root, value); }
 
  private:
+  // Height of the nodes
   int height(TreeNode* node) {
-    if (node == nullptr) return 0;
+    if (node == nullptr) {
+      return 0;
+    }
     return node->height;
   }
 
+  // Balance factor of node
   int balance_factor(TreeNode* node) {
-    if (node == nullptr) return 0;
+    if (node == nullptr) {
+      return 0;
+    }
     return height(node->left) - height(node->right);
   }
 
+  // Left Rotation
   TreeNode* rotate_left(TreeNode* node) {
-    TreeNode* new_root = node->right;
-    TreeNode* subtree = new_root->left;
+    TreeNode* new_node = node->right;
+    TreeNode* subtree = new_node->left;
 
-    new_root->left = node;
+    new_node->left = node;
     node->right = subtree;
 
     node->height = 1 + max(height(node->left), height(node->right));
-    new_root->height = 1 + max(height(new_root->left), height(new_root->right));
+    new_node->height = 1 + max(height(new_node->left), height(new_node->right));
 
-    return new_root;
+    return new_node;
   }
 
+  // Right Rotation
   TreeNode* rotate_right(TreeNode* node) {
-    TreeNode* new_root = node->left;
-    TreeNode* subtree = new_root->right;
+    TreeNode* new_node = node->left;
+    TreeNode* subtree = new_node->right;
 
-    new_root->right = node;
+    new_node->right = node;
     node->left = subtree;
 
     node->height = 1 + max(height(node->left), height(node->right));
-    new_root->height = 1 + max(height(new_root->left), height(new_root->right));
+    new_node->height = 1 + max(height(new_node->left), height(new_node->right));
 
-    return new_root;
+    return new_node;
   }
 
-  TreeNode* insert_node(TreeNode* node, int value) {
-    if (node == nullptr) return new TreeNode(value);
-    if (value > node->data) {
-      node->right = insert_node(node->right, value);
-    } else if (value < node->data) {
-      node->left = insert_node(node->left, value);
-    } else {
-      return node;
-    }
-
-    int balance = balance_factor(node);
-    node->height = 1 + max(height(node->left), height(node->right));
-
-    // LL Case
-    if (balance > 1 && value < node->left->data) {
-      return rotate_right(node);
-    }
-
-    // RR Case
-    else if (balance < -1 && value > node->right->data) {
-      return rotate_left(node);
-    }
-
-    // LR Case
-    else if (balance > 1 && value > node->left->data) {
-      node->left = rotate_left(node->left);
-      return rotate_right(node);
-    }
-
-    // RL Case
-    else if (balance < -1 && value < node->right->data) {
-      node->right = rotate_right(node->right);
-      return rotate_left(node);
-    }
-
-    else {
-      return node;
-    }
-  }
-
+  // Minimum node
   TreeNode* find_min_node(TreeNode* node) {
     TreeNode* current = node;
     while (current->left != nullptr) {
@@ -109,27 +79,66 @@ class AVLTrees {
     return current;
   }
 
+  // Insert Node
+  TreeNode* insert_node(TreeNode* node, int value) {
+    if (node == nullptr) {
+      return new TreeNode(value);
+    }
+    if (value > node->value) {
+      node->right = insert_node(node->right, value);
+    } else if (value < node->value) {
+      node->left = insert_node(node->left, value);
+    } else {
+      return node;
+    }
+
+    // Recalaculate height
+    node->height = 1 + max(height(node->left), height(node->right));
+
+    // Balance Factor
+    int balance = balance_factor(node);
+
+    // --- Rotation Cases --- //
+
+    // LL Case
+    if (balance > 1 && node->left->value < value) {
+      return rotate_right(node);
+    }
+    // RR Case
+    else if (balance < -1 && node->right->value > value) {
+      return rotate_left(node);
+    }
+    // LR Case
+    else if (balance > 1 && node->left->value > value) {
+      node->left = rotate_left(node->left);
+      return rotate_right(node);
+    }
+    // RL Case
+    else if (balance < -1 && node->right->value < value) {
+      node->right = rotate_right(node->right);
+      return rotate_left(node);
+    }
+    // Other condition
+    else {
+      return node;
+    }
+  }
+
   TreeNode* delete_node(TreeNode* node, int value) {
     if (node == nullptr) {
       return nullptr;
     }
-    if (value > node->data) {
+    if (value > node->value) {
       node->right = delete_node(node->right, value);
-    } else if (value < node->data) {
+    } else if (value < node->value) {
       node->left = delete_node(node->left, value);
     }
 
     else {
-      // No Child Nodes
+      // No children
       if (node->left == nullptr && node->right == nullptr) {
         delete node;
         return nullptr;
-      }
-      // No Right Children
-      else if (node->right == nullptr) {
-        TreeNode* temp = node->left;
-        delete node;
-        return temp;
       }
       // No left children
       else if (node->left == nullptr) {
@@ -137,16 +146,27 @@ class AVLTrees {
         delete node;
         return temp;
       }
-      // Two children
+      // No right child
+      else if (node->right == nullptr) {
+        TreeNode* temp = node->left;
+        delete node;
+        return temp;
+      }
+      // Contain Both children
+      // delete the smallest children in right subtree
       else {
         TreeNode* temp = find_min_node(node->right);
-        node->data = temp->data;
-        node->right = delete_node(node->right, temp->data);
+        node->value = temp->value;
+        node->right = delete_node(node->right, temp->value);
       }
     }
 
-    int balance = balance_factor(node);
+    // Re-calculate the height
     node->height = 1 + max(height(node->left), height(node->right));
+    // Balance factor
+    int balance = balance_factor(node);
+
+    // --- Balance Condition --- //
 
     // LL Case
     if (balance > 1 && balance_factor(node->left) >= 0) {
@@ -157,7 +177,7 @@ class AVLTrees {
       return rotate_left(node);
     }
     // LR Case
-    else if (balance > 1 && balance_factor(node->left) < 0) {
+    else if (balance > 1 && balance_factor(node->left) <= 0) {
       node->left = rotate_left(node->left);
       return rotate_right(node);
     }
@@ -165,15 +185,18 @@ class AVLTrees {
     else if (balance < -1 && balance_factor(node->right) >= 0) {
       node->right = rotate_right(node->right);
       return rotate_left(node);
+    } else {
+      return node;
     }
-
-    return node;
   }
 
+  // Helper for inorder traversal
   void inorder_traversal(TreeNode* node) {
-    if (node == nullptr) return;
+    if (node == nullptr) {
+      return;
+    }
     inorder_traversal(node->left);
-    cout << node->data << " ";
+    cout << node->value << " ";
     inorder_traversal(node->right);
   }
 };
