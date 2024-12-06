@@ -84,16 +84,26 @@ class UIManager {
     }
   }
 
-  void drawCursor(int x, int y, bool visible) {
-    if (visible && (GetTickCount() / 500) % 2) {  // Blinking cursor
-      setfillstyle(SOLID_FILL, Theme::Accent());  // Cursor color
-      bar(x - 1, y, x + 1, y + 20);               // Draw cursor
+  void drawCursor(int x, int y, bool atEnd) {
+    // Make sure the cursor is visible at the current position
+    if (!atEnd) {
+      setcolor(RED);  // Set a visible color for the cursor (e.g., red)
+      rectangle(x, y, x + 2, y + 16);  // Draw a vertical line for the cursor
     }
   }
 
-  void clearTextArea() {
-    setfillstyle(SOLID_FILL, Theme::Background());
-    bar(40, 40, width, height - 40);  // Clear text area (main screen)
+  void UIManager::clearTextArea() {
+    // Set background color to a neutral color (e.g., white or light gray)
+    setbkcolor(WHITE);  // Adjust to your preference
+    cleardevice();  // Clear the graphics window, but ensure this is done only
+                    // in necessary areas
+  }
+
+  void drawTextArea() {
+    setfillstyle(SOLID_FILL,
+                 LIGHTGRAY);  // Set light background for the text area
+    bar(50, 50, 1240, 670);   // Draw the text area with a solid fill
+    setcolor(BLACK);          // Text color should be set separately
   }
 
  private:

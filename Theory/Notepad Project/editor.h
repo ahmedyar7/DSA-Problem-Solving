@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 
+#include "configurations.cpp"
 #include "stack.h"
 #include "ui_components.h"
 
@@ -36,30 +37,40 @@ class Editor {
       : ui(uiManager), cursorPos(0), cursorLine(1), cursorCol(1) {}
 
   void renderText() {
-    ui.clearTextArea();
+    // Don't clear the entire screen; only clear the text area if necessary
+    // ui.clearTextArea(); // Comment out this line if it erases the entire
+    // background
+
+    // Draw the title bar and line numbers as needed
     ui.drawTitleBar();
     ui.drawLineNumbers(1, 100);
 
     int x = 50, y = 50, lineHeight = 25;
-    settextstyle(8, HORIZ_DIR, 1);  // Consistent text styling
+    settextstyle(8, HORIZ_DIR, 1);  // Text styling
 
+    // Start drawing the text
     for (size_t i = 0; i < text.length(); i++) {
+      // Check for newlines and handle text wrapping
       if (text[i] == '\n' || x > 1240) {
         x = 50;
         y += lineHeight;
-        if (text[i] == '\n') continue;
+        if (text[i] == '\n') continue;  // Skip newline character itself
       }
 
-      char temp[2] = {text[i], '\0'};
-      setcolor(Theme::TextColor());
-      outtextxy(x, y, temp);
-      x += 12;
+      char temp[2] = {text[i], '\0'};  // Convert char to string
+      setcolor(Theme::TextColor());    // Set text color (ensure it's visible)
+      outtextxy(x, y, temp);           // Draw text
+      x += 12;                         // Move to next character position
     }
 
+    // Draw the cursor if necessary
     ui.drawCursor(x, y, cursorPos == text.length());
+
+    // Update the status bar
     ui.drawStatusBar("Press F5 to Save, F6 to Exit | Ctrl+Z to Undo",
                      cursorLine, cursorCol);
   }
+
   void handleInput(char ch) {
     switch (ch) {
       case 8:  // Backspace
@@ -99,7 +110,8 @@ class Editor {
           cursorPos++;
         }
     }
-    updateCursorPosition();
+
+    updateCursorPosition();  // Update cursor position after each input
   }
 
   void saveToFile(const std::string& filename) {

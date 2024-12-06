@@ -37,7 +37,7 @@ void display_menu() {
 
 void display_text(const string &text) {
   cleardevice();
-  setbkcolor(WHITE);
+  // setbkcolor(WHITE);
   setcolor(BLACK);
   settextstyle(8, 0, 2);
   outtextxy(50, 50, const_cast<char *>("Current Text:"));
