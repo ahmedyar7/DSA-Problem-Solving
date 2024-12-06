@@ -20,7 +20,7 @@ int main() {
 
   int n = sizeof(arr) / sizeof(arr[0]);
 
-  SortingAlgorithm sort;
-  sort.radix_sort(arr, n);
+  SortingAlgorithms sort;
+  sort.quick_sort(arr, 0, n - 1);
   sort.print_arr(arr, n);
 }
