@@ -1,4 +1,4 @@
-#include "_Stack.h"
+#include "stack.h"
 template <class T>
 stack<T>::stack(int size) {
   this->size = size;
