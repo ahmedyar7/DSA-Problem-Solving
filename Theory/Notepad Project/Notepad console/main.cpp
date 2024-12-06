@@ -1,63 +1,55 @@
 #include <iostream>
 
-// #include "notepad.cpp"
-#include "notepad.h"  // Remove notepad.cpp include
+#include "notepad.cpp"
+#include "notepad.h"
 #include "textstack.h"
 using namespace std;
 
 int main() {
   Notepad notepad;
-  char input[MAX_TEXT_SIZE];
   int choice;
+  char buffer[MAX_TEXT_SIZE];  // Buffer for input
 
   do {
-    cout << "\n1. Add Text\n2. Delete\n3. Move Up\n4. Move Down\n";
-    cout << "5. Move Left\n6. Move Right\n7. Undo\n8. Display\n";
-    cout << "9. Save\n10. Load\n11. Exit\n";
-    cout << "Choice: ";
+    cout << "Welcome to Notepad-like Word Processor!\n";
+    cout << "1. Add text\n";
+    cout << "2. Delete text\n";
+    cout << "3. Undo last action\n";
+    cout << "4. Display current text\n";
+    cout << "5. Exit\n";
+    cout << "Please select an option (1-5): ";
     cin >> choice;
 
+    cin.ignore();  // Ignore newline after choice input
+
     switch (choice) {
-      case 1:
-        cout << "Enter text: ";
-        cin.ignore();
-        cin.getline(input, MAX_TEXT_SIZE);
-        notepad.add_text(input);
+      case 1: {
+        cout << "Enter text to add: ";
+        cin.getline(buffer, MAX_TEXT_SIZE);
+        notepad.add_text(buffer);
         break;
-      case 2:
-        notepad.delete_text();
+      }
+      case 2: {
+        int length;
+        cout << "Enter number of characters to delete: ";
+        cin >> length;
+        notepad.delete_text(length);
         break;
+      }
       case 3:
-        notepad.move_cursor_up();
-        break;
-      case 4:
-        notepad.move_cursor_down();
-        break;
-      case 5:
-        notepad.move_cursor_left();
-        break;
-      case 6:
-        notepad.move_cursor_right();
-        break;
-      case 7:
         notepad.undo();
         break;
-      case 8:
+      case 4:
         notepad.display();
         break;
-      case 9:
-        notepad.save_to_file("output.txt");
-        break;
-      case 10:
-        notepad.load_from_file("output.txt");
-        break;
-      case 11:
-        cout << "Exiting..." << endl;
+      case 5:
+        cout << "Exiting application.\n";
         break;
       default:
-        cout << "Invalid choice!" << endl;
+        cout << "Invalid option. Please try again.\n";
+        break;
     }
-  } while (choice != 11);
+  } while (choice != 5);
 
   return 0;
 }

@@ -1,40 +1,48 @@
 #ifndef TEXTSTACK_H
 #define TEXTSTACK_H
 
-#include <cstring>
-#include <stdexcept>
+#include <iostream>
+using namespace std;
 
-#define MAX_STACK_SIZE 100
-#define MAX_TEXT_SIZE 1000
+const int MAX_TEXT_SIZE = 1000;
+const int MAX_STACK_SIZE = 100;
+
+struct Command {
+  enum Operation { ADD, DELETE };
+  Operation op;
+  char text[MAX_TEXT_SIZE];  // Array for command text;
+};
 
 class TextStack {
  private:
-  char stack[MAX_STACK_SIZE][MAX_TEXT_SIZE][MAX_TEXT_SIZE];
-  int top;
+  // stack that will hold the commands regarding
+  // the text
+  Command stack[MAX_STACK_SIZE];
+
+  int top_index;  // This will keep track of the current top position
 
  public:
-  TextStack() : top(-1) {}
+  TextStack() { top_index = -1; }
 
-  bool push(char text[MAX_TEXT_SIZE][MAX_TEXT_SIZE]) {
-    if (top >= MAX_STACK_SIZE - 1) return false;
-    top++;
-    for (int i = 0; i < MAX_TEXT_SIZE; i++) {
-      std::strcpy(stack[top][i], text[i]);
+  void push(Command cmd) {
+    if (top_index == MAX_TEXT_SIZE - 1) {
+      cout << "The Stack is full\n";
+      return;
+    } else {
+      top_index++;
+      stack[top_index] = cmd;
+      return;
     }
-    return true;
   }
 
-  bool pop(char text[MAX_TEXT_SIZE][MAX_TEXT_SIZE]) {
-    if (top < 0) return false;
-    for (int i = 0; i < MAX_TEXT_SIZE; i++) {
-      std::strcpy(text[i], stack[top][i]);
-    }
-    top--;
-    return true;
-  }
+  bool is_empty() { return top_index == -1; }
 
-  bool is_empty() const { return top == -1; }
-  bool is_full() const { return top == MAX_STACK_SIZE - 1; }
+  Command top() { return stack[top_index]; }
+  void pop() {
+    if (top_index >= 0) {
+      top_index--;
+    }
+  }
 };
 
-#endif
+#endif  // TEXTSTACK_H
