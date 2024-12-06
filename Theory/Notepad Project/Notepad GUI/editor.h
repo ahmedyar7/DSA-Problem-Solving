@@ -5,7 +5,6 @@
 #include <fstream>
 #include <string>
 
-#include "configurations.cpp"  // Ensure the Command definition is included
 #include "stack.h"
 #include "ui_components.h"
 
