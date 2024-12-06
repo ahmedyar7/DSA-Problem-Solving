@@ -1,111 +1,102 @@
 #include "notepad.h"
 
-#include <cstring>
-#include <fstream>
 #include <iostream>
-
-#include "textstack.h"
 using namespace std;
 
-Notepad::Notepad() : cursor_row(0), cursor_col(0) {
-  for (int i = 0; i < MAX_TEXT_SIZE; i++) {
-    text[i][0] = '\0';
-  }
+//. Constructor
+Notepad::Notepad() {
+  cursor_position = 0;  // point towards current position
+  text[0] = '\0';       // Initialize an empty string
 }
 
-void Notepad::add_text(const char* new_text) {
-  command_stack.push(text);  // Save current state for undo
+//. Helper Function
+void Notepad::copy_text(char destination[], char source[]) {
   int i = 0;
-  while (new_text[i] != '\0' && cursor_col < MAX_TEXT_SIZE - 1) {
-    text[cursor_row][cursor_col++] = new_text[i++];
+  while (source[i] != '\0' && i < MAX_TEXT_SIZE - 1) {
+    destination[i] = source[i];
+    i++;
   }
-  text[cursor_row][cursor_col] = '\0';
+  destination[i] = '\0';
 }
 
-void Notepad::delete_text() {
-  command_stack.push(text);  // Save current state for undo
-  if (cursor_col > 0) {
-    cursor_col--;
-    text[cursor_row][cursor_col] = '\0';
+//. Adding The Text
+void Notepad::add_text(char new_text[]) {
+  int new_text_length = 0;
+
+  while (new_text[new_text_length] != '\0') {
+    new_text_length++;
   }
+
+  // Adding text to current position in the 'text'
+  for (int i = 0; i < new_text_length && cursor_position < MAX_TEXT_SIZE - 1;
+       i++) {
+    text[cursor_position] = new_text[i];
+    cursor_position++;
+  }
+  text[cursor_position] = '\0';  // Termination of the string
+
+  // Saving into the stack
+  Command cmd;
+  cmd.op = Command::ADD;
+  copy_text(cmd.text, new_text);
+  command_stack.push(cmd);
 }
 
-void Notepad::move_cursor_up() {
-  if (cursor_row > 0) {
-    cursor_row--;
-    cursor_col = strlen(text[cursor_row]);
+// . Deleting The Text
+void Notepad::delete_text(int length) {
+  if (length > cursor_position) {
+    cout << "Invalid Delete length\n";
+    return;
   }
-}
 
-void Notepad::move_cursor_down() {
-  if (cursor_row < MAX_TEXT_SIZE - 1 && text[cursor_row + 1][0] != '\0') {
-    cursor_row++;
-    cursor_col = strlen(text[cursor_row]);
+  Command cmd;
+  cmd.op = Command::DELETE;
+  for (int i = 0; i < length; i++) {
+    // cmd.text[i] will get the text that we want to delete
+    cmd.text[i] = text[cursor_position - length + i];
   }
-}
+  cmd.text[length] = '\0';  // This is the delimiter operator
+  command_stack.push(cmd);
 
-void Notepad::move_cursor_left() {
-  if (cursor_col > 0) {
-    cursor_col--;
-  } else if (cursor_row > 0) {
-    move_cursor_up();
-    cursor_col = strlen(text[cursor_row]);
-  }
-}
-
-void Notepad::move_cursor_right() {
-  // Ensure cursor_col is within the bounds of the current line's length
-  if (cursor_col < strlen(text[cursor_row])) {
-    cursor_col++;  // Move cursor right within the current row
-  }
-  // Check if we are at the end of the current row and if the next row is not
-  // empty
-  else if (cursor_row < MAX_TEXT_SIZE - 1 && text[cursor_row + 1][0] != '\0') {
-    move_cursor_down();  // Move down to the next row
-    cursor_col = 0;      // Reset cursor to the beginning of the new row
-  }
-}
-
-void Notepad::display() {
-  system("clear");  // Use "cls" for Windows
-  for (int i = 0; i <= cursor_row; i++) {
-    cout << text[i] << endl;
-  }
-  for (int i = 0; i < cursor_col; i++) cout << " ";
-  cout << "^" << endl;  // Cursor position indicator
+  cursor_position -= length;  // adjusting the cursor position
+  text[cursor_position] = '\0';
 }
 
 void Notepad::undo() {
-  if (!command_stack.pop(text)) {
-    cout << "Nothing to undo!" << endl;
-  } else {
-    cursor_row = 0;
-    cursor_col = strlen(text[cursor_row]);
-    while (cursor_row < MAX_TEXT_SIZE - 1 && text[cursor_row + 1][0] != '\0') {
-      cursor_row++;
+  if (command_stack.is_empty()) {
+    cout << "Nothing to undo the stack is empty\n";
+    return;
+  }
+
+  Command last_command = command_stack.top();
+  command_stack.pop();
+
+  if (last_command.op == Command::ADD) {
+    int len = 0;
+    while (last_command.text[len] != '\0') {
+      len++;
     }
-    cursor_col = strlen(text[cursor_row]);
+    cursor_position -= len;
+    text[cursor_position] = '\0';
+  } else if (last_command.op == Command::DELETE) {
+    int len = 0;
+
+    while (last_command.text[len] != '\0') {
+      len++;
+    }
+    for (int i = 0; i < len && cursor_position < MAX_TEXT_SIZE - 1; i++) {
+      text[cursor_position] = last_command.text[i];
+      cursor_position++;
+    }
+    text[cursor_position] = '\0';  // Null-Terminate
   }
 }
 
-void Notepad::save_to_file(const char* filename) {
-  ofstream file(filename);
-  if (file) {
-    for (int i = 0; i < MAX_TEXT_SIZE && text[i][0] != '\0'; i++) {
-      file << text[i] << endl;
-    }
+//. This Would Display The Text
+void Notepad::display() {
+  cout << text << endl;
+  for (int i = 0; i < cursor_position; i++) {
+    cout << " ";
   }
-  file.close();
-}
-
-void Notepad::load_from_file(const char* filename) {
-  ifstream file(filename);
-  if (file) {
-    cursor_row = 0;
-    while (file.getline(text[cursor_row], MAX_TEXT_SIZE)) {
-      cursor_row++;
-    }
-    cursor_col = strlen(text[cursor_row - 1]);
-  }
-  file.close();
+  cout << "^ " << endl;
 }
