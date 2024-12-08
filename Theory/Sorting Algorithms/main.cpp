@@ -1,26 +1,51 @@
-#include <cstdlib>  // For rand() and srand()
-#include <ctime>    // For time()
+#include <algorithm>
+#include <chrono>
 #include <iostream>
-
-#include "practice.cpp"
+#include <random>
+#include <vector>
 using namespace std;
 
-int main() {
-  const int SIZE = 100;              // Size of the array
-  int arr[SIZE];                     // Array to store random numbers
-  int minRange = 1, maxRange = 100;  // Range of random numbers
+vector<int> generateRandomArray(int size) {
+  random_device rd;
+  mt19937 gen(rd());
+  uniform_int_distribution<> dist(1, 100);
 
-  // Seed the random number generator
-  srand(static_cast<unsigned int>(time(0)));
-
-  // Generate 100 random numbers and store them in the array
-  for (int i = 0; i < SIZE; ++i) {
-    arr[i] = minRange + (rand() % (maxRange - minRange + 1));
+  vector<int> array(size);
+  for (int& num : array) {
+    num = dist(gen);
   }
+  return array;
+}
 
-  int n = sizeof(arr) / sizeof(arr[0]);
+void measureSortTime(const vector<int>& array) {
+  vector<int> temp = array;
+  auto start = chrono::high_resolution_clock::now();
+  sort(temp.begin(), temp.end());
+  auto end = chrono::high_resolution_clock::now();
 
-  SortingAlgorithms sort;
-  sort.quick_sort(arr, 0, n - 1);
-  sort.print_arr(arr, n);
+  double duration = chrono::duration<double, milli>(end - start).count();
+  cout << "Time: " << duration << " ms\n";
+}
+
+void measureBestWorstCases(const std::vector<int>& array) {
+  // Ascending sorted (best case for some implementations)
+  std::vector<int> ascending = array;
+  std::sort(ascending.begin(), ascending.end());
+  std::cout << "Best Case: ";
+  measureSortTime(ascending);
+
+  // Descending sorted (worst case for some implementations)
+  std::vector<int> descending = array;
+  std::sort(descending.rbegin(), descending.rend());
+  std::cout << "Worst Case: ";
+  measureSortTime(descending);
+}
+
+int main() {
+  for (int size : {100, 1000, 10000, 100000, 1000000}) {
+    std::cout << "Array size " << size << ":\n";
+    auto array = generateRandomArray(size);
+    measureBestWorstCases(array);
+  }
+  return 0;
 }
