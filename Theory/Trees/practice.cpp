@@ -20,6 +20,16 @@ class BinaryTree {
   TreeNode* root;
   BinaryTree() { root = nullptr; }
 
+  void insert(int data) { root = insert_node(root, data); }
+  void inorder() { inorder_traversal(root); }
+  void preorder() { preorder_traversal(root); }
+  void postorder() { postorder_traversal(root); }
+  void levelorder() { levelorder_traversal(root); }
+  int height() { return get_height(root); }
+  int find_min() { return get_min(root); }
+
+  ~BinaryTree() { delete_tree(root); }
+
  private:
   TreeNode* insert_node(TreeNode* node, int value) {
     if (node == nullptr) return new TreeNode(value);
@@ -100,6 +110,12 @@ class BinaryTree {
       return 1 + left + right;
     }
     return left + right;
+  }
+
+  int get_min(TreeNode* node) {
+    TreeNode* current = node;
+    while (current->left != nullptr) current = current->left;
+    return current->data;
   }
 
   int count_leaf(TreeNode* node) {
