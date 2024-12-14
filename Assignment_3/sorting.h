@@ -3,11 +3,21 @@
 
 #include <iostream>
 
-#include "file.h"
+#include "File.h"
 using namespace std;
 
 class Sorting {
  private:
+  int compare_string(const char* string1, const char* string2) const {
+    int i = 0;
+    while (string1[i] != '\0' && string2[i] != '\0') {
+      if (string1[i] != string2[i]) {
+        return string1[i] - string2[i];
+      }
+      i++;
+    }
+    return string1[i] - string2[i];
+  }
   // Helper function Quick Sort
   int partition(File* files, int left, int right,
                 int (*compare)(File&, File&)) {
@@ -113,7 +123,7 @@ class Sorting {
   void selection_sort(File* files, int size, int (*compare)(File&, File&)) {
     for (int i = 0; i < size - 1; i++) {
       int mini = i;
-      for (int j = i + 1; j < size; i++) {
+      for (int j = i + 1; j < size; j++) {
         if (compare(files[j], files[mini]) < 0) mini = j;
       }
       // Swapping
@@ -122,6 +132,24 @@ class Sorting {
       files[i] = temp;
     }
     return;
+  }
+
+  // Comparision by different parameters
+
+  // Compare by Name
+  int compare_by_name(File& f1, File& f2) {
+    return compare_string(f1.get_file_name(), f2.get_file_name());
+  }
+
+  // Compare by Date
+  int compare_by_date(File& f1, File& f2) {
+    return compare_string(f1.get_file_date(), f2.get_file_date());
+  }
+  // Ascending order
+  int compare_by_size(File& f1, File& f2) {
+    if (f1.get_file_size() < f2.get_file_size()) return -1;  // f1 small
+    if (f1.get_file_size() > f2.get_file_size()) return 1;   // f1 large
+    return 0;                                                // both equal
   }
 };
 
