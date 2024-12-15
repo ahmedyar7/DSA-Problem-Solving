@@ -61,6 +61,7 @@ class SortingAlgorithms {
       merge_sort(arr, mid + 1, high);
       merge(arr, low, mid, high);
     }
+    return 0;
   }
 
   int quick_sort(int arr[], int low, int high) {
@@ -72,22 +73,29 @@ class SortingAlgorithms {
   }
 
   void count_sort(int arr[], int n) {
-    int max = find_max(arr, n);
-    int min = find_min(arr, n);
-    int size = max - min + 1;
-    int *counter_arr = new int[size]();
+    int max = find_max(arr, n);  // Find the maximum element in the array
+    int min = find_min(arr, n);  // Find the minimum element in the array
+    int size = max - min + 1;    // The range of numbers
+    int* counter_arr =
+        new int[size]();  // Create a counting array initialized to 0
 
+    // Fill the counting array with the frequency of each element in the
+    // original array
     for (int i = 0; i < n; i++) {
       counter_arr[arr[i] - min]++;
     }
 
+    // Reconstruct the sorted array using the counting array
     int index = 0;
     for (int i = 0; i < size; i++) {
       while (counter_arr[i] > 0) {
-        arr[index++] = i + min;
+        arr[index++] =
+            i + min;  // Place the sorted elements back into the original array
         counter_arr[i]--;
       }
     }
+
+    // Clean up dynamically allocated memory
     delete[] counter_arr;
   }
 
@@ -113,8 +121,9 @@ class SortingAlgorithms {
     int right = mid + 1;
     int k = 0;
     int size = high - low + 1;
-    int *temp = new int[size];
+    int* temp = new int[size];
 
+    // Merge the two halves into the temporary array
     while (left <= mid && right <= high) {
       if (arr[left] <= arr[right]) {
         temp[k++] = arr[left++];
@@ -123,18 +132,22 @@ class SortingAlgorithms {
       }
     }
 
+    // If there are remaining elements in the left half
     while (left <= mid) {
       temp[k++] = arr[left++];
     }
 
+    // If there are remaining elements in the right half
     while (right <= high) {
       temp[k++] = arr[right++];
     }
 
+    // Copy the merged array back into the original array
     for (int i = 0; i < size; i++) {
       arr[low + i] = temp[i];
     }
 
+    // Free the dynamically allocated memory
     delete[] temp;
   }
 
@@ -149,7 +162,7 @@ class SortingAlgorithms {
       if (left > right) break;
       swap(arr[left], arr[right]);
     }
-    swap(arr[low], arr[right]);
+    swap(pivot, arr[right]);
     return right;
   }
 };
