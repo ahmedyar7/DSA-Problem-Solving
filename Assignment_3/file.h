@@ -1,7 +1,11 @@
 #ifndef FILE_H
 #define FILE_H
 
+#include <chrono>
+#include <ctime>
+#include <filesystem>
 #include <iostream>
+
 using namespace std;
 
 class File {
@@ -21,6 +25,15 @@ class File {
       i++;
     }
     return string1[i] - string2[i];
+  }
+
+  // Helper function to convert time point to string format
+  void time_to_string(
+      std::chrono::time_point<std::chrono::system_clock> time_point) {
+    std::time_t time = std::chrono::system_clock::to_time_t(time_point);
+    std::tm* tm = std::localtime(&time);
+    // Format the time as "YYYY-MM-DD HH:MM:SS"
+    strftime(file_date, sizeof(file_date), "%Y-%m-%d %H:%M:%S", tm);
   }
 
  public:
@@ -76,6 +89,16 @@ class File {
     cout << "File Name: " << file_name << ", File Size: " << file_size
          << ", Date Modified: " << file_date << endl;
   }
+
+  // Method to set the file date from a timestamp (for use with read_directory)
+  void set_file_date_from_timestamp(std::filesystem::file_time_type timestamp) {
+    // Convert file_time_type (from filesystem) to system_clock time_point
+    auto sys_time =
+        std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+            timestamp - std::filesystem::file_time_type::clock::now() +
+            std::chrono::system_clock::now());
+    time_to_string(sys_time);
+  }
 };
 
-#endif
+#endif  // FILE_H

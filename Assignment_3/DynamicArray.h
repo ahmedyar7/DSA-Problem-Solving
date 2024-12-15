@@ -1,8 +1,9 @@
 #ifndef DYNAMIC_ARRAY_H
 #define DYNAMIC_ARRAY_H
+#include <algorithm>  // For std::max
 #include <iostream>
 
-#include "File.h"
+#include "file.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ class DynamicArray {
  public:
   // Constructor
   DynamicArray(int initial_capacity = 10)
-      : capacity(initial_capacity), size(0) {
+      : capacity(max(initial_capacity, 1)), size(0) {
     files = new File[capacity];  // Allocate memory for files array
   }
 
@@ -43,7 +44,7 @@ class DynamicArray {
   }
 
   // Access element at given index (const access)
-  File& operator[](int index) { return files[index]; }
+  const File& operator[](int index) const { return files[index]; }
 
   // Get the current size (const function, as it doesn't modify the object)
   int get_size() const { return size; }

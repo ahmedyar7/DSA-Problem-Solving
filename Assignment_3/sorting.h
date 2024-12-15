@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "File.h"
+#include "file.h"
 using namespace std;
 
 class Sorting {

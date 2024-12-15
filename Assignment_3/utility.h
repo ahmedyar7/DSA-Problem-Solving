@@ -1,13 +1,19 @@
-#ifndef DIRECTORY_TRAVERSER_H
-#define DIRECTORY_TRAVERSER_H
+#ifndef UTILITY_H
+#define UTILITY_H
 
-#include <windows.h>  // Windows API
+#include <windows.h>
 
+#include <chrono>
+#include <ctime>
+#include <filesystem>
 #include <iostream>
+#include <sstream>
 #include <string>
 
-#include "File.h"  // Assuming File class is already created
+#include "DynamicArray.h"
+#include "file.h"
 
+namespace fs = std::filesystem;
 using namespace std;
 
 class Utility {
@@ -15,25 +21,6 @@ class Utility {
   // Data structure to store files (can use DynamicArray or another suitable
   // class)
   DynamicArray files;  // Assuming DynamicArray is a class for dynamic growth
-
-  // Helper function to copy file data into File class
-  void process_file(const WIN32_FIND_DATAA& find_file_data,
-                    const string& dir_path) {
-    // Create a File object and set its attributes
-    char file_name[100];
-    char file_date[100];
-    int file_size =
-        find_file_data
-            .nFileSizeLow;  // Example: get file size from WIN32_FIND_DATAA
-
-    // Copy the file name and date (simplified for this example)
-    strcpy(file_name, find_file_data.cFileName);
-    strcpy(file_date, "2024-12-14");  // Placeholder for actual file date logic
-
-    File file(file_name, file_size,
-              file_date);   // Assuming File class constructor is defined
-    files.push_back(file);  // Store the file in the dynamic array
-  }
 
  public:
   // Constructor
@@ -61,11 +48,9 @@ class Utility {
       long file_size =
           find_file_data.nFileSizeLow;  // File size can be accessed directly
                                         // from WIN32_FIND_DATA
-      const char* file_date =
-          "Unknown";  // You can fill in the date if necessary
 
       // Create File object using C-style strings
-      File file(file_name, file_size, file_date);
+      File file(file_name, file_size, "Unknown");  // Placeholder for file date
 
       // Add the file to the DynamicArray
       dynamic_array.push_back(file);
@@ -82,7 +67,40 @@ class Utility {
     }
   }
 
-  // Additional methods for sorting and reporting can be added here
+  // Method to read the directory and populate DynamicArray with file info
+  void read_directory(const std::string& path, DynamicArray& files) {
+    for (const auto& entry : fs::directory_iterator(path)) {
+      if (fs::is_regular_file(entry.status())) {
+        // Get the file name and size
+        std::string file_name = entry.path().filename().string();
+        uintmax_t file_size = entry.file_size();
+
+        // Get the last write time (file_time_type)
+        auto ftime = fs::last_write_time(entry);
+
+        // Convert file_time_type to system_clock::time_point
+        auto sctp =
+            std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+                ftime - std::filesystem::file_time_type::clock::now() +
+                std::chrono::system_clock::now());
+
+        // Convert system_clock time_point to std::time_t
+        std::time_t cftime = std::chrono::system_clock::to_time_t(sctp);
+
+        // Convert std::time_t to string
+        std::tm* ptm = std::localtime(&cftime);
+        std::stringstream ss;
+        ss << std::put_time(ptm, "%Y-%m-%d %H:%M:%S");
+        std::string file_date = ss.str();
+
+        // Create a File object and set its attributes
+        File file(file_name.c_str(), file_size, file_date);
+
+        // Add the file to the DynamicArray
+        files.push_back(file);
+      }
+    }
+  }
 };
 
-#endif
+#endif  // UTILITY_H
