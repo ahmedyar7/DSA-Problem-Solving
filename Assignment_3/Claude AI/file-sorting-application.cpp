@@ -79,19 +79,15 @@ class FileInfo {
   }
 
   friend std::ostream& operator<<(std::ostream& os, const FileInfo& fi) {
-    // Convert file_time_type to system_clock time_point
-    // auto timePoint =
-    // std::chrono::clock_cast<std::chrono::system_clock>(fi.lastModified);
+    auto file_time = std::chrono::time_point_cast<std::chrono::milliseconds>(
+        fi.lastModified);
+    auto duration = file_time.time_since_epoch();
+    auto time_t_value =
+        std::chrono::duration_cast<std::chrono::seconds>(duration).count();
 
-    // Convert to time_t for easier printing
-    // std::time_t time = std::chrono::system_clock::to_time_t(timePoint);
-
-    // Use std::localtime to convert to a readable format
-    // std::tm* timeInfo = std::localtime(&time);
-
-    // Format the time
+    std::tm* timeInfo = std::localtime(&time_t_value);
     char buffer[80];
-    // std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
 
     os << "Filename: " << fi.filename << ", Path: " << fi.path
        << ", Size: " << fi.size << " bytes"
@@ -346,10 +342,10 @@ int main() {
   FileManagementApp app;
 
   // Option 1: Scan all drives
-  // app.run();
+  app.run();
 
   // Option 2: Scan a specific directory (uncomment and modify path)
-  app.run("C:/Users/MULTITECH/Documents");
+  // app.run("C:\\Users\\MULTITECH\\Documents");
 
   return 0;
 }

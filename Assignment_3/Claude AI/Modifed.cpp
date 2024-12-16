@@ -335,59 +335,67 @@ class SortingUtility {
 };
 
 // Main Application Class
-void run(const std::string& path = "") {
-  std::cout << "File Management and Sorting Application\n";
+class FileManagementApp {
+ public:
+  void run(const std::string& path = "") {
+    // Main Application Class
+    void run(const std::string& path = "") {
+      std::cout << "File Management and Sorting Application\n";
 
-  // Scan files from specified path or all drives
-  DynamicArray<FileInfo> files = FileScanner::scanDirectories(path);
+      // Scan files from specified path or all drives
+      DynamicArray<FileInfo> files = FileScanner::scanDirectories(path);
 
-  // Check if any files were found
-  if (files.getSize() == 0) {
-    std::cout << "No files found. Exiting.\n";
-    return;
-  }
-
-  // Display total number of files found
-  std::cout << "Total files scanned: " << files.getSize() << std::endl;
-
-  // Enter main application loop
-  while (true) {
-    std::cout << "\n--- Main Menu ---\n";
-    std::cout << "1. Sort and Display Files\n";
-    std::cout << "2. Rescan Directories\n";
-    std::cout << "3. Exit\n";
-    std::cout << "Enter your choice (1-3): ";
-
-    int menuChoice;
-    while (!(std::cin >> menuChoice) || menuChoice < 1 || menuChoice > 3) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cout << "Invalid input. Please enter a number between 1 and 3: ";
-    }
-
-    switch (menuChoice) {
-      case 1:
-        // Sort and display files
-        SortingUtility::sortAndDisplayFiles(files);
-        break;
-      case 2:
-        // Rescan directories
-        files.clear();
-        files = FileScanner::scanDirectories(path);
-        if (files.getSize() == 0) {
-          std::cout << "No files found during rescan.\n";
-        } else {
-          std::cout << "Rescanned. Total files: " << files.getSize()
-                    << std::endl;
-        }
-        break;
-      case 3:
-        // Exit the application
-        std::cout << "Exiting File Management Application. Goodbye!\n";
+      // Check if any files were found
+      if (files.getSize() == 0) {
+        std::cout << "No files found. Exiting.\n";
         return;
+      }
+
+      // Display total number of files found
+      std::cout << "Total files scanned: " << files.getSize() << std::endl;
+
+      // Enter main application loop
+      while (true) {
+        std::cout << "\n--- Main Menu ---\n";
+        std::cout << "1. Sort and Display Files\n";
+        std::cout << "2. Rescan Directories\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Enter your choice (1-3): ";
+
+        int menuChoice;
+        while (!(std::cin >> menuChoice) || menuChoice < 1 || menuChoice > 3) {
+          std::cin.clear();
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          std::cout << "Invalid input. Please enter a number between 1 and 3: ";
+        }
+
+        switch (menuChoice) {
+          case 1:
+            // Sort and display files
+            SortingUtility::sortAndDisplayFiles(files);
+            break;
+          case 2:
+            // Rescan directories
+            files.clear();
+            files = FileScanner::scanDirectories(path);
+            if (files.getSize() == 0) {
+              std::cout << "No files found during rescan.\n";
+            } else {
+              std::cout << "Rescanned. Total files: " << files.getSize()
+                        << std::endl;
+            }
+            break;
+          case 3:
+            // Exit the application
+            std::cout << "Exiting File Management Application. Goodbye!\n";
+            return;
+        }
+      }
     }
+
+    SortPerformanceTracker::generateSortReport(files);
   }
-}
+};
 
 int main() {
   FileManagementApp app;
