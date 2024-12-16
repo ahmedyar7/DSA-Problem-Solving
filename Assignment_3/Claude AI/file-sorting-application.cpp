@@ -3,7 +3,10 @@
 
 #include <algorithm>
 #include <chrono>
+#include <ctime>
 #include <filesystem>
+#include <functional>
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -45,9 +48,16 @@ class DynamicArray {
   }
 
   size_t getSize() const { return size; }
+
+  void clear() {
+    delete[] array;
+    array = new T[1];
+    capacity = 1;
+    size = 0;
+  }
 };
 
-// File Information Class
+// Enhanced File Information Class
 class FileInfo {
  public:
   std::string filename;
@@ -57,14 +67,36 @@ class FileInfo {
 
   FileInfo() : size(0) {}
 
-  // Comparison operators for sorting
-  bool operator<(const FileInfo& other) const {
+  // Comparison operators for different sorting criteria
+  bool compareByName(const FileInfo& other) const {
     return filename < other.filename;
   }
 
+  bool compareBySize(const FileInfo& other) const { return size < other.size; }
+
+  bool compareByModifiedDate(const FileInfo& other) const {
+    return lastModified < other.lastModified;
+  }
+
   friend std::ostream& operator<<(std::ostream& os, const FileInfo& fi) {
+    // Convert file_time_type to system_clock time_point
+    // auto timePoint =
+    // std::chrono::clock_cast<std::chrono::system_clock>(fi.lastModified);
+
+    // Convert to time_t for easier printing
+    // std::time_t time = std::chrono::system_clock::to_time_t(timePoint);
+
+    // Use std::localtime to convert to a readable format
+    // std::tm* timeInfo = std::localtime(&time);
+
+    // Format the time
+    char buffer[80];
+    // std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeInfo);
+
     os << "Filename: " << fi.filename << ", Path: " << fi.path
-       << ", Size: " << fi.size << " bytes";
+       << ", Size: " << fi.size << " bytes"
+       << ", Last Modified: " << buffer;
+
     return os;
   }
 };
@@ -72,27 +104,33 @@ class FileInfo {
 // Sorting Strategy Interface
 class SortStrategy {
  public:
-  virtual void sort(DynamicArray<FileInfo>& files) = 0;
+  virtual void sort(
+      DynamicArray<FileInfo>& files,
+      std::function<bool(const FileInfo&, const FileInfo&)> comparator) = 0;
   virtual std::string getName() const = 0;
   virtual ~SortStrategy() {}
 };
 
-// Concrete Sorting Strategies
+// QuickSort Implementation
 class QuickSort : public SortStrategy {
  public:
-  void sort(DynamicArray<FileInfo>& files) override {
-    quickSortHelper(files, 0, files.getSize() - 1);
+  void sort(DynamicArray<FileInfo>& files,
+            std::function<bool(const FileInfo&, const FileInfo&)> comparator)
+      override {
+    quickSortHelper(files, 0, files.getSize() - 1, comparator);
   }
 
   std::string getName() const override { return "QuickSort"; }
 
  private:
-  int partition(DynamicArray<FileInfo>& files, int low, int high) {
+  int partition(
+      DynamicArray<FileInfo>& files, int low, int high,
+      std::function<bool(const FileInfo&, const FileInfo&)> comparator) {
     FileInfo pivot = files[high];
     int i = low - 1;
 
     for (int j = low; j < high; ++j) {
-      if (files[j].filename < pivot.filename) {
+      if (comparator(files[j], pivot)) {
         ++i;
         std::swap(files[i], files[j]);
       }
@@ -101,25 +139,31 @@ class QuickSort : public SortStrategy {
     return i + 1;
   }
 
-  void quickSortHelper(DynamicArray<FileInfo>& files, int low, int high) {
+  void quickSortHelper(
+      DynamicArray<FileInfo>& files, int low, int high,
+      std::function<bool(const FileInfo&, const FileInfo&)> comparator) {
     if (low < high) {
-      int pivotIndex = partition(files, low, high);
-      quickSortHelper(files, low, pivotIndex - 1);
-      quickSortHelper(files, pivotIndex + 1, high);
+      int pivotIndex = partition(files, low, high, comparator);
+      quickSortHelper(files, low, pivotIndex - 1, comparator);
+      quickSortHelper(files, pivotIndex + 1, high, comparator);
     }
   }
 };
 
+// MergeSort Implementation
 class MergeSort : public SortStrategy {
  public:
-  void sort(DynamicArray<FileInfo>& files) override {
-    mergeSortHelper(files, 0, files.getSize() - 1);
+  void sort(DynamicArray<FileInfo>& files,
+            std::function<bool(const FileInfo&, const FileInfo&)> comparator)
+      override {
+    mergeSortHelper(files, 0, files.getSize() - 1, comparator);
   }
 
   std::string getName() const override { return "MergeSort"; }
 
  private:
-  void merge(DynamicArray<FileInfo>& files, int left, int mid, int right) {
+  void merge(DynamicArray<FileInfo>& files, int left, int mid, int right,
+             std::function<bool(const FileInfo&, const FileInfo&)> comparator) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
@@ -132,7 +176,8 @@ class MergeSort : public SortStrategy {
     int i = 0, j = 0, k = left;
 
     while (i < n1 && j < n2) {
-      if (leftArray[i].filename <= rightArray[j].filename)
+      if (comparator(leftArray[i], rightArray[j]) ||
+          (!comparator(rightArray[j], leftArray[i])))
         files[k++] = leftArray[i++];
       else
         files[k++] = rightArray[j++];
@@ -142,12 +187,14 @@ class MergeSort : public SortStrategy {
     while (j < n2) files[k++] = rightArray[j++];
   }
 
-  void mergeSortHelper(DynamicArray<FileInfo>& files, int left, int right) {
+  void mergeSortHelper(
+      DynamicArray<FileInfo>& files, int left, int right,
+      std::function<bool(const FileInfo&, const FileInfo&)> comparator) {
     if (left < right) {
       int mid = left + (right - left) / 2;
-      mergeSortHelper(files, left, mid);
-      mergeSortHelper(files, mid + 1, right);
-      merge(files, left, mid, right);
+      mergeSortHelper(files, left, mid, comparator);
+      mergeSortHelper(files, mid + 1, right, comparator);
+      merge(files, left, mid, right, comparator);
     }
   }
 };
@@ -155,19 +202,34 @@ class MergeSort : public SortStrategy {
 // File Scanner Class
 class FileScanner {
  public:
-  static DynamicArray<FileInfo> scanDrives() {
+  static DynamicArray<FileInfo> scanDirectories(
+      const std::string& rootPath = "") {
     DynamicArray<FileInfo> files;
 
-    // Scan available drives (Windows-style, modify for cross-platform)
-    for (char drive = 'C'; drive <= 'Z'; ++drive) {
-      std::filesystem::path drivePath = std::string(1, drive) + ":/";
+    // If no root path provided, scan all drives
+    if (rootPath.empty()) {
+      // Scan available drives (Windows-style, modify for cross-platform)
+      for (char drive = 'C'; drive <= 'Z'; ++drive) {
+        std::filesystem::path drivePath = std::string(1, drive) + ":/";
 
-      if (std::filesystem::exists(drivePath)) {
+        if (std::filesystem::exists(drivePath)) {
+          try {
+            scanDirectory(drivePath, files);
+          } catch (const std::exception& e) {
+            std::cerr << "Error scanning drive " << drivePath << ": "
+                      << e.what() << std::endl;
+          }
+        }
+      }
+    } else {
+      // Scan specific directory
+      std::filesystem::path directoryPath(rootPath);
+      if (std::filesystem::exists(directoryPath)) {
         try {
-          scanDirectory(drivePath, files);
+          scanDirectory(directoryPath, files);
         } catch (const std::exception& e) {
-          std::cerr << "Error scanning drive " << drivePath << ": " << e.what()
-                    << std::endl;
+          std::cerr << "Error scanning directory " << rootPath << ": "
+                    << e.what() << std::endl;
         }
       }
     }
@@ -179,7 +241,8 @@ class FileScanner {
   static void scanDirectory(const std::filesystem::path& directory,
                             DynamicArray<FileInfo>& files, int depth = 0) {
     // Limit recursion depth to prevent excessive scanning
-    if (depth > 3) return;
+    if (depth > 5)
+      return;  // Increased from 3 to 5 for more comprehensive scanning
 
     try {
       for (const auto& entry :
@@ -188,10 +251,14 @@ class FileScanner {
           FileInfo fileInfo;
           fileInfo.filename = entry.path().filename().string();
           fileInfo.path = entry.path().string();
-          fileInfo.size = std::filesystem::file_size(entry);
-          fileInfo.lastModified = std::filesystem::last_write_time(entry);
 
-          files.push_back(fileInfo);
+          try {
+            fileInfo.size = std::filesystem::file_size(entry);
+            fileInfo.lastModified = std::filesystem::last_write_time(entry);
+            files.push_back(fileInfo);
+          } catch (const std::filesystem::filesystem_error& e) {
+            std::cerr << "Error getting file info: " << e.what() << std::endl;
+          }
         }
       }
     } catch (const std::exception& e) {
@@ -204,10 +271,17 @@ class FileScanner {
 // Sorting Performance Tracker
 class SortPerformanceTracker {
  public:
-  static double measureSortTime(SortStrategy* strategy,
-                                DynamicArray<FileInfo>& files) {
+  static double measureSortTime(
+      SortStrategy* strategy, DynamicArray<FileInfo>& files,
+      std::function<bool(const FileInfo&, const FileInfo&)> comparator) {
+    // Create a copy of files to ensure fair comparison
+    DynamicArray<FileInfo> filesCopy;
+    for (size_t i = 0; i < files.getSize(); ++i) {
+      filesCopy.push_back(files[i]);
+    }
+
     auto start = std::chrono::high_resolution_clock::now();
-    strategy->sort(files);
+    strategy->sort(filesCopy, comparator);
     auto end = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double, std::milli> duration = end - start;
@@ -215,40 +289,53 @@ class SortPerformanceTracker {
   }
 
   static void generateSortReport(DynamicArray<FileInfo>& files) {
-    std::cout << "\n--- SORTING PERFORMANCE REPORT ---\n";
+    std::cout << "\n--- COMPREHENSIVE SORTING PERFORMANCE REPORT ---\n";
 
     // Create sorting strategies
     QuickSort quickSort;
     MergeSort mergeSort;
 
-    // Clone original files for each sort to ensure fair comparison
-    DynamicArray<FileInfo> quickSortFiles, mergeSortFiles;
-    for (size_t i = 0; i < files.getSize(); ++i) {
-      quickSortFiles.push_back(files[i]);
-      mergeSortFiles.push_back(files[i]);
-    }
-
-    // Measure and report sorting times
-    double quickSortTime = measureSortTime(&quickSort, quickSortFiles);
-    double mergeSortTime = measureSortTime(&mergeSort, mergeSortFiles);
+    // Define sorting criteria
+    std::vector<std::pair<
+        std::string, std::function<bool(const FileInfo&, const FileInfo&)>>>
+        sortCriteria = {
+            {"Name", std::bind(&FileInfo::compareByName, std::placeholders::_1,
+                               std::placeholders::_2)},
+            {"Size", std::bind(&FileInfo::compareBySize, std::placeholders::_1,
+                               std::placeholders::_2)},
+            {"Modified Date",
+             std::bind(&FileInfo::compareByModifiedDate, std::placeholders::_1,
+                       std::placeholders::_2)}};
 
     std::cout << "Total Files Scanned: " << files.getSize() << std::endl;
-    std::cout << "\nQuickSort Performance:\n";
-    std::cout << "Time taken: " << quickSortTime << " milliseconds\n";
 
-    std::cout << "\nMergeSort Performance:\n";
-    std::cout << "Time taken: " << mergeSortTime << " milliseconds\n";
+    // Measure and report sorting times for each criteria
+    for (const auto& criteria : sortCriteria) {
+      std::cout << "\n--- Sorting by " << criteria.first << " ---\n";
+
+      // Measure QuickSort
+      double quickSortTime =
+          measureSortTime(&quickSort, files, criteria.second);
+      std::cout << "QuickSort Performance:\n";
+      std::cout << "Time taken: " << quickSortTime << " milliseconds\n";
+
+      // Measure MergeSort
+      double mergeSortTime =
+          measureSortTime(&mergeSort, files, criteria.second);
+      std::cout << "MergeSort Performance:\n";
+      std::cout << "Time taken: " << mergeSortTime << " milliseconds\n";
+    }
   }
 };
 
 // Main Application Class
 class FileManagementApp {
  public:
-  void run() {
+  void run(const std::string& path = "") {
     std::cout << "File Management and Sorting Application\n";
 
-    // Scan files from drives
-    DynamicArray<FileInfo> files = FileScanner::scanDrives();
+    // Scan files from specified path or all drives
+    DynamicArray<FileInfo> files = FileScanner::scanDirectories(path);
 
     // Generate and display sorting performance report
     SortPerformanceTracker::generateSortReport(files);
@@ -257,7 +344,13 @@ class FileManagementApp {
 
 int main() {
   FileManagementApp app;
-  app.run();
+
+  // Option 1: Scan all drives
+  // app.run();
+
+  // Option 2: Scan a specific directory (uncomment and modify path)
+  app.run("C:/Users/MULTITECH/Documents");
+
   return 0;
 }
 
