@@ -27,6 +27,8 @@ class BinaryTree {
   void levelorder() { levelorder_traversal(root); }
   int height() { return get_height(root); }
   int find_min() { return get_min(root); }
+  void delete_node(int data) { root = delete_node_recursive(root, data); }
+  bool search(int data) { return search_node(root, data); }
 
   ~BinaryTree() { delete_tree(root); }
 
@@ -34,12 +36,53 @@ class BinaryTree {
   TreeNode* insert_node(TreeNode* node, int value) {
     if (node == nullptr) return new TreeNode(value);
     if (value > node->data) {
-      insert_node(node->right, value);
+      node->right = insert_node(node->right, value);
     }
     if (value < node->data) {
-      insert_node(node->left, value);
+      node->left = insert_node(node->left, value);
     }
     return node;
+  }
+
+  TreeNode* delete_node_recursive(TreeNode* node, int value) {
+    if (node == nullptr) return nullptr;
+
+    if (value < node->data) {
+      node->left = delete_node_recursive(node->left, value);
+    } else if (value > node->data) {
+      node->right = delete_node_recursive(node->right, value);
+    } else {
+      // Node found
+      if (node->left == nullptr) {
+        TreeNode* temp = node->right;
+        delete node;
+        return temp;
+      } else if (node->right == nullptr) {
+        TreeNode* temp = node->left;
+        delete node;
+        return temp;
+      } else {
+        // Node with two children: replace with inorder successor
+        TreeNode* successor = find_min_node(node->right);
+        node->data = successor->data;
+        node->right = delete_node_recursive(node->right, successor->data);
+      }
+    }
+    return node;
+  }
+
+  TreeNode* find_min_node(TreeNode* node) {
+    while (node->left != nullptr) {
+      node = node->left;
+    }
+    return node;
+  }
+
+  bool search_node(TreeNode* node, int value) {
+    if (node == nullptr) return false;
+    if (node->data == value) return true;
+    if (value < node->data) return search_node(node->left, value);
+    return search_node(node->right, value);
   }
 
   void delete_tree(TreeNode* node) {
@@ -86,47 +129,10 @@ class BinaryTree {
     }
   }
 
-  int count_nodes(TreeNode* node) {
-    if (node == nullptr) return 0;
-    return count_nodes(node->left) + count_nodes(node->right);
-  }
-
-  int count_deg2(TreeNode* node) {
-    if (node == nullptr) return 0;
-    int left = count_deg2(node->left);
-    int right = count_deg2(node->right);
-    if (node->left != nullptr && node->right != nullptr) {
-      return 1 + left + right;
-    }
-    return left + right;
-  }
-
-  int count_deg1(TreeNode* node) {
-    if (node == nullptr) return 0;
-    int left = count_deg1(node->left);
-    int right = count_deg1(node->right);
-    if ((node->left == nullptr && node->right != nullptr) ||
-        (node->right == nullptr && node->left != nullptr)) {
-      return 1 + left + right;
-    }
-    return left + right;
-  }
-
   int get_min(TreeNode* node) {
     TreeNode* current = node;
     while (current->left != nullptr) current = current->left;
     return current->data;
-  }
-
-  int count_leaf(TreeNode* node) {
-    if (node == nullptr) {
-      return 0;
-    }
-    int left = count_leaf(node->left);
-    int right = count_leaf(node->right);
-    if (node->left == nullptr && node->right == nullptr)
-      return 1 + left + right;
-    return left + right;
   }
 
   int get_height(TreeNode* node) {
@@ -135,14 +141,29 @@ class BinaryTree {
     int right = get_height(node->right);
     return 1 + max(left, right);
   }
-
-  bool same_tree(TreeNode* t1, TreeNode* t2) {
-    if (t1 == nullptr && t2 == nullptr) return true;
-    if (t1 == nullptr || t2 == nullptr) return false;
-    bool left = same_tree(t1->left, t2->left);
-    bool right = same_tree(t1->right, t2->right);
-    bool value = t1->data == t2->data;
-    if (left && right && value) return true;
-    return false;
-  }
 };
+
+int main() {
+  BinaryTree bt;
+  bt.insert(50);
+  bt.insert(30);
+  bt.insert(70);
+  bt.insert(20);
+  bt.insert(40);
+  bt.insert(60);
+  bt.insert(80);
+
+  cout << "Inorder traversal: ";
+  bt.inorder();
+  cout << endl;
+
+  cout << "Searching for 40: " << (bt.search(40) ? "Found" : "Not Found")
+       << endl;
+  cout << "Deleting 40..." << endl;
+  bt.delete_node(40);
+  cout << "Inorder traversal after deletion: ";
+  bt.inorder();
+  cout << endl;
+
+  return 0;
+}
