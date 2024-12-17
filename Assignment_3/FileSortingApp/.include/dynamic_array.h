@@ -49,5 +49,5 @@ class DynamicArray {
     size = 0;
   }
 };
-// Rest of the implementation follows similar pattern...
+
 #endif  // DYNAMIC_ARRAY_H
