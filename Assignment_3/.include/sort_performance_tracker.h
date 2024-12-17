@@ -1,5 +1,6 @@
 #ifndef SORT_PERFORMANCE_TRACKER_H
 #define SORT_PERFORMANCE_TRACKER_H
+
 #include <chrono>
 #include <functional>
 #include <iomanip>

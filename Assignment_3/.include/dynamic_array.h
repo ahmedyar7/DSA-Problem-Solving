@@ -14,7 +14,7 @@ class DynamicArray {
   void resize(size_t newCapacity) {
     T* newArray = new T[newCapacity];
     for (size_t i = 0; i < size; ++i) {
-      newArray[i] = std::move(array[i]);
+      newArray[i] = move(array[i]);
     }
     delete[] array;
     array = newArray;
@@ -35,7 +35,7 @@ class DynamicArray {
 
   T& operator[](size_t index) {
     if (index >= size) {
-      throw std::out_of_range("Index out of range");
+      throw out_of_range("Index out of range");
     }
     return array[index];
   }

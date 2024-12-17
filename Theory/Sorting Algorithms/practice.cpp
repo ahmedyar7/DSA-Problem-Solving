@@ -70,6 +70,7 @@ class SortingAlgorithms {
       quick_sort(arr, low, index - 1);
       quick_sort(arr, index + 1, high);
     }
+    return 0;
   }
 
   void count_sort(int arr[], int n) {

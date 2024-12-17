@@ -2,3 +2,46 @@
 *.exe
 *.ps1
 *.log
+# Compiled object files, static libraries, and executables
+*.o
+*.a
+*.out
+*.exe
+*.so
+*.dylib
+
+# Build directories
+/build/
+/bin/
+/out/
+/Debug/
+/Release/
+
+# IDE files
+.vs/
+.vscode/
+*.vcxproj
+*.vcxproj.user
+*.suo
+.settings/
+.project
+.classpath
+.idea/
+cmake-build-debug/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*~
+*.swp
+*.swo
+.editorconfig
+
+# Log files
+*.log
+
+# Test output
+*.test
+*.out
