@@ -6,10 +6,10 @@ using namespace std;
 int main() {
   try {
     FileManagementApp app;
-    app.run();
-    // app.run(
-    //     "C:\\Users\\MULTITECH\\Desktop\\3rd Semester\\Statistics & "
-    //     "Probability");
+    // app.run();
+    app.run(
+        "C:\\Users\\MULTITECH\\Desktop\\3rd Semester\\Statistics & "
+        "Probability");
   } catch (const exception& e) {
     cerr << "An error occurred: " << e.what() << endl;
     return 1;
