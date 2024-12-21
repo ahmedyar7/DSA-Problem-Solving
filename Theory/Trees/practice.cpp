@@ -36,6 +36,13 @@ class BinaryTree {
   int height() { return __height(root); }
   bool is_balanced() { return __balance_factor(root); }
   bool same_tree() { return __same_tree(root, root) }
+  int diameter() { return __diameter(root); }
+
+  // Counting Function
+  int count() { return __count(root); }
+  int deg1() { return __deg1(root) }
+  int deg2() { return __deg2(root) }
+  int deg0() { return __deg0(root) }
 
   // Destructor
   ~BinaryTree() { delete_tree(root); }
@@ -177,5 +184,69 @@ class BinaryTree {
       return true;
     }
     return false;
+  }
+
+  int __diameter(Treenode<T>* node) {
+    if (node == nullptr) return 0;
+
+    int left = __diameter(node->left);
+    int right = __diameter(node->right);
+    int both = 1 + max(__height(node->left), __height(node->right));
+    int diameter = 0;
+
+    diameter = max(left, max(right, both));
+    return diameter;
+  }
+
+  int __count(Treenode<T>* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    return 1 + __count(node->left) + __count(node->right);
+  }
+
+  // Count Nodes
+  int __deg0(Treenode<T>* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    int left = __deg0(node->left);
+    int right = __deg0(node->right);
+    if (node->left == nullptr && node->right == nullptr) {
+      return 1 + left + right;
+    } else
+      return left + right;
+  }
+
+  int __deg2(Treenode<T>* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    int left = __deg2(node->left);
+    int right = __deg2(node->right);
+    if (node->left != nullptr && node->right != nullptr) {
+      return 1 + left + right;
+    } else
+      return left + right;
+  }
+
+  int __deg1(Treenode<T>* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    int left = __deg1(node->left);
+    int right = __deg1(node->right);
+    if ((node->left == nullptr && node->right != nullptr) ||
+        (node->left != nullptr && node->right == nullptr)) {
+      return 1 + left + right;
+    } else
+      return left + right;
+  }
+
+  int find_index(int inorder[], int start, int end, int value) {
+    for (int i = start; i <= end; i++) {
+      if (inorder[i] == value) return i;
+    }
+    return -1;
   }
 };

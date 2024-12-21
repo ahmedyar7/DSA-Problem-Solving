@@ -7,13 +7,13 @@
 - [x] **Inorder Traversal**
 - [x] **Levelorder Traversal**
 - [x] **Levelorder Traversal**
-- [ ] **Count Total nodes**
-- [ ] **Count Height**
-- [ ] **Count edges**
-- [ ] **Count Leafnodes**
-- [ ] **Count Nodes with deg 1**
-- [ ] **Count Nodes with deg 2**
+- [x] **Count Total nodes**
+- [x] **Count Height**
+- [x] **Count edges**
+- [x] **Count Leafnodes**
+- [x] **Count Nodes with deg 1**
+- [x] **Count Nodes with deg 2**
 - [ ] **Making Tree from traversals**
-- [ ] **Balanced Binary tree**
-- [ ] **Diameter of the tree**
-- [ ] **Identical Tree**
+- [x] **Balanced Binary tree**
+- [x] **Diameter of the tree**
+- [x] **Identical Tree**
