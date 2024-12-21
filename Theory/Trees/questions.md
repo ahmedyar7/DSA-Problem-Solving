@@ -1,12 +1,12 @@
 # Binary Trees
 
-- [ ] **Making binary tree**
-- [ ] **Insertion in binary tree**
-- [ ] **Preorder Traversal**
-- [ ] **Postorder Traversal**
-- [ ] **Inorder Traversal**
-- [ ] **Levelorder Traversal**
-- [ ] **Levelorder Traversal**
+- [x] **Making binary tree**
+- [x] **Insertion in binary tree**
+- [x] **Preorder Traversal**
+- [x] **Postorder Traversal**
+- [x] **Inorder Traversal**
+- [x] **Levelorder Traversal**
+- [x] **Levelorder Traversal**
 - [ ] **Count Total nodes**
 - [ ] **Count Height**
 - [ ] **Count edges**
