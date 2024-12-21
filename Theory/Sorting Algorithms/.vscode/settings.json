@@ -4,6 +4,13 @@
     "utility": "cpp",
     "iostream": "cpp",
     "chrono": "cpp",
+<<<<<<< HEAD
     "ostream": "cpp"
+=======
+    "exception": "cpp",
+    "memory": "cpp",
+    "tuple": "cpp",
+    "xstring": "cpp"
+>>>>>>> practice
   }
 }

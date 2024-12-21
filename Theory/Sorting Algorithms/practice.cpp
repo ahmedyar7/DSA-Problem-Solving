@@ -1,39 +1,41 @@
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 using namespace std;
 
 class SortingAlgorithms {
  public:
   void print_arr(int arr[], int n) {
-    for (int i = 0; i <= n - 1; i++) {
+    for (int i = 0; i < n; i++) {
       cout << arr[i] << " ";
     }
+    cout << endl;
   }
 
   void selection_sort(int arr[], int n) {
-    for (int i = 0; i <= n - 2; i++) {
+    for (int i = 0; i < n - 1; i++) {
       int mini = i;
-      for (int j = i; j <= n - 1; j++) {
-        if (arr[j] < arr[mini]) mini = j;
+      for (int j = i + 1; j < n; j++) {
+        if (arr[j] < arr[mini]) {
+          mini = j;
+        }
       }
-      swap(arr[i], arr[mini]);
+      swap(arr[mini], arr[i]);
     }
   }
 
   void bubble_sort(int arr[], int n) {
-    bool flag = false;
-    for (int i = n - 1; i >= 0; i--) {
+    for (int i = n - 1; i > 0; i--) {
       for (int j = 0; j < i; j++) {
         if (arr[j] > arr[j + 1]) {
           swap(arr[j], arr[j + 1]);
-          flag = true;
         }
       }
-      if (flag == false) break;
     }
   }
 
   void insertion_sort(int arr[], int n) {
-    for (int i = 0; i <= n - 1; i++) {
+    for (int i = 1; i < n; i++) {
       int j = i;
       while (j > 0 && arr[j - 1] > arr[j]) {
         swap(arr[j - 1], arr[j]);
@@ -48,13 +50,13 @@ class SortingAlgorithms {
         int j = i;
         while (j >= gap && arr[j - gap] > arr[j]) {
           swap(arr[j - gap], arr[j]);
-          j = j - gap;
+          j -= gap;
         }
       }
     }
   }
 
-  int merge_sort(int arr[], int low, int high) {
+  void merge_sort(int arr[], int low, int high) {
     if (low < high) {
       int mid = low + (high - low) / 2;
       merge_sort(arr, low, mid);
@@ -64,7 +66,7 @@ class SortingAlgorithms {
     return 0;
   }
 
-  int quick_sort(int arr[], int low, int high) {
+  void quick_sort(int arr[], int low, int high) {
     if (low < high) {
       int index = partition(arr, low, high);
       quick_sort(arr, low, index - 1);
@@ -99,11 +101,17 @@ class SortingAlgorithms {
     // Clean up dynamically allocated memory
     delete[] counter_arr;
   }
+  void generate_random_array(int arr[], int n, int min_val = 0,
+                             int max_val = 100) {
+    for (int i = 0; i < n; i++) {
+      arr[i] = rand() % (max_val - min_val + 1) + min_val;
+    }
+  }
 
  private:
   int find_max(int arr[], int n) {
     int max = arr[0];
-    for (int i = 0; i <= n - 1; i++) {
+    for (int i = 1; i < n; i++) {
       if (arr[i] > max) max = arr[i];
     }
     return max;
@@ -111,7 +119,7 @@ class SortingAlgorithms {
 
   int find_min(int arr[], int n) {
     int min = arr[0];
-    for (int i = 0; i <= n - 1; i++) {
+    for (int i = 1; i < n; i++) {
       if (arr[i] < min) min = arr[i];
     }
     return min;
@@ -127,43 +135,101 @@ class SortingAlgorithms {
     // Merge the two halves into the temporary array
     while (left <= mid && right <= high) {
       if (arr[left] <= arr[right]) {
-        temp[k++] = arr[left++];
+        tmp[k++] = arr[left++];
       } else {
-        temp[k++] = arr[right++];
+        tmp[k++] = arr[right++];
       }
     }
 
-    // If there are remaining elements in the left half
     while (left <= mid) {
       temp[k++] = arr[left++];
     }
 
-    // If there are remaining elements in the right half
     while (right <= high) {
       temp[k++] = arr[right++];
     }
 
     // Copy the merged array back into the original array
     for (int i = 0; i < size; i++) {
-      arr[low + i] = temp[i];
+      arr[low + i] = tmp[i];
     }
 
-    // Free the dynamically allocated memory
     delete[] temp;
   }
 
   int partition(int arr[], int low, int high) {
-    int left = low + 1;
+    int left = low;
     int right = high;
-    int pivot = arr[low];
+    int pivot = arr[(low + high) / 2];
 
     while (true) {
-      while (left <= right && arr[left] <= pivot) left++;
-      while (left <= right && arr[right] > pivot) right--;
-      if (left > right) break;
+      while (arr[left] < pivot) left++;
+      while (arr[right] > pivot) right--;
+      if (left >= right) {
+        break;
+      }
       swap(arr[left], arr[right]);
     }
     swap(pivot, arr[right]);
     return right;
   }
 };
+
+int main() {
+  srand(time(0));  // Seed for random number generation
+  const int SIZE = 10;
+  int arr[SIZE];
+
+  SortingAlgorithms sorter;
+
+  // Generate and print a random array for selection sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Selection Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.selection_sort(arr, SIZE);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for bubble sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Bubble Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.bubble_sort(arr, SIZE);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for insertion sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Insertion Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.insertion_sort(arr, SIZE);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for shell sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Shell Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.shell_sort(arr, SIZE);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for merge sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Merge Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.merge_sort(arr, 0, SIZE - 1);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for quick sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Quick Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.quick_sort(arr, 0, SIZE - 1);
+  sorter.print_arr(arr, SIZE);
+
+  // Generate and print a random array for counting sort
+  sorter.generate_random_array(arr, SIZE);
+  cout << "Original array (Counting Sort): ";
+  sorter.print_arr(arr, SIZE);
+  sorter.count_sort(arr, SIZE);
+  sorter.print_arr(arr, SIZE);
+
+  return 0;
+}

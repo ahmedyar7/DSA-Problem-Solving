@@ -1,28 +1,28 @@
+#include <cstring>  // For strcmp
 #include <iostream>
-#include <string>
 using namespace std;
 
 // Define a Node structure
 struct Node {
-  string data;  // The string data
-  Node* left;   // Pointer to the left child
-  Node* right;  // Pointer to the right child
+  const char* data;  // Pointer to the string (const for safety)
+  Node* left;        // Pointer to the left child
+  Node* right;       // Pointer to the right child
 
   // Constructor
-  Node(string value) : data(value), left(nullptr), right(nullptr) {}
+  Node(const char* value) : data(value), left(nullptr), right(nullptr) {}
 };
 
 // Function to insert a string into the binary tree
-Node* insert(Node* root, const string& value) {
+Node* insert(Node* root, const char* value) {
   if (root == nullptr) {
     // Create a new node if the tree is empty or we reach a leaf
     return new Node(value);
   }
 
-  // Lexicographical comparison to decide where to insert
-  if (value < root->data) {
+  // Use strcmp to compare strings lexicographically
+  if (strcmp(value, root->data) < 0) {
     root->left = insert(root->left, value);  // Insert into the left subtree
-  } else if (value > root->data) {
+  } else if (strcmp(value, root->data) > 0) {
     root->right = insert(root->right, value);  // Insert into the right subtree
   }
   // Duplicate values are ignored
@@ -50,12 +50,13 @@ void deleteTree(Node* root) {
 int main() {
   Node* root = nullptr;
 
-  // Strings to insert into the binary tree
-  string strings[] = {"apple", "banana", "cherry", "date", "fig", "grape"};
+  // Array of pointers to constant strings
+  const char* strings[] = {"apple", "banana", "cherry", "date", "fig", "grape"};
+  int n = sizeof(strings) / sizeof(strings[0]);
 
   // Build the tree
-  for (const string& str : strings) {
-    root = insert(root, str);
+  for (int i = 0; i < n; ++i) {
+    root = insert(root, strings[i]);
   }
 
   // Display strings in lexicographical order

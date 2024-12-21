@@ -36,12 +36,17 @@ class BinaryTree {
   TreeNode* construct_tree(int preorder[], int inorder[], int& preorder_index,
                            int inorder_start, int inorder_end) {
     if (inorder_start > inorder_end) return nullptr;
+
     int rootvalue = preorder[preorder_index++];
+
     TreeNode* rootnode = new TreeNode(rootvalue);
     if (inorder_start == inorder_end) return rootnode;
+
     int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
+
     rootnode->left = construct_tree(preorder, inorder, preorder_index,
                                     inorder_start, rootindex - 1);
+
     rootnode->right = construct_tree(preorder, inorder, preorder_index,
                                      rootindex + 1, inorder_end);
   }
