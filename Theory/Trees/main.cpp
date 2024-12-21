@@ -1,64 +1,60 @@
 #include <iostream>
 
 #include "practice.cpp"
+
 using namespace std;
 
 int main() {
-  BinaryTree tree;
-  int choice, value;
+  // Create Binary Tree
+  BinaryTree<int> tree;
 
-  do {
-    cout << "\nMenu:" << endl;
-    cout << "1. Insert a node" << endl;
-    cout << "2. Find the height of the tree" << endl;
-    cout << "3. Find the minimum value in the tree" << endl;
-    cout << "4. Display Inorder Traversal" << endl;
-    cout << "5. Display Preorder Traversal" << endl;
-    cout << "6. Display Postorder Traversal" << endl;
-    cout << "7. Display Level-order Traversal" << endl;
-    cout << "0. Exit" << endl;
-    cout << "Enter your choice: ";
-    cin >> choice;
+  // Insert nodes
+  tree.insert(10);
+  tree.insert(5);
+  tree.insert(15);
+  tree.insert(2);
+  tree.insert(7);
+  tree.insert(12);
+  tree.insert(20);
 
-    switch (choice) {
-      case 1:
-        cout << "Enter value to insert: ";
-        cin >> value;
-        tree.insert(value);
-        break;
-      case 2:
-        cout << "Height of the tree: " << tree.height() << endl;
-        break;
-      case 3:
-        cout << "Minimum value in the tree: " << tree.find_min() << endl;
-        break;
-      case 4:
-        cout << "Inorder Traversal: ";
-        tree.inorder();
-        cout << endl;
-        break;
-      case 5:
-        cout << "Preorder Traversal: ";
-        tree.preorder();
-        cout << endl;
-        break;
-      case 6:
-        cout << "Postorder Traversal: ";
-        tree.postorder();
-        cout << endl;
-        break;
-      case 7:
-        cout << "Level-order Traversal: ";
-        tree.levelorder();
-        cout << endl;
-        break;
-      case 0:
-        cout << "Exiting program." << endl;
-        break;
-      default:
-        cout << "Invalid choice. Please try again." << endl;
-    }
-  } while (choice != 0);
+  // Display traversals
+  cout << "Inorder Traversal: ";
+  tree.inorder();
+  cout << endl;
+
+  cout << "Preorder Traversal: ";
+  tree.preorder();
+  cout << endl;
+
+  cout << "Postorder Traversal: ";
+  tree.postorder();
+  cout << endl;
+
+  cout << "Levelorder Traversal: ";
+  tree.levelorder();
+  cout << endl;
+
+  // Display tree properties
+  cout << "Height of tree: " << tree.height() << endl;
+  cout << "Is the tree balanced? " << (tree.is_balanced() ? "Yes" : "No")
+       << endl;
+  cout << "Diameter of tree: " << tree.diameter() << endl;
+  cout << "Total node count: " << tree.count() << endl;
+
+  // Remove node and display tree again
+  tree.remove(7);
+  cout << "Inorder Traversal after removing 7: ";
+  tree.inorder();
+  cout << endl;
+
+  // Check the degree of nodes
+  cout << "Degree 0 nodes: " << tree.deg0() << endl;
+  cout << "Degree 1 nodes: " << tree.deg1() << endl;
+  cout << "Degree 2 nodes: " << tree.deg2() << endl;
+
+  // Check if trees are the same (same tree with itself)
+  cout << "Is the tree same as itself? " << (tree.same_tree() ? "Yes" : "No")
+       << endl;
 
   return 0;
 }

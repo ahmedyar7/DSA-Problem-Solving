@@ -22,9 +22,33 @@ class BinaryTree {
   Treenode<T>* root;
   BinaryTree() { root = nullptr; }
 
+  Treenode<T>* construct_tree(int inorder[], int preorder[],
+                              int& preorder_index, int inorder_start,
+                              int inorder_end) {
+    if (inorder_start > inorder_end) {
+      return nullptr;
+    }
+
+    int rootvalue = preorder[preorder_index];
+    Treenode<T>* rootnode = new Treenode<T>(rootvalue);
+
+    if (inorder_start == inorder_end) {
+      return rootnode;
+    }
+
+    int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
+
+    rootnode->left = construct_tree(inorder, preorder, preorder_index,
+                                    inorder_start, rootindex - 1);
+    rootnode->right = construct_tree(inorder, preorder, preorder_index,
+                                     rootindex + 1, inorder_end);
+
+    return rootnode;
+  }
+
   // Insert & Delete
   void insert(T data) { root = __insert_node(root, data); }
-  Treenode<T>* remove(T data) { __remove_node(root, T); }
+  Treenode<T>* remove(T data) { return __remove_node(root, data); }
 
   // Traversal
   void inorder() { __inorder_traversal(root); }
@@ -35,14 +59,14 @@ class BinaryTree {
   // Auxillary
   int height() { return __height(root); }
   bool is_balanced() { return __balance_factor(root); }
-  bool same_tree() { return __same_tree(root, root) }
+  bool same_tree() { return __same_tree(root, root); }
   int diameter() { return __diameter(root); }
 
   // Counting Function
   int count() { return __count(root); }
-  int deg1() { return __deg1(root) }
-  int deg2() { return __deg2(root) }
-  int deg0() { return __deg0(root) }
+  int deg1() { return __deg1(root); }
+  int deg2() { return __deg2(root); }
+  int deg0() { return __deg0(root); }
 
   // Destructor
   ~BinaryTree() { delete_tree(root); }
@@ -52,16 +76,16 @@ class BinaryTree {
   Treenode<T>* __insert_node(Treenode<T>* node, T data) {
     if (node == nullptr) return new Treenode<T>(data);
     if (node->data < data) {
-      node->left = __insert_node(node->left, T);
+      node->left = __insert_node(node->left, data);
     } else if (node->data > data) {
-      node->right = __insert_node(node->right, T);
+      node->right = __insert_node(node->right, data);
     }
     return node;
   }
 
   // Delete Node
-  Treenode<T>* delete_tree(Treenode<T>* node) {
-    if (node == nullptr) return nullptr;
+  void delete_tree(Treenode<T>* node) {
+    if (node == nullptr) return;
     delete_tree(node->left);
     delete_tree(node->right);
     delete node;
@@ -77,11 +101,11 @@ class BinaryTree {
       cout << current->data << " ";
       q.pop();
 
-      if (node->left != nullptr) {
-        q.push(node->left);
+      if (current->left != nullptr) {
+        q.push(current->left);
       }
-      if (node->right != nullptr) {
-        q.push(node->right);
+      if (current->right != nullptr) {
+        q.push(current->right);
       }
     }
   }
@@ -99,9 +123,9 @@ class BinaryTree {
     if (node == nullptr) {
       return;
     }
+    cout << node->data << " ";
     __preorder_traversal(node->left);
     __preorder_traversal(node->right);
-    cout << node->data << " ";
   }
 
   void __postorder_traversal(Treenode<T>* node) {
@@ -116,13 +140,13 @@ class BinaryTree {
   // Helper function for deletion
   Treenode<T>* __find_min(Treenode<T>* node) {
     Treenode<T>* current = node;
-    whlie(current->left != nullptr) current = current->left;
+    while (current->left != nullptr) current = current->left;
     return current;
   }
 
   Treenode<T>* __remove_node(Treenode<T>* node, T value) {
     if (node == nullptr) {
-      return;
+      return nullptr;  // Corrected to return nullptr
     }
     if (node->data < value) {
       node->left = __remove_node(node->left, value);
@@ -145,8 +169,8 @@ class BinaryTree {
         return temp;
       } else {
         Treenode<T>* temp = __find_min(node->right);
-        temp->data = node->data;
-        node->data = __remove_node(node->right, temp->data);
+        node->data = temp->data;  // Using temp->data for assignment
+        node->right = __remove_node(node->right, temp->data);
       }
     }
     return node;
@@ -161,7 +185,7 @@ class BinaryTree {
   }
 
   bool __balance_factor(Treenode<T>* node) {
-    if (node == nullptr) false;
+    if (node == nullptr) return false;
     bool left_subtree = __balance_factor(node->left);
     bool right_subtree = __balance_factor(node->right);
     bool diff = (abs(__height(node->left) - __height(node->right)) <= 1);
