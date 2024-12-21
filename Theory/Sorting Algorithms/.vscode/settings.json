@@ -3,6 +3,10 @@
     "algorithm": "cpp",
     "utility": "cpp",
     "iostream": "cpp",
-    "chrono": "cpp"
+    "chrono": "cpp",
+    "exception": "cpp",
+    "memory": "cpp",
+    "tuple": "cpp",
+    "xstring": "cpp"
   }
 }
