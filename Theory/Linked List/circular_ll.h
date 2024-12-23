@@ -1,132 +1,134 @@
-#ifndef CIRCULAR_LL_H
-#define CIRCULAR_LL_H
-
 #include <iostream>
 using namespace std;
 
-class Node_ {
- private:
+class Node {
  public:
   int data;
-  Node_* next;
+  Node* next;
 
-  Node_(int data) {
+  Node(int data) {
     this->data = data;
     next = nullptr;
   }
 };
 
-class CircularLinkedList {
- private:
+class CircularLL {
  public:
-  Node_* head;
-  CircularLinkedList() { head = nullptr; }
+  CircularLL() { head = nullptr; }
 
-  void insert_at_head(int value) {
-    Node_* new_Node_ = new Node_(value);
-    if (head == nullptr) {
-      head = new_Node_;
-      new_Node_->next = head;
-      return;
-    }
-    Node_* temp = head;
-
-    while (temp != head);
-    temp = temp->next;
-
-    temp->next = new_Node_;
-    new_Node_->next = head;
-    head = new_Node_;
-    return;
+  void insert_at_head(int data) { _insert_at_head_(head, data); }
+  void insert_at_tail(int data) { insert_at_tail_(head, data); }
+  void insert_at_position(int data, int pos) {
+    insert_at_position_(head, data, pos);
   }
+  void display() { display_(head); }
+  void delete_head() { delete_head_(head); }
+  void delete_at_position(int pos) { delete_at_position_(head, pos); }
 
-  void display() {
+ private:
+  Node* head;
+  void _insert_at_head_(Node*& head, int data) {
+    Node* newnode = new Node(data);
     if (head == nullptr) {
-      cout << "The Circular Linked List is empty\n";
-      return;
-    }
-    Node_* temp = head;
-    do {
-      cout << "[" << temp->data << "] ->";
-      temp = temp->next;
-    } while (temp != head);
-
-    cout << "(" << temp->data << ") HEAD" << endl;
-  }
-
-  void insert_at_tail(int value) {
-    Node_* new_node = new Node_(value);
-
-    if (head == nullptr) {
-      head = new_node;
-      new_node->next = head;
+      head = newnode;
+      head->next = head;
       return;
     }
 
-    Node_* temp = head;
+    Node* temp = head;
     while (temp->next != head) {
       temp = temp->next;
     }
-    temp->next = new_node;
-    new_node->next = head;
-    return;
+    temp->next = newnode;
+    newnode->next = head;
+    head = newnode;
   }
 
-  void insert_at_position(int value, int position) {
-    Node_* new_node = new Node_(value);
-    if (position <= 0) {
+  void insert_at_tail_(Node*& head, int data) {
+    Node* newnode = new Node(data);
+    if (head == nullptr) {
+      head = newnode;
+      head->next = head;
+      return;
+    }
+
+    Node* temp = head;
+    while (temp->next != head) {
+      temp = temp->next;
+    }
+    temp->next = newnode;
+    newnode->next = head;
+  }
+
+  void insert_at_position_(Node*& head, int data, int pos) {
+    if (pos <= 0) {
       cout << "Invalid Position\n";
       return;
     }
-    if (position == 1) {
-      insert_at_head(value);
+    if (pos == 1) {
+      _insert_at_head_(head, data);
       return;
     }
-    Node_* temp = head;
-    for (int i = 1; i < position - 1 && temp->next != head; i++) {
+
+    Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
       temp = temp->next;
     }
-    new_node->next = temp->next;
-    temp->next = new_node;
-    return;
+    Node* newnode = new Node(data);
+    newnode->next = temp->next;
+    temp->next = newnode;
   }
 
-  void delete_head() {
+  void delete_head_(Node*& head) {
     if (head == nullptr) {
-      cout << "Circular Linked List is empty\n";
+      cout << "List is empty" << endl;
       return;
     }
-    if (head->next == head) {
+    if (head->next == head) {  // Single node case
       delete head;
       head = nullptr;
+      return;
     }
-    Node_* temp = head;
+
+    Node* temp = head;
     while (temp->next != head) {
       temp = temp->next;
     }
-    temp->next = head->next;
-    Node_* to_delete = head;
+    Node* temp_head = head;
     head = head->next;
-    return;
+    temp->next = head;
+    delete temp_head;
   }
 
-  void delete_position(int position) {
-    if (position <= 0) {
+  void delete_at_position_(Node*& head, int pos) {
+    if (pos <= 0) {
       cout << "Invalid Position\n";
       return;
     }
-    if (position == 1) {
-      delete_head();
+    if (pos == 1) {
+      delete_head_(head);
       return;
     }
-    Node_* temp = head;
-    for (int i = 1; i < position - 1 && temp->next != head; i++) {
+
+    Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
       temp = temp->next;
     }
-    Node_* to_delete = temp->next;
-    temp->next = temp->next->next;
-    delete to_delete;
+    Node* del = temp->next;
+    temp->next = del->next;
+    delete del;
+  }
+
+  void display_(Node* head) {
+    if (head == nullptr) {
+      cout << "List is empty\n";
+      return;
+    }
+    Node* temp = head;
+    do {
+      cout << temp->data << " ";
+      temp = temp->next;
+    } while (temp != head);
+    cout << endl;
   }
 };
-
-#endif  // CIRCULAR_LL_H
