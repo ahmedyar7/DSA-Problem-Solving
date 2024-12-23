@@ -1,32 +1,41 @@
-#ifndef NODE_H
-#define NODE_H
-
-#include <climits>
 #include <iostream>
 using namespace std;
 
+template <typename T>
 class Node {
- private:
  public:
-  int data;
+  T data;
   Node* next;
-  Node* head = nullptr;
 
-  Node(int data) {
+  Node(T data) {
     this->data = data;
     next = nullptr;
   }
 };
 
+template <typename T>
 class LinkedList {
  private:
+  Node<T>* head;
+
  public:
-  Node* head;
   LinkedList() { head = nullptr; }
 
-  void insert_at_head(int value) {
-    Node* new_node = new Node(value);
+  void insert_at_tail(T data) {
+    Node<T>* new_node = new Node<T>(data);
+    if (head == nullptr) {
+      head = new_node;
+      return;
+    }
+    Node<T>* temp = head;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+    }
+    temp->next = new_node;
+  }
 
+  void insert_at_head(T data) {
+    Node<T>* new_node = new Node<T>(data);
     if (head == nullptr) {
       head = new_node;
       return;
@@ -35,94 +44,79 @@ class LinkedList {
     head = new_node;
   }
 
-  void insert_at_tail(int value) {
-    Node* new_node = new Node(value);
+  void print() {
     if (head == nullptr) {
+      cout << "Head is empty\n";
+      return;
+    }
+    Node<T>* temp = head;
+    while (temp != nullptr) {
+      cout << temp->data << " ";
+      temp = temp->next;
+    }
+    cout << "end\n";
+  }
+
+  void insert_at_position(int position, T data) {
+    if (position <= 0) {
+      cout << "Please enter valid position\n";
+      return;
+    }
+    Node<T>* new_node = new Node<T>(data);
+    if (position == 1 || head == nullptr) {
+      new_node->next = head;
       head = new_node;
       return;
     }
-    Node* temp = head;
-    while (temp->next != nullptr) {
-      temp = temp->next;
-    }
-    temp->next = new_node;
-    return;
-  }
-
-  void insert_at_position(int value, int position) {
-    Node* new_node = new Node(value);
-
-    if (position <= 0) {
-      cout << "Invalid Position\n";
-      return;
-    }
-    if (position == 1) {
-      insert_at_head(value);
-      return;
-    }
-    Node* temp = head;
-    for (int i = 1; i < (position && temp->next != nullptr); i++) {
+    Node<T>* temp = head;
+    for (int i = 1; i < position - 1 && temp->next != nullptr; i++) {
       temp = temp->next;
     }
     new_node->next = temp->next;
     temp->next = new_node;
-    return;
   }
 
-  void display() {
+  void max_n_min() {
     if (head == nullptr) {
-      cout << "Linked List is empty\n";
+      cout << "List is empty\n";
       return;
     }
-    Node* temp = head;
+    int max = head->data;
+    int min = head->data;
+    Node<T>* temp = head;
+
     while (temp != nullptr) {
-      cout << "[" << temp->data << "]-> ";
+      if (temp->data > max) {
+        max = temp->data;
+      }
+      if (temp->data < min) {
+        min = temp->data;
+      }
       temp = temp->next;
     }
-    cout << "nullptr\n";
+
+    cout << "Max: " << max << endl;
+    cout << "Min: " << min << endl;
   }
 
-  int delete_at_head() {
-    if (head == nullptr) {
-      cout << "Linked List is empty\n";
-      return -1;
-    }
-    Node* temp = head;
-    int value = temp->data;
-    head = head->next;
-    delete temp;
-    return value;
-  }
-
-  int delete_at_position(int position) {
-    if (head == nullptr) {
-      cout << "The Linked List is empty\n";
-      return -1;
-    }
-
-    if (position <= 0) {
-      cout << "Invalid Position\n";
-      return -1;
-    }
-
-    if (position == 1) {
-      delete_at_head();
-      return -1;
-    }
-
-    Node* temp = head;
-    for (int i = 0; i < (position - 1 && temp->next != nullptr); i++) {
+  void count_nodes() {
+    int count = 0;
+    Node<T>* temp = head;
+    while (temp != nullptr) {
+      count++;
       temp = temp->next;
     }
-    temp->next = temp->next->next;
-    return -1;
+    cout << "Total Nodes: " << count << endl;
   }
 
-  Node* reverse_nodes() {
-    Node* p = head;
-    Node* q = nullptr;
-    Node* r = nullptr;
-
+  Node<T>* reverse_node() {
+    if (head == nullptr) {
+      cout << "List is empty\n";
+      return nullptr;
+    }
+    Node<T>* p = head;
+    Node<T>* q = nullptr;
+    Node<T>* r = nullptr;
     while (p != nullptr) {
       r = q;
       q = p;
@@ -133,27 +127,44 @@ class LinkedList {
     return q;
   }
 
-  Node* concatenation(LinkedList& otherlist) {
-    if (head == nullptr) return otherlist.head;
-    if (otherlist.head == nullptr) return head;
+  bool find_element(T element) {
+    if (head == nullptr) {
+      cout << "List is empty\n";
+      return false;
+    }
+    Node<T>* temp = head;
+    while (temp != nullptr) {
+      if (temp->data == element) {
+        return true;
+      }
+      temp = temp->next;
+    }
+    return false;
+  }
 
-    Node* temp = head;
+  Node<T>* concatenation(Node<T>* head_1, Node<T>* head_2) {
+    if (head_1 == nullptr) {
+      return head_2;
+    }
+    if (head_2 == nullptr) {
+      return head_1;
+    }
+    Node<T>* temp = head_1;
     while (temp->next != nullptr) {
       temp = temp->next;
     }
-    temp->next = otherlist.head;
-    otherlist.head = nullptr;
-    return head;
+    head_2->next = nullptr;
+    return head_1;  // Return concatenated list's head
   }
 
-  Node* merged_ll(LinkedList& otherlist) {
-    if (head == nullptr) return otherlist.head;
-    if (otherlist.head == nullptr) return head;
+  Node<T>* merge_sorted(Node<T>* head1, Node<T>* head2) {
+    if (head1 == nullptr) return head2;
+    if (head2 == nullptr) return head1;
 
-    Node* first = head;
-    Node* second = otherlist.head;
-    Node* third = nullptr;
-    Node* last = nullptr;
+    Node<T>* first = head1;
+    Node<T>* second = head2;
+    Node<T>* third = nullptr;
+    Node<T>* last = nullptr;
 
     if (first->data < second->data) {
       third = last = first;
@@ -183,12 +194,15 @@ class LinkedList {
     return third;
   }
 
-  Node* find_middle_element() {
-    if (head == nullptr || head->next == nullptr) {
-      return head;
+  Node<T>* find_mid(Node<T>* head) {
+    if (head == nullptr) {
+      cout << "List is empty\n";
+      return nullptr;
     }
-    Node* slow = head;
-    Node* fast = head->next;
+
+    Node<T>* slow = head;
+    Node<T>* fast = slow->next;
+
     while (fast != nullptr && fast->next != nullptr) {
       slow = slow->next;
       fast = fast->next->next;
@@ -196,141 +210,29 @@ class LinkedList {
     return slow;
   }
 
-  Node* sorting() {
-    if (head == nullptr || head->next == nullptr) {
-      return head;
+  Node<T>* sort(Node<T>* head) {
+    if (head == nullptr && head->next == nullptr) {
+      return nullptr;
     }
-    Node* right = head;
-    Node* left = find_middle_element()->next;
-    find_middle_element()->next = nullptr;
 
-    LinkedList left_list;
-    LinkedList right_list;
+    Node<T>* left = head;
+    Node<T>* mid = find_mid(head);
+    Node<T>* right = mid->next;
+    mid->next = nullptr;
 
-    left_list.head = left;
-    right_list.head = right;
+    left = sort(left);
+    right = sort(right);
 
-    Node* sorted_left = left_list.sorting();
-    Node* sorted_right = right_list.sorting();
-
-    LinkedList sortedlist;
-    sortedlist.head = sorted_left;
-    sortedlist.head = sortedlist.merged_ll(right_list);
-    return sortedlist.head;
+    return (left, right);
   }
 
-  bool searching(int value) {
-    Node* temp = head;
-    while (temp->next != nullptr) {
-      if (temp->data == value) {
-        return true;
-      }
+  // Destructor
+  ~LinkedList() {
+    Node<T>* temp = head;
+    while (temp != nullptr) {
+      Node<T>* to_delete = temp;
       temp = temp->next;
+      delete to_delete;
     }
-    return false;
-  }
-
-  void min_n_max() {
-    if (head == nullptr) {
-      return;
-    }
-    int min = INT_MAX;
-    int max = INT_MIN;
-    Node* temp = head;
-    while (temp->next != nullptr) {
-      if (temp->data < min) {
-        min = temp->data;
-      }
-      if (temp->data > max) {
-        max = temp->data;
-      }
-      temp = temp->next;
-    }
-    cout << "Max: " << max << endl;
-    cout << "Min: " << min << endl;
-
-    return;
-  }
-
-  void count_nodes() {
-    if (head == nullptr) {
-      return;
-    }
-    int counter = 1;
-    Node* temp = head;
-    while (temp->next != nullptr) {
-      counter++;
-      temp = temp->next;
-    }
-    cout << "Total Nodes: " << counter << endl;
-  }
-
-  Node* remove_duplicates() {
-    if (head == nullptr || head->next == nullptr) {
-      return head;
-    }
-
-    Node* prev = head;
-    Node* current = head->next;
-
-    while (current != nullptr) {
-      if (current->data == prev->data) {
-        Node* delete_nodes = current;
-        prev->next = current->next;
-        current = current->next;
-        delete delete_nodes;
-      } else {
-        prev = current;
-        current = current->next;
-      }
-    }
-    return head;
-  }
-
-  Node* segregate_odd_n_even() {
-    if (head == nullptr || head->next == nullptr) return head;
-
-    Node* odd = head;
-    Node* even = head->next;
-    Node* even_head = even;
-
-    while ((odd != nullptr) && (even != nullptr) && (even->next != nullptr)) {
-      odd->next = even->next;
-      odd = odd->next;
-      even->next = odd->next;
-      even = even->next;
-    }
-    odd->next = even_head;
-
-    return head;
-  }
-
-  int josephus(int people, int steps) {
-    if (people <= 0 || steps <= 0) return -1;
-    Node* head = new Node(1);
-    Node* prev = head;
-    for (int i = 2; i <= people; i++) {
-      Node* new_node = new Node(i);
-      prev->next = new_node;
-      prev = new_node;
-    }
-    prev->next = head;
-    Node* current = head;
-    Node* prev_node = prev;
-    while (current->next != current) {
-      for (int i = 1; i < steps; i++) {
-        prev_node = current;
-        current = current->next;
-      }
-      prev_node->next = current->next;
-      Node* temp = current;
-      current = current->next;
-      delete temp;
-    }
-    int result = current->data;
-    delete current;
-    return result;
   }
 };
-
-#endif

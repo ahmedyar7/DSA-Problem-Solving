@@ -1,69 +1,116 @@
 #include <iostream>
 using namespace std;
 
-template <typename T>
-class Treenode {
+class TreeNode {
  public:
-  T data;
-  Treenode* left;
-  Treenode* right;
-  int height;
+  int data;
+  TreeNode* left;
+  TreeNode* right;
+  int height = 1;
 
-  Treenode(T data) {
+  TreeNode(int data) {
     this->data = data;
     left = nullptr;
     right = nullptr;
-    height = 1;
   }
 };
 
-// NOTE: Private member functions are marked with single underscore
-
-template <typename T>
 class AvlTree {
- public:
-  Treenode<T>* root;
-  AvlTree() { root = nullptr; }
-
-  void insert(T data) { root = insert_node(root, data); }
-  Treenode<T>* remove(T data) { return delete_node(root, data); }
-  void inorder() { inorder_traverse(root); }
-
-  ~AvlTree() { delete_tree(root); }
-
  private:
-  // Rotate left
-  Treenode<T>* rotate_left(Treenode<T>* node) {
-    Treenode<T>* new_root = node->right;
-    Treenode<T>* subtree = new_root->left;
+  int get_height(TreeNode* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    return node->height;
+  }
+
+  int balance_factor(TreeNode* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    return get_height(node->left) - get_height(node->right);
+  }
+
+  TreeNode* rotate_left(TreeNode* node) {
+    TreeNode* new_root = node->right;
+    TreeNode* subtree = new_root->left;
 
     new_root->left = node;
     node->right = subtree;
 
-    node->height = 1 + max(get_height(node->left), get_height(node->right));
     new_root->height =
         1 + max(get_height(new_root->left), get_height(new_root->right));
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
 
     return new_root;
   }
 
-  // Rotate right
-  Treenode<T>* rotate_right(Treenode<T>* node) {
-    Treenode<T>* new_root = node->left;
-    Treenode<T>* subtree = new_root->right;
+  TreeNode* rotate_right(TreeNode* node) {
+    TreeNode* new_root = node->left;
+    TreeNode* subtree = new_root->right;
 
     new_root->right = node;
     node->left = subtree;
 
-    node->height = 1 + max(get_height(node->left), get_height(node->right));
     new_root->height =
         1 + max(get_height(new_root->left), get_height(new_root->right));
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
 
     return new_root;
   }
 
-  // Delete tree and free memory
-  void delete_tree(Treenode<T>* node) {
+  TreeNode* find_min(TreeNode* node) {
+    if (node == nullptr) {
+      return nullptr;
+    }
+    TreeNode* current = node;
+    while (current->left != nullptr) current = current->left;
+    return current;
+  }
+
+  void inorder_traversal(TreeNode* node) {
+    if (node == nullptr) return;
+    inorder_traversal(node->left);
+    cout << node->data << " ";
+    inorder_traversal(node->right);
+  }
+
+  TreeNode* insert_node(TreeNode* node, int data) {
+    if (node == nullptr) return new TreeNode(data);
+    if (data < node->data) {
+      node->left = insert_node(node->left, data);
+    } else if (data > node->data) {
+      node->right = insert_node(node->right, data);
+    } else {
+      return node;
+    }
+
+    int balance = balance_factor(node);
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
+
+    // LL Case
+    if (balance > 1 && data < node->left->data) {
+      return rotate_right(node);
+    }
+    // RR Case
+    else if (balance < -1 && data > node->right->data) {
+      return rotate_left(node);
+    }
+    // LR Case
+    else if (balance > 1 && data > node->left->data) {
+      node->left = rotate_left(node->left);
+      return rotate_right(node);
+    }
+    // RL Case
+    else if (balance < -1 && data < node->right->data) {
+      node->right = rotate_right(node->left);
+      return rotate_left(node);
+    } else {
+      return node;
+    }
+  }
+
+  void delete_tree(TreeNode* node) {
     if (node == nullptr) {
       return;
     }
@@ -72,160 +119,104 @@ class AvlTree {
     delete node;
   }
 
-  // Get height of node
-  int get_height(Treenode<T>* node) {
-    if (node == nullptr) return 0;
-    return node->height;
-  }
-
-  // Calculate balance factor of node
-  int balance_factor(Treenode<T>* node) {
-    if (node == nullptr) return 0;
-    return get_height(node->left) - get_height(node->right);
-  }
-
-  // Inorder traversal
-  void inorder_traverse(Treenode<T>* node) {
-    if (node == nullptr) return;
-    inorder_traverse(node->left);
-    cout << node->data << " ";
-    inorder_traverse(node->right);
-  }
-
-  // Insert node in the AVL tree
-  Treenode<T>* insert_node(Treenode<T>* node, T data) {
-    if (node == nullptr) {
-      return new Treenode<T>(data);
-    }
-
-    // Perform standard BST insert
-    if (data < node->data) {
-      node->left = insert_node(node->left, data);
-    } else if (data > node->data) {
-      node->right = insert_node(node->right, data);
+  TreeNode* remove_node(TreeNode* node, int data) {
+    if (node == nullptr) return nullptr;
+    if (node->data < data) {
+      node->right = remove_node(node->right, data);
+    } else if (node->data > data) {
+      node->left = remove_node(node->left, data);
     } else {
-      return node;  // No duplicates allowed
-    }
-
-    // Update height of current node
-    node->height = 1 + max(get_height(node->left), get_height(node->right));
-
-    // Check balance factor and perform rotations if necessary
-    int balance = balance_factor(node);
-
-    // LL Case
-    if (balance > 1 && data < node->left->data) {
-      return rotate_right(node);
-    }
-
-    // RR Case
-    if (balance < -1 && data > node->right->data) {
-      return rotate_left(node);
-    }
-
-    // LR Case
-    if (balance > 1 && data > node->left->data) {
-      node->left = rotate_left(node->left);
-      return rotate_right(node);
-    }
-
-    // RL Case
-    if (balance < -1 && data < node->right->data) {
-      node->right = rotate_right(node->right);
-      return rotate_left(node);
-    }
-
-    return node;  // No rotation needed
-  }
-
-  Treenode<T>* find_min(Treenode<T>* node) {
-    Treenode<T>* current = node;
-    while (current->left != nullptr) current = current->left;
-    return current;
-  }
-
-  Treenode<T>* delete_node(Treenode<T>* node, T value) {
-    if (node == nullptr) {
-      return nullptr;  // Corrected to return nullptr
-    }
-    if (node->data < value) {
-      node->left = delete_node(node->left, value);
-    } else if (node->data > value) {
-      node->right = delete_node(node->right, value);
-    } else {
-      // no child
       if (node->left == nullptr && node->right == nullptr) {
         delete node;
         return nullptr;
-      }
-      // left child
-      else if (node->left == nullptr) {
-        Treenode<T>* temp = node->right;
+      } else if (node->left == nullptr) {
+        TreeNode* temp = node->right;
         delete node;
         return temp;
       } else if (node->right == nullptr) {
-        Treenode<T>* temp = node->left;
+        TreeNode* temp = node->left;
         delete node;
         return temp;
       } else {
-        Treenode<T>* temp = find_min(node->right);
-        node->data = temp->data;  // Using temp->data for assignment
-        node->right = delete_node(node->right, temp->data);
+        TreeNode* temp = find_min(node->right);
+        node->data = temp->data;
+        node->right = remove_node(node->right, temp->data);
       }
     }
 
-    // Update height of current node
-    node->height = 1 + max(get_height(node->left), get_height(node->right));
-
-    // Check balance factor and perform rotations if necessary
     int balance = balance_factor(node);
+    node->height = 1 + max(get_height(node->left), get_height(node->right));
 
     // LL Case
     if (balance > 1 && balance_factor(node->left) >= 0) {
       return rotate_right(node);
     }
-
     // RR Case
-    if (balance < -1 && balance_factor(node->right) <= 0) {
+    else if (balance < -1 && balance_factor(node->right) <= 0) {
       return rotate_left(node);
     }
-
     // LR Case
-    if (balance > 1 && balance_factor(node->left) <= 0) {
+    else if (balance > 1 && balance_factor(node->left) <= 0) {
       node->left = rotate_left(node->left);
       return rotate_right(node);
     }
-
     // RL Case
-    if (balance < -1 && balance_factor(node->right) <= 0) {
-      node->right = rotate_right(node->right);
+    else if (balance < -1 && balance_factor(node->right) >= 0) {
+      node->right = rotate_right(node->left);
       return rotate_left(node);
+    } else {
+      return node;
     }
-
-    return node;  // No rotation needed
   }
+
+ public:
+  TreeNode* root;
+
+  AvlTree() { root = nullptr; }
+
+  void insert(int data) { root = insert_node(root, data); }
+  void inorder() { inorder_traversal(root); }
+  TreeNode* remove(int data) { return remove_node(root, data); }
+  ~AvlTree() { delete_tree(root); }
 };
 
-int main() {
-  AvlTree<int> tree;
+#include <iostream>
+using namespace std;
 
-  // Insert some elements
+int main() {
+  AvlTree tree;
+
+  cout << "Inserting elements into the AVL Tree..." << endl;
   tree.insert(10);
   tree.insert(20);
   tree.insert(30);
-  tree.insert(15);
+  tree.insert(40);
+  tree.insert(50);
   tree.insert(25);
 
-  cout << "In-order traversal after insertions: ";
-  tree.inorder();  // Should print the sorted tree: 10 15 20 25 30
+  cout << "Inorder traversal of the AVL Tree: ";
+  tree.inorder();
   cout << endl;
 
-  // Delete some elements
-  tree.remove(20);  // Remove 20
-  tree.remove(10);  // Remove 10
+  cout << "Removing element 20 from the AVL Tree..." << endl;
+  tree.root = tree.remove(20);
 
-  cout << "In-order traversal after deletions: ";
-  tree.inorder();  // Should print the sorted tree: 15 25 30
+  cout << "Inorder traversal after removing 20: ";
+  tree.inorder();
+  cout << endl;
+
+  cout << "Removing element 10 from the AVL Tree..." << endl;
+  tree.root = tree.remove(10);
+
+  cout << "Inorder traversal after removing 10: ";
+  tree.inorder();
+  cout << endl;
+
+  cout << "Removing element 30 from the AVL Tree..." << endl;
+  tree.root = tree.remove(30);
+
+  cout << "Inorder traversal after removing 30: ";
+  tree.inorder();
   cout << endl;
 
   return 0;

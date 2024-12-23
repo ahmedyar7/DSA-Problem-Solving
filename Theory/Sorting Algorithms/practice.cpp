@@ -63,7 +63,11 @@ class SortingAlgorithms {
       merge_sort(arr, mid + 1, high);
       merge(arr, low, mid, high);
     }
+<<<<<<< HEAD
     return 0;
+=======
+    return;
+>>>>>>> practice
   }
 
   void quick_sort(int arr[], int low, int high) {
