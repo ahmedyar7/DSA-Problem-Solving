@@ -70,7 +70,7 @@ class CircularLinkedList {
     temp->next = new_node;
     new_node->next = head;
     return;
-  } 
+  }
 
   void insert_at_position(int value, int position) {
     Node_* new_node = new Node_(value);
