@@ -74,7 +74,6 @@ class DoublyCircular {
     newnode->next = temp->next;
     temp->next->prev = newnode;
     temp->next = newnode;
-    newnode->prev = temp;
   }
 
   void display() {
