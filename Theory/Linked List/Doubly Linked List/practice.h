@@ -103,4 +103,55 @@ class DoublyLinkedList {
     temp->next = temp->next->next;
     temp->next->next->prev = temp;
   }
+
+  Node* contatenation(Node*& head1, Node*& head2) {
+    if (head1 == nullptr) return head2;
+    if (head2 == nullptr) return head1;
+
+    Node* temp = head1;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+    }
+    temp->next = head2;
+    head2->next = nullptr;
+    return head1;
+  }
+
+  Node* merge_dll(Node*& head1, Node*& head2) {
+    if (head1 == nullptr) return head2;
+    if (head2 == nullptr) return head1;
+
+    Node* first = head1;
+    Node* second = head2;
+    Node* third = nullptr;
+    Node* last = nullptr;
+
+    if (first->data < second->data) {
+      third = last = first;
+      first = first->next;
+    } else {
+      third = last = second;
+      second = second->next;
+    }
+
+    while (first != nullptr && second != nullptr) {
+      if (first->data < second->data) {
+        last->next = first;
+        last = first;
+        first = first->next;
+      } else {
+        last->next = second;
+        last = second;
+        second = second->next;
+      }
+    }
+
+    if (first == nullptr) {
+      last = second;
+    } else {
+      last = first;
+    }
+
+    return third;
+  }
 };
