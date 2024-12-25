@@ -91,4 +91,47 @@ class DoublyCircular {
 
     cout << endl;
   }
+
+  void delete_head() {
+    if (head == nullptr) {
+      cout << "List is empty\n";
+      return;
+    }
+
+    if (head->next == head) {
+      delete head;
+    }
+
+    Node* temp = head;
+    Node* last = head->prev;
+    head = head->next;
+    last->next = head;
+    head->prev = last;
+
+    delete temp;
+  }
+
+  void delete_at_position(int pos) {
+    if (pos <= 0) {
+      cout << "Invalid Position\n";
+      return;
+    }
+    if (pos == 1) {
+      delete_head();
+    }
+    Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp->next != head; i++) {
+      temp = temp->next;
+    }
+
+    if (temp->next == head) {
+      cout << "Position out of range\n";
+      return;
+    }
+
+    Node* to_del = temp->next;
+    temp->next = temp->next->next;
+    temp->next->next->prev = temp;
+    delete to_del;
+  }
 };
