@@ -1,82 +1,107 @@
 #include <iostream>
+using namespace std;
 
-#include "practice.h"
+struct Node {
+  int data;
+  Node* next;
+  Node* prev;
+
+  Node(int val) : data(val), next(nullptr), prev(nullptr) {}
+};
+
+class DoublyLinkedList {
+ public:
+  Node* head;
+
+  DoublyLinkedList() : head(nullptr) {}
+
+  // Function to delete a node with a specific value
+  void deleteNode(int value) {
+    if (head == nullptr) {
+      std::cout << "The list is empty." << std::endl;
+      return;
+    }
+
+    Node* temp = head;
+
+    // If the node to be deleted is the head node
+    if (temp != nullptr && temp->data == value) {
+      head = temp->next;  // Move the head to the next node
+      if (head != nullptr) {
+        head->prev =
+            nullptr;  // If there's a next node, update its prev pointer
+      }
+      delete temp;
+      std::cout << "Node with value " << value << " deleted." << std::endl;
+      return;
+    }
+
+    // Traverse the list to find the node
+    while (temp != nullptr && temp->data != value) {
+      temp = temp->next;
+    }
+
+    // If the node was not found
+    if (temp == nullptr) {
+      std::cout << "Node with value " << value << " not found." << std::endl;
+      return;
+    }
+
+    // If the node is found, update the pointers and delete the node
+    if (temp->next != nullptr) {
+      temp->next->prev = temp->prev;  // Update the next node's prev pointer
+    }
+    if (temp->prev != nullptr) {
+      temp->prev->next = temp->next;  // Update the previous node's next pointer
+    }
+
+    delete temp;
+    std::cout << "Node with value " << value << " deleted." << std::endl;
+  }
+
+  // Function to insert a node at the end (for testing purposes)
+  void append(int value) {
+    Node* newNode = new Node(value);
+    if (head == nullptr) {
+      head = newNode;
+      return;
+    }
+    Node* temp = head;
+    while (temp->next != nullptr) {
+      temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+  }
+
+  // Function to display the list (for testing purposes)
+  void display() {
+    Node* temp = head;
+    while (temp != nullptr) {
+      std::cout << temp->data << " ";
+      temp = temp->next;
+    }
+    std::cout << std::endl;
+  }
+};
 
 int main() {
-  DoublyLinkedList dll;
-  Node* head1 = nullptr;
-  Node* head2 = nullptr;
+  DoublyLinkedList list;
+  list.append(10);
+  list.append(20);
+  list.append(30);
+  list.append(40);
 
-  // Testing insert_at_head
-  cout << "Inserting at head:\n";
-  dll.insert_at_head(head1, 10);
-  dll.insert_at_head(head1, 20);
-  dll.insert_at_head(head1, 30);
-  dll.display(head1);
+  std::cout << "Original list: ";
+  list.display();
 
-  // Testing insert_at_tail
-  cout << "\nInserting at tail:\n";
-  dll.insert_at_tail(head1, 5);
-  dll.insert_at_tail(head1, 0);
-  dll.display(head1);
+  list.deleteNode(20);
+  std::cout << "After deleting 20: ";
+  list.display();
 
-  // Testing insert_at_position
-  cout << "\nInserting at position 3:\n";
-  dll.insert_at_position(head1, 15, 3);
-  dll.display(head1);
-
-  // Testing delete_head
-  cout << "\nDeleting head:\n";
-  dll.delete_head(head1);
-  dll.display(head1);
-
-  // Testing delete_at_position
-  cout << "\nDeleting at position 4:\n";
-  dll.delete_at_position(head1, 4);
-  dll.display(head1);
-
-  // Testing concatenation
-  cout << "\nCreating second list and concatenating:\n";
-  dll.insert_at_tail(head2, 50);
-  dll.insert_at_tail(head2, 60);
-  dll.insert_at_tail(head2, 70);
-  dll.display(head2);
-
-  // Testing merge_dll
-  cout << "\nTesting merge of two sorted lists:\n";
-  Node* sorted1 = nullptr;
-  Node* sorted2 = nullptr;
-  dll.insert_at_tail(sorted1, 1);
-  dll.insert_at_tail(sorted1, 3);
-  dll.insert_at_tail(sorted1, 5);
-  dll.insert_at_tail(sorted2, 2);
-  dll.insert_at_tail(sorted2, 4);
-  dll.insert_at_tail(sorted2, 6);
-
-  cout << "List 1: ";
-  dll.display(sorted1);
-  cout << "List 2: ";
-  dll.display(sorted2);
-
-  Node* merged = dll.merge_dll(sorted1, sorted2);
-  cout << "Merged list: ";
-  dll.display(merged);
-
-  // Testing sort
-  cout << "\nTesting sorting of an unsorted list:\n";
-  Node* unsorted = nullptr;
-  dll.insert_at_tail(unsorted, 7);
-  dll.insert_at_tail(unsorted, 2);
-  dll.insert_at_tail(unsorted, 9);
-  dll.insert_at_tail(unsorted, 1);
-  dll.insert_at_tail(unsorted, 5);
-
-  cout << "Unsorted list: ";
-  dll.display(unsorted);
-
-  Node* sorted = dll.sort(unsorted);
-  cout << "Sorted list: ";
-  dll.display(sorted);
+  list.deleteNode(10);
+  std::cout << "After deleting 10: ";
+  list.display();
 
   return 0;
 }
