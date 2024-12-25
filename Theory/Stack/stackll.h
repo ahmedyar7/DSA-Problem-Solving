@@ -4,10 +4,10 @@ using namespace std;
 
 class Node {
  public:
-  int data;
+  char data;
   Node* next;
 
-  Node(int data) {
+  Node(char data) {
     this->data = data;
     next = nullptr;
   }
@@ -20,7 +20,7 @@ class Stack {
  public:
   Stack() { front = nullptr; }
 
-  void push(int data) {
+  void push(char data) {
     Node* new_node = new Node(data);
     if (front == nullptr) {
       front = new_node;
@@ -30,10 +30,10 @@ class Stack {
     front = new_node;
   }
 
-  int pop() {
+  char pop() {
     if (front == nullptr) {
       cout << "List is empty\n";
-      return -1;
+      return '\0';
     }
     Node* temp = front;
     int value = temp->data;
@@ -43,10 +43,10 @@ class Stack {
   }
 
   bool empty() { return front == nullptr; }
-  int top() {
+  char top() {
     if (front == nullptr) {
       cout << "List is empty\n";
-      return -1;
+      return '\0';
     }
     return front->data;
   }
@@ -114,59 +114,86 @@ class Stack {
   }
 
   // Infix to Postfix Conversion
-  void infix_to_postfix(const char* exp, char* result) {
+  void infix_to_postfix(char* infix, char* postfix) {
+    int i = 0, j = 0;
     Stack st;
-    int k = 0;  // Index for result string
-    for (int i = 0; exp[i] != '\0'; i++) {
-      char ch = exp[i];
 
+    // Iterate through the infix expression
+    while (infix[i] != '\0') {
+      char ch = infix[i];
+
+      // If the character is an operand, add it to the postfix expression
       if (is_operand(ch)) {
-        result[k++] = ch;  // Append operand to result
-      } else if (ch == '(') {
-        st.push(ch);  // Push '(' to stack
-      } else if (ch == ')') {
-        // Pop until '(' is encountered
-        while (!st.empty() && st.top() != '(') {
-          result[k++] = st.pop();
-        }
-        st.pop();  // Remove '(' from stack
-      } else {
-        // Operator
-        while (!st.empty() && precedence(st.top()) >= precedence(ch)) {
-          result[k++] = st.pop();  // Pop higher precedence operators
-        }
-        st.push(ch);  // Push current operator to stack
+        postfix[j++] = ch;
       }
+      // If it's an opening parenthesis, push to stack
+      else if (ch == '(') {
+        st.push(ch);
+      }
+      // If it's a closing parenthesis, pop from stack until opening parenthesis
+      else if (ch == ')') {
+        while (!st.empty() && st.top() != '(') {
+          postfix[j++] = st.pop();
+        }
+        if (!st.empty()) {
+          st.pop();  // Pop the '('
+        }
+      }
+      // If it's an operator
+      else {
+        while (!st.empty() && precedence(ch) <= precedence(st.top())) {
+          postfix[j++] = st.pop();
+        }
+        st.push(ch);
+      }
+      i++;
     }
 
     // Pop remaining operators from stack
     while (!st.empty()) {
-      result[k++] = st.pop();
+      postfix[j++] = st.pop();
     }
-    result[k] = '\0';  // Null-terminate the result string
+    postfix[j] = '\0';  // Null-terminate the postfix expression
   }
 
-  // Infix to Prefix Conversion
-  void infix_to_prefix(const char* exp, char* result) {
-    // Reverse the expression
-    char reversed_exp[100];
-    strcpy(reversed_exp, exp);
-    reverse_string(reversed_exp);
+  void infix_to_prefix(char* infix, char* prefix) {
+    // Reverse the infix expression
+    reverse_string(infix);
 
-    // Reverse parentheses
-    for (int i = 0; reversed_exp[i] != '\0'; i++) {
-      if (reversed_exp[i] == '(')
-        reversed_exp[i] = ')';
-      else if (reversed_exp[i] == ')')
-        reversed_exp[i] = '(';
+    int i = 0;
+    // Change '(' to ')' and vice versa
+    while (infix[i] != '\0') {
+      if (infix[i] == '(') {
+        infix[i] = ')';
+      } else if (infix[i] == ')') {
+        infix[i] = '(';
+      }
+      i++;
     }
 
-    // Get postfix of the reversed expression
-    char reversed_postfix[100];
-    infix_to_postfix(reversed_exp, reversed_postfix);
+    // Create a new postfix array to store result
+    char postfix[100];  // Ensure the size is sufficient for the expression
+    infix_to_postfix(infix, postfix);  // Convert the reversed infix to postfix
 
-    // Reverse the postfix result to get prefix
-    reverse_string(reversed_postfix);
-    strcpy(result, reversed_postfix);
+    // Reverse the postfix to get the prefix expression
+    reverse_string(postfix);
+
+    // Copy the result to prefix
+    int j = 0;
+    while (postfix[j] != '\0') {
+      prefix[j] = postfix[j];
+      j++;
+    }
+    prefix[j] = '\0';  // Null-terminate the prefix expression
   }
 };
+
+/*
+  Algorithm For Infix to Postfix:
+  1. Check if operand add to postfix array
+  2. If opening bracket add to the stack
+  3. If closing bracket then empty the stack untill you find the opening of the
+  close bracket
+  4. Check precedence if precedence is less than pop
+
+*/
