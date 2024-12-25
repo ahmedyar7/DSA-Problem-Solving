@@ -1,5 +1,4 @@
-#ifndef DOUBLYLINKEDLIST_H
-#define DOUBLYLINKEDLIST_H
+
 
 #include <iostream>
 using namespace std;
@@ -30,5 +29,3 @@ class DoublyLinkedList {
   void remove_duplicate(DoublyLinkedList*& head);
   void insert_at_sorted_position(DoublyLinkedList*& head, int value);
 };
-
-#endif
