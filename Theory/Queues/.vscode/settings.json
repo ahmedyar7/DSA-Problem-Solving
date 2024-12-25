@@ -53,7 +53,8 @@
     "queue": "cpp",
     "span": "cpp",
     "vector": "cpp",
-    "ranges": "cpp"
+    "ranges": "cpp",
+    "string": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
