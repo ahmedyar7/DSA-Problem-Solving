@@ -4,16 +4,23 @@
 using namespace std;
 
 int main() {
-  Stack<int> st;
+  // Test your Stack class and conversions
+  Stack s;
+  const char* expression = "{[a+b]*(c+d)}";
+  if (s.valid_parenthesis(expression)) {
+    cout << "Valid Parentheses\n";
+  } else {
+    cout << "Invalid Parentheses\n";
+  }
 
-  char exp[] = "((a+b)*(c-d))/(e+f)";
-  cout << valid_parenthesis(exp) << endl;
+  char infix[] = "(a+b)*(c+d)";
+  char postfix[100], prefix[100];
 
-  char postfix[100];
-  infix_to_postfix(exp, postfix);
-  cout << postfix << endl;
+  s.infix_to_postfix(infix, postfix);
+  cout << "Postfix: " << postfix << endl;
 
-  char prefix[100];
-  infix_to_prefix(exp, prefix);
-  cout << prefix << endl;
+  s.infix_to_prefix(infix, prefix);
+  cout << "Prefix: " << prefix << endl;
+
+  return 0;
 }
