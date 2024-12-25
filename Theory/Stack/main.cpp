@@ -4,16 +4,29 @@
 using namespace std;
 
 int main() {
-  Stack<int> st;
+  Stack s;
 
-  char exp[] = "((a+b)*(c-d))/(e+f)";
-  cout << valid_parenthesis(exp) << endl;
+  // Testing push
+  s.push(10);
+  s.push(20);
+  s.push(30);
+  s.push(40);
 
-  char postfix[100];
-  infix_to_postfix(exp, postfix);
-  cout << postfix << endl;
+  cout << "Current Stack: ";
+  s.display();
 
-  char prefix[100];
-  infix_to_prefix(exp, prefix);
-  cout << prefix << endl;
+  // Testing top
+  cout << "Top of the stack: " << s.top() << endl;
+
+  // Testing pop
+  cout << "Popped: " << s.pop() << endl;
+  cout << "Popped: " << s.pop() << endl;
+
+  cout << "Current Stack: ";
+  s.display();
+
+  // Testing top after pops
+  cout << "Top of the stack after pops: " << s.top() << endl;
+
+  return 0;
 }
