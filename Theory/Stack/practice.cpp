@@ -1,170 +1,156 @@
 #include <iostream>
 using namespace std;
 
-class Node {
- private:
- public:
-  char data;
-  Node* next;
-
-  Node(char data) {
-    this->data = data;
-    next = nullptr;
-  }
-};
-
 class Stack {
  private:
-  Node* top;
+  int capacity;
+  char *arr;
+  int front;
 
  public:
-  Stack() { top = nullptr; }
+  Stack(int capacity) {
+    this->capacity = capacity;
+    front = -1;
+    arr = new char[capacity];
+  }
 
-  bool empty() { return top == nullptr; }
+  bool full() { return front == capacity - 1; }
+  bool empty() { return front == -1; }
 
   void push(char value) {
-    Node* new_node = new Node(value);
-    if (empty()) {
-      top = new_node;
+    if (full()) {
+      cout << "Stack is full\n";
       return;
     }
-    new_node->next = top;
-    top = new_node;
-    return;
+    arr[++front] = value;
   }
 
   char pop() {
-    Node* temp = top;
-    top = top->next;
-    char value = temp->data;
-    delete temp;
+    if (empty()) {
+      cout << "Stack is empty\n";
+      return '\0';
+    }
+    char value = arr[front--];
     return value;
   }
 
-  char peek() { return top->data; }
-};
+  char top() {
+    if (empty()) {
+      cout << "Stack is empty\n";
+      return '\0';
+    }
+    return arr[front];
+  }
 
-bool valid_parenthesis(char str[]) {
-  Stack st;
-  int i = 0;
-
-  while (str[i] != '\0') {
-    char ch = str[i];
-
-    if (ch == '(' || ch == '{' || ch == '[') {
-      st.push(ch);
-    } else if (ch == ')' || ch == '}' || ch == ']') {
-      if (st.empty()) return false;
-      char top = st.peek();
-      if ((ch == ')' && top == '(') || (ch == ']' && top == '[') ||
-          (ch == '}' && top == '{')) {
-        st.pop();
+  bool valid_parenthesis(char exp[]) {
+    int i = 0;
+    Stack st(100);
+    while (exp[i] != '\0') {
+      char ch = exp[i];
+      if (ch == '(' || ch == '{' || ch == '[') {
+        st.push(ch);
+      } else if (ch == ')' || ch == '}' || ch == ']') {
+        if (st.empty()) {
+          return false;
+        }
+        char peek = st.top();
+        if ((ch == ')' && peek == '(') || (ch == '}' && peek == '{') ||
+            (ch == ']' && peek == '['))
+          st.pop();
       } else {
         return false;
       }
+      i++;
+    }
+    return st.empty();
+  }
+
+  int prece(char exp) {
+    if (exp == '+' || exp == '-') return 1;
+    if (exp == '/' || exp == '*') return 2;
+    if (exp == '^') return 3;
+    return -1;
+  }
+
+  bool is_operand(char ch) {
+    if ((ch >= 'A' && ch <= 'Z') || (ch >= 'z' && ch <= 'z') ||
+        (ch >= '0' && ch <= '9'))
+      return true;
+    return false;
+  }
+
+  void reverse_str(char *exp) {
+    int n = 0;
+    while (exp[n] != '\0') {
+      n++;
+    }
+    for (int i = 0; i < n / 2; i++) {
+      char temp = exp[i];
+      exp[i] = exp[n - i - 1];
+      exp[n - i - 1] = temp;
+    }
+    return;
+  }
+
+  void infix_to_postfix(char *infix, char *postfix) {
+    int i = 0;
+    int j = 0;
+
+    Stack st(100);
+
+    while (infix[i] != '\0') {
+      char ch = infix[i];
+      if (is_operand(ch)) {
+        postfix[j++] = ch;
+      } else if (ch == '(') {
+        st.push(ch);
+      } else if (ch == ')') {
+        while (!st.empty() && st.top() != '(') {
+          postfix[j++] = st.pop();
+        }
+        if (!st.empty()) {
+          st.pop();
+        }
+      } else {
+        while (!st.empty() && prece(ch) <= prece(st.top())) {
+          postfix[j++] = st.pop();
+        }
+        st.push(ch);
+      }
+      i++;
+    }
+    while (!st.empty()) {
+      postfix[j++] = st.pop();
+    }
+    postfix[j++] = '\0';
+    return;
+  }
+
+  void infix_to_prefix(char *infix, char *prefix) {
+    reverse_str(infix);
+    int i = 0;
+    while (infix[i] != '\0') {
+      if (infix[i] == '(') {
+        infix[i] = ')';
+      } else if (infix[i] == ')') {
+        infix[i] = '(';
+      }
+      i++;
     }
 
-    i++;
-  }
-  return st.empty();
-}
+    char postfix[100];
+    infix_to_postfix(infix, postfix);
+    reverse_str(postfix);
 
-void reverse_string(char arr[]) {
-  int len = 0;
-  while (arr[len] != '\0') len++;
-
-  for (int i = 0; i < len / 2; i++) {
-    char temp = arr[i];
-    arr[i] = arr[len - i - 1];
-    arr[len - i - 1] = temp;
-  }
-}
-
-int precedence(char ch) {
-  if (ch == '+' || ch == '-') return 1;
-  if (ch == '*' || ch == '/') return 2;
-  if (ch == '^') return 3;
-
-  return -1;
-}
-
-bool is_operand(char ch) {
-  return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-          (ch >= '0' && ch <= '9'));
-}
-
-void infix_to_postfix(char infix[], char postfix[]) {
-  Stack st;
-  int i = 0;
-  int j = 0;
-
-  while (infix[i] != '\0') {
-    char ch = infix[i];
-    if (is_operand(ch)) {
-      postfix[j++] = ch;
-    } else if (ch == '(') {
-      st.push(ch);
-    } else if (ch == ')') {
-      while (!st.empty() & st.peek() != '(') {
-        postfix[j++] = st.pop();
-      }
-      if (!st.empty()) {
-        st.pop();
-      }
-    } else {
-      while (!st.empty() && precedence(ch) <= precedence(st.peek())) {
-        postfix[j++] = st.pop();
-      }
-      st.push(ch);
+    int j = 0;
+    while (postfix[j] != '\0') {
+      infix[j] = postfix[j];
+      j++;
     }
-    i++;
-  }
-  while (!st.empty()) {
-    postfix[j++] = st.pop();
-  }
-  postfix[j] = '\0';
-}
 
-void infix_to_prefix(char infix[], char prefix[]) {
-  reverse_string(infix);
-
-  int i = 0;
-  while (infix[i] != '\0') {
-    if (infix[i] == '(') {
-      infix[i] = ')';
-    } else if (infix[i] == ')') {
-      infix[i] = '(';
-    }
-    i++;
+    infix[j] = '\0';
+    return;
   }
 
-  char postfix[100];
-  infix_to_postfix(infix, postfix);
-  reverse_string(postfix);
-
-  int j = 0;
-  while (postfix[j] != '\0') {
-    prefix[j] = postfix[j];
-    j++;
-  }
-  prefix[j] = '\0';
-}
-
-int main() {
-  char exp[] = "(A-B/C)*(A/K-L)";
-  cout << "Infix expression: " << exp << endl;
-
-  cout << "Postfix Expression \n\n";
-  char ans[100];
-  infix_to_postfix(exp, ans);
-  cout << ans << endl;
-
-  cout << "Prefix  Expression \n\n";
-  char ans1[100];
-  infix_to_prefix(exp, ans1);
-  cout << ans1 << endl;
-
-  cout << "Is valid: " << (valid_parenthesis(exp) ? "Yes" : "No") << endl;
-
-  return 0;
-}
+  ~Stack() { delete[] arr; }
+};

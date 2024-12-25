@@ -1,26 +1,43 @@
 #include <iostream>
 
-#include "stackll.h"
+#include "practice.cpp"
 using namespace std;
 
 int main() {
-  // Test your Stack class and conversions
-  Stack s;
-  const char* expression = "{[a+b]*(c+d)}";
-  if (s.valid_parenthesis(expression)) {
-    cout << "Valid Parentheses\n";
+  // Create an instance of Stack
+  Stack stack(100);
+
+  // Example expressions
+  char infixExpression[] = "(A+B)*C";
+  char postfixExpression[100];
+  char prefixExpression[100];
+  char validExpression[] = "{[()]}";    // Valid parenthesis example
+  char invalidExpression[] = "{[(])}";  // Invalid parenthesis example
+
+  // Validate parenthesis
+  cout << "Valid Parenthesis Test:\n";
+  if (stack.valid_parenthesis(validExpression)) {
+    cout << validExpression << " is valid.\n";
   } else {
-    cout << "Invalid Parentheses\n";
+    cout << validExpression << " is invalid.\n";
+  }
+  if (stack.valid_parenthesis(invalidExpression)) {
+    cout << invalidExpression << " is valid.\n";
+  } else {
+    cout << invalidExpression << " is invalid.\n";
   }
 
-  char infix[] = "(a+b)*(c+d)";
-  char postfix[100], prefix[100];
+  // Convert Infix to Postfix
+  cout << "\nInfix to Postfix Conversion:\n";
+  cout << "Infix Expression: " << infixExpression << endl;
+  stack.infix_to_postfix(infixExpression, postfixExpression);
+  cout << "Postfix Expression: " << postfixExpression << endl;
 
-  s.infix_to_postfix(infix, postfix);
-  cout << "Postfix: " << postfix << endl;
-
-  s.infix_to_prefix(infix, prefix);
-  cout << "Prefix: " << prefix << endl;
+  // Convert Infix to Prefix
+  cout << "\nInfix to Prefix Conversion:\n";
+  stack.infix_to_prefix(infixExpression, prefixExpression);
+  cout << "Infix Expression: " << infixExpression << endl;
+  cout << "Prefix Expression: " << prefixExpression << endl;
 
   return 0;
 }
