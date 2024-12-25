@@ -5,28 +5,15 @@ using namespace std;
 
 int main() {
   Stack s;
+  char infix[] = "(A+B)*(C-D)";
+  char postfix[100];
+  char prefix[100];
 
-  // Testing push
-  s.push(10);
-  s.push(20);
-  s.push(30);
-  s.push(40);
+  s.infix_to_postfix(infix, postfix);
+  cout << "Postfix: " << postfix << endl;
 
-  cout << "Current Stack: ";
-  s.display();
-
-  // Testing top
-  cout << "Top of the stack: " << s.top() << endl;
-
-  // Testing pop
-  cout << "Popped: " << s.pop() << endl;
-  cout << "Popped: " << s.pop() << endl;
-
-  cout << "Current Stack: ";
-  s.display();
-
-  // Testing top after pops
-  cout << "Top of the stack after pops: " << s.top() << endl;
+  s.infix_to_prefix(infix, prefix);
+  cout << "Prefix: " << prefix << endl;
 
   return 0;
 }
