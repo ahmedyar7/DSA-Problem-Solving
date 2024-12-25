@@ -22,11 +22,9 @@ class DoublyLinkedList {
       head = new_node;
       return;
     }
-    Node* temp = head;
-    new_node->next = temp;
-    temp->prev = new_node;
+    new_node->next = head;
+    head->prev = new_node;
     head = new_node;
-    return;
   }
 
   void insert_at_tail(Node*& head, int value) {
@@ -41,12 +39,11 @@ class DoublyLinkedList {
     }
     temp->next = new_node;
     new_node->prev = temp;
-    return;
   }
 
   void insert_at_position(Node*& head, int value, int position) {
     if (position <= 0) {
-      cout << "Invalid Postion\n";
+      cout << "Invalid Position\n";
       return;
     }
     if (position == 1) {
@@ -54,14 +51,16 @@ class DoublyLinkedList {
       return;
     }
     Node* temp = head;
-    for (int i = 1; i < position - 1 && temp->next != nullptr; i++)
+    for (int i = 1; i < position - 1 && temp->next != nullptr; i++) {
       temp = temp->next;
+    }
     Node* new_node = new Node(value);
     new_node->next = temp->next;
-    temp->next->prev = new_node;
+    if (temp->next != nullptr) {
+      temp->next->prev = new_node;
+    }
     temp->next = new_node;
     new_node->prev = temp;
-    return;
   }
 
   void display(Node* head) {
@@ -84,27 +83,38 @@ class DoublyLinkedList {
     }
     Node* temp = head;
     head = head->next;
+    if (head != nullptr) {
+      head->prev = nullptr;
+    }
     delete temp;
   }
 
   void delete_at_position(Node*& head, int position) {
     if (position <= 0) {
-      cout << "Invalid Postiont\n";
+      cout << "Invalid Position\n";
       return;
     }
     if (position == 1) {
       delete_head(head);
+      return;
     }
     Node* temp = head;
     for (int i = 1; i < position - 1 && temp->next != nullptr; i++) {
       temp = temp->next;
     }
+    if (temp->next == nullptr) {
+      cout << "Invalid position\n";
+      return;
+    }
     Node* to_del = temp->next;
     temp->next = temp->next->next;
-    temp->next->next->prev = temp;
+    if (temp->next != nullptr) {
+      temp->next->prev = temp;
+    }
+    delete to_del;
   }
 
-  Node* contatenation(Node*& head1, Node*& head2) {
+  Node* concatenation(Node*& head1, Node*& head2) {
     if (head1 == nullptr) return head2;
     if (head2 == nullptr) return head1;
 
@@ -113,7 +123,7 @@ class DoublyLinkedList {
       temp = temp->next;
     }
     temp->next = head2;
-    head2->next = nullptr;
+    head2->prev = temp;
     return head1;
   }
 
@@ -137,21 +147,58 @@ class DoublyLinkedList {
     while (first != nullptr && second != nullptr) {
       if (first->data < second->data) {
         last->next = first;
+        first->prev = last;
         last = first;
         first = first->next;
       } else {
         last->next = second;
+        second->prev = last;
         last = second;
         second = second->next;
       }
     }
 
-    if (first == nullptr) {
-      last = second;
-    } else {
-      last = first;
+    if (first != nullptr) {
+      last->next = first;
+      first->prev = last;
+    } else if (second != nullptr) {
+      last->next = second;
+      second->prev = last;
     }
 
     return third;
+  }
+
+  Node* find_mid(Node* head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+    Node* slow = head;
+    Node* fast = head;
+
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+    return slow;
+  }
+
+  Node* sort(Node*& head) {
+    if (head == nullptr || head->next == nullptr) {
+      return head;
+    }
+
+    Node* mid = find_mid(head);
+    Node* left = head;
+    Node* right = mid->next;
+    mid->next = nullptr;
+    if (right != nullptr) {
+      right->prev = nullptr;
+    }
+
+    left = sort(left);
+    right = sort(right);
+
+    return merge_dll(left, right);
   }
 };
