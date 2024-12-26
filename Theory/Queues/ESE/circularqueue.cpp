@@ -3,7 +3,7 @@ using namespace std;
 
 class CircularQueue {
  private:
-  int *arr;
+  int* arr;
   int front;
   int rear;
   int size;
@@ -21,7 +21,7 @@ class CircularQueue {
 
   void push(int data) {
     if (full()) {
-      cout << "Queue is full\n";
+      cout << "Queue is already full\n";
       return;
     }
     if (front == -1 && rear == -1) {
@@ -44,27 +44,20 @@ class CircularQueue {
     if (front == rear) {
       front = -1;
       rear = -1;
-    } else {
+    } else
       front = (front + 1) % size;
-    }
     return value;
   }
 
-  int top() {
+  void display() {
     if (empty()) {
       cout << "Queue is empty\n";
-      return -1;
+      return;
     }
-    return arr[front];
-  }
-
-  void display() {
     int i = front;
     while (true) {
       cout << arr[i] << " ";
-      if (i == rear) {
-        break;
-      }
+      if (i == rear) break;
       i = (i + 1) % size;
     }
     cout << endl;
@@ -72,26 +65,34 @@ class CircularQueue {
 };
 
 int main() {
-  CircularQueue cq(5);
+  CircularQueue queue(5);  // Create a queue of size 5
 
-  cq.push(10);
-  cq.push(20);
-  cq.push(30);
-  cq.display();  // Output: 10 20 30
+  queue.push(10);
+  queue.push(20);
+  queue.push(30);
+  queue.push(40);
+  queue.push(50);
 
-  std::cout << "Front: " << cq.top() << std::endl;  // Output: Front: 10
+  // Try pushing when the queue is full
+  queue.push(60);  // Should display "Queue is already full"
 
-  std::cout << "Popped: " << cq.pop() << std::endl;  // Output: Popped: 10
-  cq.display();                                      // Output: 20 30
+  queue.display();  // Should display: 10 20 30 40 50
 
-  cq.push(40);
-  cq.push(50);
-  cq.display();  // Output: 20 30 40 50
+  cout << "Popped: " << queue.pop() << endl;  // Should display: Popped: 10
+  cout << "Popped: " << queue.pop() << endl;  // Should display: Popped: 20
 
-  std::cout << "Front: " << cq.top() << std::endl;  // Output: Front: 20
+  queue.display();  // Should display: 30 40 50
 
-  cq.push(60);   // Queue is full
-  cq.display();  // Output: 20 30 40 50
+  queue.push(60);
+  queue.push(70);
+
+  queue.display();  // Should display: 30 40 50 60 70
+
+  while (!queue.empty()) {
+    cout << "Popped: " << queue.pop() << endl;
+  }
+
+  queue.display();  // Should display "Queue is empty"
 
   return 0;
 }
