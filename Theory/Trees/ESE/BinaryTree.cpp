@@ -38,6 +38,27 @@ class BinaryTree {
   bool search(int target) { return find_node(root, target); }
   Treenode* remove(int target) { return delete_node(root, target); }
 
+  bool isBalanced() { return is_balanced(root); }
+  int diameter() { return get_diameter(root); }
+
+  Treenode* construct_tree(int inorder[], int preorder[], int& preorder_index,
+                           int inorder_start, int inorder_end) {
+    if (inorder_start > inorder_end) return nullptr;
+
+    int rootvalue = preorder[preorder_index];
+    Treenode* rootnode = new Treenode(rootvalue);
+
+    if (inorder_start == inorder_end) return rootnode;
+    int rootindex = find_index(inorder, inorder_start, inorder_end, rootvalue);
+
+    rootnode->left = construct_tree(inorder, preorder, preorder_index,
+                                    inorder_start, rootindex - 1);
+    rootnode->right = construct_tree(inorder, preorder, preorder_index,
+                                     rootindex + 1, inorder_end);
+
+    return rootnode;
+  }
+
   ~BinaryTree() { delete_tree(root); }
 
  private:
@@ -181,9 +202,9 @@ class BinaryTree {
     if (node->data == target)
       return true;
     else if (target > node->data) {
-      find_node(node->right, target);
+      return find_node(node->right, target);
     } else {
-      find_node(node->left, target);
+      return find_node(node->left, target);
     }
     return false;
   }
@@ -221,4 +242,121 @@ class BinaryTree {
     }
     return node;
   }
+
+  bool is_balanced(Treenode* node) {
+    if (node == nullptr) return true;
+    bool left = is_balanced(node->left);
+    bool right = is_balanced(node->right);
+    bool diff = abs(get_height(node->left) - get_height(node->right) <= 1);
+    if (left && right && diff) return true;
+    return false;
+  }
+
+  int get_diameter(Treenode* node) {
+    if (node == nullptr) return 0;
+
+    int left_height = get_height(node->left);
+    int right_height = get_height(node->right);
+
+    int left_diameter = get_diameter(node->left);
+    int right_diameter = get_diameter(node->right);
+
+    return max(left_height + right_height + 1,
+               max(left_diameter, right_diameter));
+  }
+
+  int find_index(int inorder[], int start, int end, int target) {
+    for (int i = start; i <= end; i++) {
+      if (inorder[i] == target) return i;
+    }
+    return -1;
+  }
 };
+
+int main() {
+  BinaryTree tree;
+
+  // Insert nodes into the binary tree
+  tree.insert(50);
+  tree.insert(30);
+  tree.insert(70);
+  tree.insert(20);
+  tree.insert(40);
+  tree.insert(60);
+  tree.insert(80);
+
+  // 1. Inorder Traversal
+  cout << "Inorder Traversal: ";
+  tree.inorder();
+  cout << endl;
+
+  // 2. Preorder Traversal
+  cout << "Preorder Traversal: ";
+  tree.preorder();
+  cout << endl;
+
+  // 3. Postorder Traversal
+  cout << "Postorder Traversal: ";
+  tree.postorder();
+  cout << endl;
+
+  // 4. Level Order Traversal
+  cout << "Level Order Traversal: ";
+  tree.levelorder();
+  cout << endl;
+
+  // 5. Count Total Nodes
+  cout << "Total nodes: " << tree.count_nodes() << endl;
+
+  // 6. Count Leaf Nodes (Degree 0)
+  cout << "Leaf nodes (degree 0): " << tree.deg0() << endl;
+
+  // 7. Count Nodes with Degree 1
+  cout << "Nodes with degree 1: " << tree.deg1() << endl;
+
+  // 8. Count Nodes with Degree 2
+  cout << "Nodes with degree 2: " << tree.deg2() << endl;
+
+  // 9. Search for a specific node
+  int target = 40;
+  cout << "Searching for node " << target << ": ";
+  if (tree.search(target)) {
+    cout << "Found!" << endl;
+  } else {
+    cout << "Not Found!" << endl;
+  }
+
+  // 10. Delete a node
+  int delete_val = 30;
+  cout << "Deleting node " << delete_val << "..." << endl;
+  tree.remove(delete_val);
+
+  // 11. Inorder Traversal after Deletion
+  cout << "Inorder Traversal after deletion: ";
+  tree.inorder();
+  cout << endl;
+
+  // 12. Tree Height
+  cout << "Height of the tree: " << tree.height() << endl;
+
+  // 13. Check if the tree is balanced
+  cout << "Is the tree balanced? " << (tree.isBalanced() ? "Yes" : "No")
+       << endl;
+
+  // 14. Diameter of the tree
+  cout << "Diameter of the tree: " << tree.diameter() << endl;
+
+  // 15. Construct Tree from Inorder and Preorder Arrays
+  int inorder[] = {20, 30, 40, 50, 60, 70, 80};
+  int preorder[] = {50, 30, 20, 40, 70, 60, 80};
+  int preorder_index = 0;
+  BinaryTree tree_from_arrays;
+  tree_from_arrays.root =
+      tree_from_arrays.construct_tree(inorder, preorder, preorder_index, 0, 6);
+
+  cout << "Inorder Traversal of constructed tree: ";
+  tree_from_arrays.inorder();
+  cout << endl;
+
+  return 0;
+}
