@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <bits-stdc++.h>
 using namespace std;
 
 //. BRUTE FORCE
@@ -45,3 +45,5 @@ void move_zero() {
 }
 
 int main() { move_zero(); }
+
+ds
