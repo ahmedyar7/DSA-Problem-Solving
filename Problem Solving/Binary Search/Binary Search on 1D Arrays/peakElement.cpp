@@ -85,6 +85,4 @@ int main() {
     for (int i = 0; i < n; i++) cin >> arr[i];
     cout << solution.findPeakElement(arr) << endl;
   }
-
-  return 0;
 }
