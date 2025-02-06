@@ -15,7 +15,7 @@ class ListNode {
 
   // Stack Approach
   bool isPalindriom_1(ListNode* head) {
-    if (head == nullptr) return head;
+    if (head == nullptr) return false;
 
     ListNode* temp = head;
     stack<ListNode*> st;
@@ -27,21 +27,26 @@ class ListNode {
 
     temp = head;
     while (temp != nullptr) {
-      if (st.top()->data == temp->data) {
-        st.pop();
-        temp = temp->next;
-      } else
+      if (temp->data != st.top()->data)
         return false;
+      else {
+        temp = temp->next;
+        st.pop();
+      }
     }
 
-    if (st.empty())
+    if (st.empty()) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   // Tortoise and Hare Approach
+
   ListNode* reverse(ListNode* head) {
+    if (head == nullptr) return nullptr;
+
     ListNode* temp = head;
     ListNode* prev = nullptr;
 
@@ -51,10 +56,13 @@ class ListNode {
       prev = temp;
       temp = front;
     }
+
     return prev;
   }
 
   bool isPalindrom_2(ListNode* head) {
+    if (head == nullptr) return false;
+
     ListNode* slow = head;
     ListNode* fast = head;
 
@@ -72,9 +80,10 @@ class ListNode {
       if (first->data != second->data) {
         reverse(newHead);
         return false;
+      } else {
+        first = first->next;
+        second = second->next;
       }
-      first = first->next;
-      second = second->next;
     }
 
     reverse(newHead);
