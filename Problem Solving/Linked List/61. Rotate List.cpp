@@ -12,6 +12,7 @@ struct ListNode {
 
 class Solution {
  public:
+  // Brute Force & Optimal Approach
   ListNode* rotateRight(ListNode* head, int k) {
     if (head == nullptr) return nullptr;
 

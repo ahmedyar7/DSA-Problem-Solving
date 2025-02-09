@@ -34,6 +34,7 @@ class Solution {
     return prev;
   }
 
+  // Brute Force Approach & Optimal Approach
   ListNode* reverseKGroup(ListNode* head, int k) {
     if (head == nullptr || k == 1) return head;
 
