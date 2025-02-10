@@ -84,7 +84,26 @@ class Solution {
     return head;
   }
 
-  ListNode* removeFromEnd(ListNode* head) {
-    // code
+  ListNode* removeFromEnd(ListNode* head, int k) {
+    if (head == nullptr) return nullptr;
+
+    int len = 0;
+    ListNode* temp = head;
+
+    while (temp != nullptr) {
+      len++;
+      temp = temp->next;
+    }
+
+    temp = head;
+    for (int i = 0; i < len - k - 1; i++) {
+      temp = temp->next;
+    }
+
+    ListNode* delNode = temp->next;
+    temp->next = temp->next->next;
+    delete delNode;
+
+    return head;
   }
 };
