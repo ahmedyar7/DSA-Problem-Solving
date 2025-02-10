@@ -42,7 +42,7 @@ class Solution {
     return newhead;
   }
 
-    ListNode* sortList(ListNode* head) {
+  ListNode* sortList(ListNode* head) {
     if (head == nullptr || head->next == nullptr) return head;
 
     ListNode* temp = head;
@@ -65,7 +65,6 @@ class Solution {
 
     return head;
   }
-
   ListNode* deleteMidNode(ListNode* head) {
     if (head == nullptr) return nullptr;
 
