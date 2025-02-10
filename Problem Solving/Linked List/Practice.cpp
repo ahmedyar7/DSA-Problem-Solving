@@ -106,4 +106,26 @@ class Solution {
 
     return head;
   }
+
+  ListNode* intersectionOfLL(ListNode* head1, ListNode* head2) {
+    if (head1 == nullptr || head2 == nullptr) return nullptr;
+
+    map<ListNode*, int> hmap;
+
+    ListNode* temp = head1;
+    while (temp != nullptr) {
+      hmap[temp] = 1;
+    }
+
+    temp = head2;
+    while (temp != nullptr) {
+      if (hmap.find(temp) != hmap.end()) {
+        return temp;
+      }
+      hmap[temp] = 1;
+      temp = temp->next;
+    }
+
+    return nullptr;
+  }
 };
