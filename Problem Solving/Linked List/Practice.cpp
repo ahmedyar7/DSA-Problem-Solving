@@ -41,4 +41,51 @@ class Solution {
 
     return newhead;
   }
+
+    ListNode* sortList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr) return head;
+
+    ListNode* temp = head;
+    vector<int> vec;
+
+    while (temp != nullptr) {
+      vec.push_back(temp->val);
+      temp = temp->next;
+    }
+
+    sort(vec.begin(), vec.end());
+
+    int it = 0;
+    temp = head;
+    while (temp != nullptr) {
+      temp->val = vec[it];
+      it++;
+      temp = temp->next;
+    }
+
+    return head;
+  }
+
+  ListNode* deleteMidNode(ListNode* head) {
+    if (head == nullptr) return nullptr;
+
+    ListNode* slow = head;
+    ListNode* fast = head;
+    ListNode* prev = nullptr;
+
+    while (fast != nullptr && fast->next != nullptr) {
+      prev = slow;
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+
+    ListNode* delNode = prev->next;
+    delete delNode;
+
+    return head;
+  }
+
+  ListNode* removeFromEnd(ListNode* head) {
+    // code
+  }
 };
