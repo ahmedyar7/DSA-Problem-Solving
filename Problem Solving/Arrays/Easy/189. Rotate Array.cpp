@@ -6,23 +6,20 @@ class Solution {
   void reverse(vector<int>& nums, int left, int right) {
     while (left < right) {
       swap(nums[left], nums[right]);
-
-      left++;
-      right--;
+      left++, right--;
     }
+
+    return;
   }
+
   void rotate(vector<int>& nums, int k) {
-    int n = nums.size();
-    k = k % n;
-
-    // Reverse the entire array
-    reverse(nums, 0, n - 1);
-
-    // Reverse first k elements
+    k = k % nums.size();
+    // Reverse entire array
+    reverse(nums, 0, nums.size() - 1);
+    // Reverse left
     reverse(nums, 0, k - 1);
-
-    // Reverse remaining n-k elements
-    reverse(nums, k, n - 1);
+    // Reverse right
+    reverse(nums, k + 1, nums.size() - 1);
 
     return;
   }
