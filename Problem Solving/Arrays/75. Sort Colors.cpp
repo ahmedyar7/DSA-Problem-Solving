@@ -11,19 +11,22 @@ class Solution {
 
   // Better Approach
   void sortColors_2(vector<int>& nums) {
+    // Maintain counter for 0,1,2
     int counter0 = 0;
     int counter1 = 0;
     int counter2 = 0;
 
-    for (int i = 0; i < nums.size(); i++) {
-      if (nums[i] == 0)
+    for (int it = 0; it < nums.size(); it++) {
+      if (nums[it] == 0)
         counter0++;
-      else if (nums[i] == 1)
+      else if (nums[it] == 1)
         counter1++;
-      else
+      else {
         counter2++;
+      }
     }
 
+    // Populating the array
     for (int i = 0; i < counter0; i++) nums[i] = 0;
     for (int i = counter0; i < counter0 + counter1; i++) nums[i] = 1;
     for (int i = counter0 + counter1; i < nums.size(); i++) nums[i] = 2;
@@ -35,7 +38,7 @@ class Solution {
   void sortColors_3(vector<int>& nums) {
     int low = 0;
     int mid = 0;
-    int high = nums.size();
+    int high = nums.size() - 1;
 
     for (int i = 0; i < nums.size(); i++) {
       if (nums[mid] == 0) {
