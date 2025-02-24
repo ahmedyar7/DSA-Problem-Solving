@@ -15,11 +15,7 @@ class ListNode {
 
   // Stack Approach
   bool isPalindriom_1(ListNode* head) {
-<<<<<<< HEAD
-    if (head == nullptr) return false;
-=======
     if (head == nullptr) return head;
->>>>>>> Leetcode-Solutions
 
     ListNode* temp = head;
     stack<ListNode*> st;
@@ -31,28 +27,6 @@ class ListNode {
 
     temp = head;
     while (temp != nullptr) {
-<<<<<<< HEAD
-      if (temp->data != st.top()->data)
-        return false;
-      else {
-        temp = temp->next;
-        st.pop();
-      }
-    }
-
-    if (st.empty()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Tortoise and Hare Approach
-
-  ListNode* reverse(ListNode* head) {
-    if (head == nullptr) return nullptr;
-
-=======
       if (st.top()->data == temp->data) {
         st.pop();
         temp = temp->next;
@@ -68,7 +42,6 @@ class ListNode {
 
   // Tortoise and Hare Approach
   ListNode* reverse(ListNode* head) {
->>>>>>> Leetcode-Solutions
     ListNode* temp = head;
     ListNode* prev = nullptr;
 
@@ -78,19 +51,10 @@ class ListNode {
       prev = temp;
       temp = front;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> Leetcode-Solutions
     return prev;
   }
 
   bool isPalindrom_2(ListNode* head) {
-<<<<<<< HEAD
-    if (head == nullptr) return false;
-
-=======
->>>>>>> Leetcode-Solutions
     ListNode* slow = head;
     ListNode* fast = head;
 
@@ -108,16 +72,9 @@ class ListNode {
       if (first->data != second->data) {
         reverse(newHead);
         return false;
-<<<<<<< HEAD
-      } else {
-        first = first->next;
-        second = second->next;
-      }
-=======
       }
       first = first->next;
       second = second->next;
->>>>>>> Leetcode-Solutions
     }
 
     reverse(newHead);
